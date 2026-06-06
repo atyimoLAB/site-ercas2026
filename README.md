@@ -35,13 +35,13 @@ gerando todos os arquivos necessários na pasta `out/`.
 Para gerar os arquivos na pasta `out/`
 
 ```bash
-docker-compose -f docker-compose.yml up --build 
+docker-compose -f docker-compose.yml up --build
 ```
 
 Para usar o modo watch do docker para desenvolvimento
 
 ```bash
-docker-compose up --build 
+docker-compose up --build
 ```
 
 > [!NOTE]
@@ -49,22 +49,23 @@ docker-compose up --build
 
 ## Alterações de informações
 
-| Tipo | Localização | Observação |
-|------|------------|------------|
-| Dados anuais | `public/data/` | Atualizados anualmente[^1] |
-| Traduções | `locale/` (`pt` e `en`) | Textos traduzidos |
+| Tipo         | Localização             | Observação                 |
+| ------------ | ----------------------- | -------------------------- |
+| Dados anuais | `public/data/`          | Atualizados anualmente[^1] |
+| Traduções    | `locale/` (`pt` e `en`) | Textos traduzidos          |
 
-* **Dados anuais:** Arquivos que precisam ser atualizados todo ano devem ser colocados na pasta `public/data/`.
+- **Dados anuais:** Arquivos que precisam ser atualizados todo ano devem ser colocados na pasta `public/data/`.
 
-* **Traduções:** Textos para os idiomas `pt` e `en` devem estar na pasta `locale/`.
+- **Traduções:** Textos para os idiomas `pt` e `en` devem estar na pasta `locale/`.
 
-Para observar as alterações na página é necessário compilar os *json*'s e os *yaml*'s
+Para observar as alterações na página é necessário compilar os _json_'s e os _yaml_'s
 
 ```bash
 npm run generate-messages
 npm run generate-events
 npm run generate-data
 ```
-ou simplesmente realizar o build.
+
+ou simplesmente realizar o build. O `npm run dev` já faz isso automaticamente com o `predev`.
 
 [^1]: Idealmente
