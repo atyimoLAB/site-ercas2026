@@ -5,7 +5,7 @@
 ```bash
 cp .env.example .env   # padrões já funcionam para dev local
 npm install
-npm run dev            # http://localhost:3000/{NEXT_PUBLIC_URL}/{LOCALE}
+npm run dev            # http://localhost:3000/{NEXT_PUBLIC_BASE_PATH}/{LOCALE}
 ```
 
 Para mais detalhes, veja [Iniciando o projeto manualmente](#iniciando-o-projeto-manualmente) ou [Iniciando o projeto com Docker](#iniciando-o-projeto-com-docker).
@@ -31,7 +31,7 @@ npm install
 npm run dev
 ```
 
-A aplicação ficará disponível em: [http://localhost:3000/{NEXT_PUBLIC_URL}/{LOCALE}](http://localhost:3000/{NEXT_PUBLIC_URL}/{LOCALE}).
+A aplicação ficará disponível em: [http://localhost:3000/{NEXT_PUBLIC_BASE_PATH}/{LOCALE}](http://localhost:3000/{NEXT_PUBLIC_BASE_PATH}/{LOCALE}).
 
 3. **Gerar o build do projeto**
 
