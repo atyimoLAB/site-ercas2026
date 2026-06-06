@@ -1,10 +1,23 @@
 ![CBSOFT Logo](./public/images/logos/cbsoft-logo.svg)
 
-## Iniciando o projeto
+## Início rápido
 
-Caso queira usar o Docker Compose como alternativa à instalação manual, veja a seção [Docker Compose](#docker-compose).
+```bash
+cp .env.example .env   # padrões já funcionam para dev local
+npm install
+npm run dev            # http://localhost:3000/{NEXT_PUBLIC_URL}/{LOCALE}
+```
 
-Antes de começar, é necessário ter o [Node.js](https://nodejs.org/pt/download) instalado e criar um arquivo `.env` para configurar parâmetros do `sitemap.xml`.
+Para mais detalhes, veja [Iniciando o projeto manualmente](#iniciando-o-projeto-manualmente) ou [Iniciando o projeto com Docker](#iniciando-o-projeto-com-docker).
+
+## Iniciando o projeto manualmente
+
+### Pré-requisitos
+
+- [Node.js](https://nodejs.org/pt/download) instalado
+- Arquivo `.env` na raiz (`cp .env.example .env`) — define URL e _base path_ do site. Veja o `.env.example` para as variáveis.
+
+### Passos para rodar o projeto
 
 1. **Instalar dependências**
 
@@ -13,8 +26,6 @@ npm install
 ```
 
 2. **Rodar em modo desenvolvimento**
-
-Caso queira rodar em modo desenvolvimento, basta
 
 ```bash
 npm run dev
@@ -30,7 +41,7 @@ npm run build
 
 gerando todos os arquivos necessários na pasta `out/`.
 
-## Docker Compose
+## Iniciando o projeto com Docker
 
 Para gerar os arquivos na pasta `out/`
 
