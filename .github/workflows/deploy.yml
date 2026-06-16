@@ -114,16 +114,19 @@ jobs:
 
           # Secrets to a 600 file, off the command line / process list.
           umask 077
+          # Passive mode, but ignore the server's PASV-advertised IP (it returns
+          # an internal/NAT address unreachable over the VPN) and reconnect to
+          # the control IP instead. Active mode fails: server can't dial ppp0.
           cat > deploy.lftp <<EOF
           set ftp:ssl-allow false
-          set ftp:passive-mode false
-          set net:timeout 30
-          set net:max-retries 3
+          set ftp:passive-mode true
+          set ftp:fix-pasv-address true
+          set net:timeout 20
+          set net:max-retries 2
           set net:reconnect-interval-base 5
-          set mirror:parallel-transfers 1
           set cmd:fail-exit true
           open -u "$FTP_USERNAME","$FTP_PASSWORD" "ftp://$FTP_SERVER"
-          debug 0
+          # debug 3  # protocol trace for diagnosing handshake; off to keep auth out of logs
           mirror -R --delete --verbose out/ /sharedirs/sharedir01/tchaves/public_html/
           bye
           EOF
