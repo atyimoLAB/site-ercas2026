@@ -123,7 +123,7 @@ jobs:
           set mirror:parallel-transfers 1
           set cmd:fail-exit true
           open -u "$FTP_USERNAME","$FTP_PASSWORD" "ftp://$FTP_SERVER"
-          debug 3
+          debug 0
           mirror -R --delete --verbose out/ /sharedirs/sharedir01/tchaves/public_html/
           bye
           EOF
