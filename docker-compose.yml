@@ -1,0 +1,53 @@
+# Single-command dev:  docker compose up dev
+# Production parity:    docker compose up prod   (production build + static serve)
+# Switch language:      JEKYLL_CONFIG=_config.yml,_config.en.yml docker compose up dev
+#
+# Docker here is for development + production-parity preview ONLY. Deployment is
+# the native FTP-over-VPN GitHub Actions workflow; nothing here touches it.
+
+services:
+  dev:
+    build: .
+    image: ercas2026:dev
+    ports:
+      - "4000:4000"
+      - "35729:35729"          # livereload websocket; unpublished = silent no-refresh
+    environment:
+      JEKYLL_CONFIG: ${JEKYLL_CONFIG:-_config.yml,_config.pt.yml}
+      JEKYLL_ENV: development
+    volumes:
+      - .:/srv/jekyll                   # live source
+      - bundle:/usr/local/bundle        # gems: not clobbered by the host mount
+      - site:/srv/jekyll/_site          # build output kept off the host mount
+      - cache:/srv/jekyll/.jekyll-cache
+    # Uses the Dockerfile CMD (PT serve + livereload + force_polling).
+
+  prod:
+    build: .
+    image: ercas2026:dev               # reuse the dev image; only the command differs
+    ports:
+      - "4000:4000"
+    environment:
+      JEKYLL_CONFIG: ${JEKYLL_CONFIG:-_config.yml,_config.pt.yml}
+      JEKYLL_ENV: production
+    volumes:
+      - .:/srv/jekyll
+      - bundle:/usr/local/bundle
+      - site:/srv/jekyll/_site
+      - cache:/srv/jekyll/.jekyll-cache
+    # Build exactly what CI ships, then serve that built _site verbatim (no
+    # livereload, no watch) for true production parity. $$ escapes compose's
+    # own variable interpolation so the shell expands JEKYLL_CONFIG at runtime.
+    # Keep each command on a single line: a bare line break here would split the
+    # shell statement and drop the serve flags (--host/--no-watch).
+    command:
+      - sh
+      - -c
+      - |
+        bundle exec jekyll build --config $$JEKYLL_CONFIG -d _site && \
+        bundle exec jekyll serve --config $$JEKYLL_CONFIG -d _site --host 0.0.0.0 --skip-initial-build --no-watch
+
+volumes:
+  bundle:
+  site:
+  cache:

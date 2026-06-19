@@ -35,7 +35,7 @@ There are no tests or linters. The build itself is the gate: `show_errors: true`
 
 `_config.yml` is the shared base (theme, plugins, collections, `conference.*` event metadata, tracks, tags). Each language adds a thin overlay:
 
-- `_config.pt.yml` → `baseurl: /site-ercas2026`, `collections_dir: pt`, `data_dir: pt/_data`, `conference.lang: pt`, PT navigation, excludes `en/`.
+- `_config.pt.yml` → `baseurl: ""` (root, for the `ercas2026.ufba.br` custom domain), `collections_dir: pt`, `data_dir: pt/_data`, `conference.lang: pt`, PT navigation, excludes `en/`.
 - `_config.en.yml` → `baseurl: /en`, `collections_dir: en`, `data_dir: en/_data`, `conference.lang: en`, EN navigation, excludes `pt/`.
 
 So **`pt/` and `en/` are parallel, self-contained site trees** — same structure, translated content. A language build sees only its own tree. When you add/restructure content, **mirror the change in both `pt/` and `en/`**.
@@ -66,4 +66,4 @@ The theme has no native committees / sponsors / important-dates rendering, so `_
 
 ### Pending custom-domain migration
 
-Site currently serves at `https://atyimolab.github.io/site-ercas2026/`; target is **`https://ercas2026.ufba.br/`**. Full runbook is in `GUIDE.md` (DNS request to UFBA infra, GitHub Pages settings, HTTPS). When the domain goes live, set `url: https://ercas2026.ufba.br` and `baseurl: ""` (the per-language `baseurl` values exist only for the current GitHub Pages path layout). `GUIDE.md` and `README.md` are `exclude`d from the build.
+Target is **`https://ercas2026.ufba.br/`**. The config is already set for it: `_config.yml` has `url: https://ercas2026.ufba.br` and `_config.pt.yml` has `baseurl: ""` (serves at root). Remaining work is the DNS/GitHub-Pages cutover — full runbook in `GUIDE.md` (DNS request to UFBA infra, GitHub Pages settings, HTTPS). EN still uses `baseurl: /en`. `GUIDE.md` and `README.md` are `exclude`d from the build.
