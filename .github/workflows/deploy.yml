@@ -5,7 +5,7 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Read-only: only builds the repo.
+# Read-only repo permissions: the workflow only needs to read repository contents.
 permissions:
   contents: read
 
