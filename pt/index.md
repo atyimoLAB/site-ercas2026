@@ -13,8 +13,6 @@ links:
     disabled: true
 ---
 
-Bem-vindo ao **{{ site.conference.name }} {{ site.conference.year }}** — {{ site.conference.event.dates }}, {{ site.conference.event.city }}.
-
-A Escola Regional de Computação Aplicada à Saúde (ERCAS) é um evento anual que reúne pesquisadores, profissionais e estudantes da área de informática em saúde para troca de experiências e apresentação de trabalhos científicos.
+**{{ site.conference.name }} {{ site.conference.year }}** — {{ site.conference.event.dates }}, {{ site.conference.event.city }}.
 
 **Local:** {{ site.conference.event.venue }}, {{ site.conference.event.city }}.

@@ -1,8 +1,6 @@
 title: ERCAS 2026
 description: >-
-  Escola Regional de Computação Aplicada à Saúde (ERCAS) — evento anual que
-  reúne pesquisadores, profissionais e estudantes das áreas de informática
-  em saúde, sistemas de informação hospitalar e tecnologias aplicadas à saúde.
+  Escola Regional de Computação Aplicada à Saúde (ERCAS) — evento divulga, debate e fomenta o uso de abordagens computacionais no contexto da saúde, estimulando a troca de conhecimentos e a integração entre profissionais, docentes, pesquisadores, estudantes e atores institucionais dedicados à aplicação de tecnologias na área da saúde.
 url: "https://ercas2026.ufba.br"
 # baseurl is set per-language config
 
@@ -50,9 +48,9 @@ conference:
   show_errors: true   # set false in production build
 
   event:
-    dates: "13–15 de outubro de 2026"
+    dates: "5–6 de Outubro de 2026"
     city: "Salvador, BA"
-    venue: "Universidade Federal da Bahia (UFBA)"
+    venue: "Instituto de Computação da Universidade Federal da Bahia (UFBA)"
     registration_url: "https://ercas2026.ufba.br/inscricoes"
 
   social:
