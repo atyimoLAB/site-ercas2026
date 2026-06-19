@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "source": "workspace-visual-schema",
+  "name": "Minimal Design System",
+  "slug": "minimal-design-system",
+  "project": {
+    "name": "Minimal",
+    "logoUrl": null
+  },
+  "importSource": {
+    "type": "manual",
+    "importedAt": "2026-06-19T14:41:59.561Z",
+    "sourceName": "TypeUI design skill: Minimal"
+  },
+  "components": []
+}
