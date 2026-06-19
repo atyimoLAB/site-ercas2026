@@ -92,7 +92,7 @@ jobs:
           rm -f vpn.conf
           exit 1
 
-      - name: Assert FTP route goes through the VPN (fail closed)
+      - name: Assert FTP route via VPN and lock egress to ppp0 (fail closed)
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
         run: |
@@ -107,6 +107,12 @@ jobs:
           echo "Route to FTP host ($IP) uses dev: ${DEV:-<none>}"
           [ "$DEV" = "ppp0" ] || { echo "FTP route is NOT via VPN (dev=$DEV). Refusing to deploy."; exit 1; }
 
+          # Route check is point-in-time; pin egress to the FTP host to ppp0 so a ppp0 drop fails
+          # the transfer instead of leaking over the default iface. Host IP covers PASV ports.
+          sudo iptables -I OUTPUT 1 -d "$IP" -o ppp0 -m comment --comment ftp-killswitch -j ACCEPT
+          sudo iptables -A OUTPUT    -d "$IP"          -m comment --comment ftp-killswitch -j REJECT --reject-with icmp-admin-prohibited
+          echo "Egress to FTP host ($IP) is now locked to ppp0."
+
       - name: Deploy to FTP (mirror with delete)
         uses: SamKirkland/FTP-Deploy-Action@110f9186c050f71550953127052e77650219c287 # v4.4.0
         with:
@@ -120,6 +126,12 @@ jobs:
       - name: Disconnect SSL-VPN
         if: always()                  # run even on failure; never leave the tunnel up
         run: |
+          # Drop the ftp-killswitch rules first (tagged by comment) so a failed run leaves no
+          # stray REJECT behind. Loop until gone since ACCEPT+REJECT are two separate rules.
+          while sudo iptables -L OUTPUT --line-numbers 2>/dev/null | grep -q ftp-killswitch; do
+            LINE=$(sudo iptables -L OUTPUT --line-numbers | awk '/ftp-killswitch/{print $1; exit}')
+            sudo iptables -D OUTPUT "$LINE" || break
+          done
           if [ -f openfortivpn.pid ]; then
             VPN_PID="$(cat openfortivpn.pid)"
             if [ -n "${VPN_PID}" ]; then
