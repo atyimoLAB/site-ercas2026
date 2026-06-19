@@ -1,4 +1,4 @@
-baseurl: "/site-ercas2026"
+baseurl: ""
 exclude:
   - en
   - GUIDE.md
