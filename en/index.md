@@ -2,6 +2,8 @@
 layout: home
 permalink: /
 title: "ERCAS 2026"
+header:
+  img: ercas-hero.svg
 links:
   - name: Program
     relative_url: /program/
