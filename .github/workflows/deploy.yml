@@ -36,8 +36,15 @@ jobs:
 
       - name: Install tooling
         run: |
+          set -euo pipefail
           sudo apt-get update
-          sudo apt-get install -y openfortivpn
+          # ppp provides /usr/sbin/pppd. openfortivpn authenticates itself, then hands off to pppd
+          # to create ppp0. Without pppd the process dies right after "Authenticated." -- which is
+          # exactly the bring-up failure we saw. Install ppp explicitly; do not rely on it being preinstalled.
+          sudo apt-get install -y openfortivpn ppp
+          # Fail fast with a clear message rather than a silent post-auth death later.
+          command -v pppd >/dev/null 2>&1 || [ -x /usr/sbin/pppd ] \
+            || { echo "pppd missing after install -- openfortivpn cannot bring up ppp0"; exit 1; }
 
       - name: Bring up VPN (openfortivpn, ppp0)
         env:
@@ -51,14 +58,23 @@ jobs:
           # printf writes the INI body with no leading whitespace; openfortivpn's parser is strict.
           printf 'host = %s\nport = %s\nusername = %s\npassword = %s\n' \
             "$VPN_GATEWAY_HOST" "$VPN_GATEWAY_PORT" "$VPN_USERNAME" "$VPN_PASSWORD" > vpn.conf
-          # Start tunnel; capture the REAL openfortivpn pid (not sudo's) for clean teardown.
-          sudo openfortivpn -c vpn.conf >openfortivpn.log 2>&1 &
+          # Start tunnel with -v so the pppd handoff (and any pppd failure) is surfaced in the log,
+          # instead of the process dying silently after "Authenticated.". stdbuf -oL -eL defeats
+          # block buffering so the real error reaches openfortivpn.log before the process exits.
+          # Capture the REAL openfortivpn pid (not sudo's) for clean teardown.
+          sudo stdbuf -oL -eL openfortivpn -v -c vpn.conf >openfortivpn.log 2>&1 &
           sleep 1
           PID=$(pgrep -x openfortivpn | head -n1 || true)
           echo "$PID" > openfortivpn.pid
           [ -n "$PID" ] || { echo "openfortivpn did not start"; cat openfortivpn.log; exit 1; }
           for i in $(seq 1 30); do
-            kill -0 "$PID" 2>/dev/null || { echo "openfortivpn died during bring-up"; cat openfortivpn.log; exit 1; }
+            kill -0 "$PID" 2>/dev/null || {
+              echo "openfortivpn died during bring-up -- full log:"; cat openfortivpn.log
+              # Most common cause: pppd absent/unusable at the post-auth handoff.
+              command -v pppd >/dev/null 2>&1 || [ -x /usr/sbin/pppd ] \
+                || echo "HINT: pppd is not on PATH -- install the 'ppp' package."
+              exit 1
+            }
             if ip link show ppp0 >/dev/null 2>&1; then echo "ppp0 is up"; break; fi
             sleep 2
           done
