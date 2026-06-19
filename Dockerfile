@@ -37,5 +37,7 @@ EXPOSE 4000 35729
 # A layered --config is mandatory or nothing renders (_config.yml alone has no
 # collections_dir/data_dir). 0.0.0.0 so the host can reach it; --force_polling
 # because macOS bind mounts don't deliver inotify events into the container.
+# No --incremental: it reuses cached page output and misses global config
+# changes (e.g. baseurl), serving stale URLs like /site-ercas2026/.
 ENV JEKYLL_CONFIG=_config.yml,_config.pt.yml
-CMD ["sh", "-c", "bundle exec jekyll serve --config $JEKYLL_CONFIG --host 0.0.0.0 --livereload --force_polling --incremental"]
+CMD ["sh", "-c", "bundle exec jekyll serve --config $JEKYLL_CONFIG --host 0.0.0.0 --livereload --force_polling"]

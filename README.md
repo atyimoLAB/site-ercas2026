@@ -10,8 +10,8 @@ No Ruby on your machine — one command:
 docker compose up dev
 ```
 
-Site (Portuguese): <http://localhost:4000/site-ercas2026/> — note the
-`/site-ercas2026/` path; it's the configured `baseurl`. Live reload is on.
+Site (Portuguese): <http://localhost:4000/> — served at root (PT `baseurl`
+is now `""` for the `ercas2026.ufba.br` custom domain). Live reload is on.
 
 | Task | Command |
 |------|---------|
@@ -29,7 +29,7 @@ Site (Portuguese): <http://localhost:4000/site-ercas2026/> — note the
   lag ~1–2s.
 - The site is on **port 4000**. Port `35729` is the live-reload helper only —
   visiting it shows `This port only serves livereload.js over HTTP.`, not the
-  site. Use <http://localhost:4000/site-ercas2026/>.
+  site. Use <http://localhost:4000/>.
 
 ## Run natively (without Docker)
 
