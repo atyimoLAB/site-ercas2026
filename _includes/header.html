@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="{{ site.conference.lang | default: 'en' }}">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script>
+    // Force light theme always (dark mode disabled site-wide).
+    // The theme's conference.bundle.js re-applies data-bs-theme from the OS
+    // preference on load and on system-setting changes, so a one-time set is
+    // not enough — lock the attribute with a MutationObserver.
+    (function() {
+      var html = document.documentElement;
+      var force = function() {
+        if (html.getAttribute('data-bs-theme') !== 'light') {
+          html.setAttribute('data-bs-theme', 'light');
+        }
+      };
+      force();
+      new MutationObserver(force).observe(html, {
+        attributes: true,
+        attributeFilter: ['data-bs-theme']
+      });
+    })();
+
+    {%- if site.conference.pwa and site.conference.pwa.enable %}
+    // Apply PWA styles for iOS immediately to prevent flash
+    (function() {
+      const isStandalone = (navigator.standalone || window.matchMedia("(display-mode: standalone)").matches);
+      document.documentElement.setAttribute('data-pwa', isStandalone ? 'true' : 'false');
+    })();
+    {%- endif -%}
+  </script>
+
+  {% include get_page_title.html -%}
+  <title>
+    {{- page_title -}}
+    {%- unless page_title == empty %} - {% endunless -%}
+    {{- site.title -}}
+  </title>
+  {% include list_header_meta.html %}
+
+  {% if site.conference.custom_style == "bootstrap" %}
+  {% comment %} Conference bundle with separate Bootstrap {% endcomment %}
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/bootstrap.min.css?t={{ site.time | date: '%s' }}" />
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/conference-only.bundle.css?t={{ site.time | date: '%s' }}" />
+  {% elsif site.conference.custom_style != "full" %}
+  {% comment %} Full conference bundle {% endcomment %}
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/conference.bundle.css?t={{ site.time | date: '%s' }}" />
+  {% endif %}
+  {% comment %} User stylesheet (can include full custom conference bundle) {% endcomment %}
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css?t={{ site.time | date: '%s' }}" />
+
+  {% include list_header_live.html %}
+
+  {% include list_header_pwa.html %}
+</head>
+
+<body class="min-vh-100">
+  <a href="#main" class="visually-hidden-focusable position-absolute top-0 start-0">
+    {{ site.data.lang[site.conference.lang].navigation.skip_to_content | default: "Skip to content" }}
+  </a>
+  <header>
+    <!-- navigation bar (web only): -->
+    {%- include navbar.html -%}
+
+    {%- unless page.url == "/" -%}
+      <!-- site title (print only): -->
+      <div class="container d-none d-print-block mt-4 mb-4">
+        <h1 class="display-4">
+          {{ site.title }}
+        </h1>
+      </div>
+    {%- endunless -%}
+
+  </header>
+  <main id="main" class="container my-3" role="main" tabindex="-1">
+
+    {%- include infobox.html -%}
