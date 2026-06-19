@@ -103,6 +103,12 @@ jobs:
           # ahostsv4 forces A records only; fail closed if nothing resolves.
           IP=$(getent ahostsv4 "$FTP_SERVER" | awk '{print $1; exit}')
           [ -n "$IP" ] || { echo "Could not resolve an IPv4 address for $FTP_SERVER. Refusing to deploy."; exit 1; }
+
+          # openfortivpn is split-tunnel: the FortiGate only pushes the routes it advertises, which
+          # do not cover the FTP host -- so it falls through to the default route (eth0). Pin an
+          # explicit /32 host route over ppp0. ppp0 is point-to-point, so `dev ppp0` needs no gateway.
+          sudo ip route replace "$IP/32" dev ppp0
+
           DEV=$(ip route get "$IP" | grep -oP 'dev \K\S+' || true)
           echo "Route to FTP host ($IP) uses dev: ${DEV:-<none>}"
           [ "$DEV" = "ppp0" ] || { echo "FTP route is NOT via VPN (dev=$DEV). Refusing to deploy."; exit 1; }
