@@ -17,20 +17,30 @@ conference:
     preposition: "at"
 
   navigation:
+    # All sections disabled until content is ready — only the home (brand) link is active.
+    # Remove `disabled: true` from a link to re-enable it.
     links:
       - name: Program
         relative_url: /program/
+        disabled: true
       - name: Talks
         relative_url: /talks/
+        disabled: true
       - name: Speakers
         relative_url: /speakers/
+        disabled: true
       - name: Committees
         relative_url: /committees/
+        disabled: true
       - name: Sponsors
         relative_url: /sponsors/
+        disabled: true
       - name: Important Dates
         relative_url: /important-dates/
+        disabled: true
       - name: Location
         relative_url: /location/
+        disabled: true
       - name: Registration
         absolute_url: "https://ercas2026.ufba.br/inscricoes"
+        disabled: true

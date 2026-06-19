@@ -1,0 +1,13 @@
+{
+  "designSystemId": "47a43442-2e6c-46eb-ace2-7f69f2ca3fed",
+  "installScope": "project",
+  "skillFolderName": "typeui-design-system",
+  "slug": "minimal-design-system",
+  "source": "workspace",
+  "templateSlug": "minimal",
+  "type": "typeui-design-system",
+  "variant": "workspace",
+  "versionId": "748cc467-6dd2-423b-af91-d5d1108879af",
+  "versionNumber": 1,
+  "workspaceId": "d68e68fa-b7f6-4ec0-94b4-0f93e57f6e38"
+}
