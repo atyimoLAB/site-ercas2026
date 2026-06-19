@@ -127,6 +127,6 @@ jobs:
               sudo kill "${VPN_PID}" 2>/dev/null || true
             fi
           fi
-          sudo pkill -f openfortivpn 2>/dev/null || true
-          rm -f vpn.conf openfortivpn.pid
+          sudo pkill -x openfortivpn 2>/dev/null || true   # exact process-name match; -f would substring-match unrelated cmdlines
+          rm -f vpn.conf openfortivpn.pid openfortivpn.log  # remove log so VPN diagnostics can't leak into later steps/artifacts
           echo "VPN teardown complete."
