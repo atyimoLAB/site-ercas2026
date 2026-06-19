@@ -98,7 +98,11 @@ jobs:
         run: |
           set -euo pipefail
           # Assert the kernel route to the FTP host egresses ppp0 (ping is not proof).
-          IP=$(getent hosts "$FTP_SERVER" | awk '{print $1; exit}')
+          # Resolve IPv4 explicitly: the openfortivpn tunnel is IPv4 (ppp0). getent hosts can
+          # return an AAAA first, and `ip route get` on a v6 addr won't match ppp0 -> false negative.
+          # ahostsv4 forces A records only; fail closed if nothing resolves.
+          IP=$(getent ahostsv4 "$FTP_SERVER" | awk '{print $1; exit}')
+          [ -n "$IP" ] || { echo "Could not resolve an IPv4 address for $FTP_SERVER. Refusing to deploy."; exit 1; }
           DEV=$(ip route get "$IP" | grep -oP 'dev \K\S+' || true)
           echo "Route to FTP host ($IP) uses dev: ${DEV:-<none>}"
           [ "$DEV" = "ppp0" ] || { echo "FTP route is NOT via VPN (dev=$DEV). Refusing to deploy."; exit 1; }

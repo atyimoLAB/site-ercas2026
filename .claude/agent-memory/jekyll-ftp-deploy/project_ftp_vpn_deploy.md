@@ -14,7 +14,7 @@ metadata:
 - Deploy tool: currently the marketplace **`SamKirkland/FTP-Deploy-Action`** (NOT the lftp script standard — flagged for rewrite to `lftp mirror --reverse --delete` with dry-run + delete-sanity gate + sha256 manifest). Remote dir: `/sharedirs/sharedir01/tchaves/public_html/`.
 - Protocol: plain FTP (`protocol: ftp`). FTPS NOT in use — flagged, recommend FTPS.
 - Single `deploy` job (build + VPN + FTP combined) — build has secrets in scope. Flagged: split build/deploy.
-- iptables REJECT killswitch DROPPED (2026-06-19, deliberate user decision). Route-via-ppp0 fail-closed assert KEPT (`ip route get`, dev must be ppp0).
+- iptables REJECT killswitch DROPPED (2026-06-19, deliberate user decision). Route-via-ppp0 fail-closed assert KEPT (`ip route get`, dev must be ppp0). Route assert resolves IPv4 explicitly via `getent ahostsv4` (fixed 2026-06-19): plain `getent hosts` can return an AAAA first and `ip route get` on a v6 addr won't match the IPv4 ppp0 tunnel -> false negative. Also fail closed if no IPv4 resolves.
 - Runner: **GitHub-hosted ubuntu-latest + VPN** (fallback model, not self-hosted-in-network). Recommend self-hosted runner inside UFBA network.
 - Build command matches CLAUDE.md: `bundle exec jekyll build --config _config.yml,_config.pt.yml -d _site`, `JEKYLL_ENV=production`. PT only.
 - `Gemfile.lock` IS committed. `bundler-cache: true` + `BUNDLE_FROZEN: 'true'`.
