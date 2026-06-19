@@ -1,0 +1,2 @@
+- [FTP-over-VPN deploy facts](project_ftp_vpn_deploy.md) — host/VPN/runner/path details for the lftp delete-mirror workflow
+- [Pinned action SHAs](reference_pinned_actions.md) — SHA→version map for actions used in deploy.yml

@@ -1,52 +1,101 @@
-name: Build and deploy Jekyll site
+name: Build and deploy Jekyll site (FTP over VPN)
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
+# Least privilege: only need to read the repo to build.
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
-# Allow one concurrent deployment; don't cancel an in-progress one.
+# One deploy at a time; never cancel an in-flight FTP mirror mid-write.
 concurrency:
-  group: pages
+  group: ftp-deploy-production
   cancel-in-progress: false
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@89f90524b88a01fe6e0b732220432cc6142926af # v1.313.0
+        env:
+          BUNDLE_FROZEN: 'true'          # fail if Gemfile.lock is stale; never re-resolve in CI
         with:
           ruby-version: '3.4'
-          bundler-cache: true
-
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v6
+          bundler-cache: true            # gems cached, keyed by Gemfile.lock hash
 
       - name: Build site (pt)
         run: bundle exec jekyll build --config _config.yml,_config.pt.yml -d _site
         env:
           JEKYLL_ENV: production
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v5
+      - name: Install tooling
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openfortivpn
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
+      - name: Bring up VPN (openfortivpn, ppp0)
+        env:
+          VPN_GATEWAY_HOST: ${{ secrets.VPN_GATEWAY_HOST }}
+          VPN_GATEWAY_PORT: ${{ secrets.VPN_GATEWAY_PORT }}
+          VPN_USERNAME: ${{ secrets.VPN_USERNAME }}
+          VPN_PASSWORD: ${{ secrets.VPN_PASSWORD }}
+        run: |
+          set -euo pipefail
+          umask 077                                   # vpn.conf must be 600 before any secret is written
+          # printf writes the INI body with no leading whitespace; openfortivpn's parser is strict.
+          printf 'host = %s\nport = %s\nusername = %s\npassword = %s\n' \
+            "$VPN_GATEWAY_HOST" "$VPN_GATEWAY_PORT" "$VPN_USERNAME" "$VPN_PASSWORD" > vpn.conf
+          # Start tunnel; capture the REAL openfortivpn pid (not sudo's) for clean teardown.
+          sudo openfortivpn -c vpn.conf >openfortivpn.log 2>&1 &
+          sleep 1
+          PID=$(pgrep -x openfortivpn | head -n1 || true)
+          echo "$PID" > openfortivpn.pid
+          [ -n "$PID" ] || { echo "openfortivpn did not start"; cat openfortivpn.log; exit 1; }
+          for i in $(seq 1 30); do
+            kill -0 "$PID" 2>/dev/null || { echo "openfortivpn died during bring-up"; cat openfortivpn.log; exit 1; }
+            if ip link show ppp0 >/dev/null 2>&1; then echo "ppp0 is up"; break; fi
+            sleep 2
+          done
+          ip link show ppp0 >/dev/null 2>&1 || { echo "VPN failed to bring up ppp0"; cat openfortivpn.log; exit 1; }
+          kill -0 "$PID" 2>/dev/null || { echo "openfortivpn died before deploy"; cat openfortivpn.log; exit 1; }
+          rm -f vpn.conf                              # remove credential file as soon as tunnel is up
+
+      - name: Assert FTP route goes through the VPN (fail closed)
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+        run: |
+          set -euo pipefail
+          # Resolve FTP host and assert the kernel route egresses via ppp0. ping is NOT proof.
+          IP=$(getent hosts "$FTP_SERVER" | awk '{print $1; exit}')
+          DEV=$(ip route get "$IP" | grep -oP 'dev \K\S+' || true)
+          echo "Route to FTP host ($IP) uses dev: ${DEV:-<none>}"
+          [ "$DEV" = "ppp0" ] || { echo "FTP route is NOT via VPN (dev=$DEV). Refusing to deploy."; exit 1; }
+          # Killswitch: the FTP deploy runs inside a third-party action we can't make VPN-aware, and
+          # plain FTP is cleartext. The route check above only proves ppp0 at THIS instant -- if the
+          # tunnel drops mid-transfer the kernel would silently fail over to eth0 and leak the FTP
+          # password + site over the public internet. This rule rejects any packet to the FTP host
+          # that doesn't egress ppp0, so a dropped tunnel = failed deploy, never a cleartext leak.
+          sudo iptables -A OUTPUT -d "$IP" ! -o ppp0 -j REJECT
+
+      - name: Deploy to FTP (delete-mirror)
+        uses: SamKirkland/FTP-Deploy-Action@110f9186c050f71550953127052e77650219c287 # v4.4.0
+        with:
+          protocol: ftp                 # simple server; egress is protected by the VPN, not TLS
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./_site/           # trailing slash required
+          server-dir: /sharedirs/sharedir01/tchaves/public_html/
+
+      - name: Tear down VPN
+        if: always()                  # MUST run even on failure; never leave the tunnel up
+        run: |
+          [ -f openfortivpn.pid ] && sudo kill "$(cat openfortivpn.pid)" 2>/dev/null || true
+          sudo pkill -x openfortivpn 2>/dev/null || true
+          rm -f vpn.conf openfortivpn.pid openfortivpn.log
