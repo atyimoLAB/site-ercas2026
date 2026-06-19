@@ -69,11 +69,13 @@ jobs:
           # Capture openfortivpn's REAL pid inside the root shell (not sudo's) for clean teardown.
           sudo sh -c 'openfortivpn -c vpn.conf >> openfortivpn.log 2>&1 & echo $! > openfortivpn.pid'
 
-          # Wait for ppp0; bail fast if the process dies mid-bring-up.
-          echo "Waiting for ppp0 interface..."
+          # Wait for ppp0 to get an IPv4 address; bail fast if the process dies mid-bring-up.
+          # Link presence alone is too early: pppd creates ppp0, then IPCP negotiates the address.
+          # Adding a route before IPCP finishes fails with "Device for nexthop is not up".
+          echo "Waiting for ppp0 to come up with an IPv4 address..."
           for i in $(seq 1 30); do
-            if ip link show ppp0 >/dev/null 2>&1; then
-              echo "VPN tunnel is up (ppp0 present)."
+            if ip -4 addr show dev ppp0 2>/dev/null | grep -q 'inet '; then
+              echo "VPN tunnel is up (ppp0 has an IPv4 address)."
               rm -f vpn.conf
               ip -brief addr show ppp0 || true
               exit 0
