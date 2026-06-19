@@ -1,0 +1,13 @@
+.git
+_site
+vendor
+.jekyll-cache
+.jekyll-metadata
+.sass-cache
+.ruby-lsp
+.github
+node_modules
+*.log
+Dockerfile
+docker-compose.yml
+.dockerignore
