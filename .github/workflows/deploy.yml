@@ -5,11 +5,11 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Least privilege: only need to read the repo to build.
+# Read-only: only builds the repo.
 permissions:
   contents: read
 
-# One deploy at a time; never cancel an in-flight FTP mirror mid-write.
+# One deploy at a time; never cancel an in-flight mirror.
 concurrency:
   group: ftp-deploy-production
   cancel-in-progress: false
@@ -24,10 +24,10 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@89f90524b88a01fe6e0b732220432cc6142926af # v1.313.0
         env:
-          BUNDLE_FROZEN: 'true'          # fail if Gemfile.lock is stale; never re-resolve in CI
+          BUNDLE_FROZEN: 'true'          # fail if Gemfile.lock is stale
         with:
           ruby-version: '3.4'
-          bundler-cache: true            # gems cached, keyed by Gemfile.lock hash
+          bundler-cache: true            # gems cached by Gemfile.lock hash
 
       - name: Build site (pt)
         run: bundle exec jekyll build --config _config.yml,_config.pt.yml -d _site
@@ -38,15 +38,15 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update
-          # ppp provides /usr/sbin/pppd. openfortivpn authenticates itself, then hands off to pppd
-          # to create ppp0. Without pppd the process dies right after "Authenticated." -- which is
-          # exactly the bring-up failure we saw. Install ppp explicitly; do not rely on it being preinstalled.
+          # openfortivpn hands off to pppd to create ppp0; without ppp it dies after "Authenticated."
           sudo apt-get install -y openfortivpn ppp
-          # Fail fast with a clear message rather than a silent post-auth death later.
           command -v pppd >/dev/null 2>&1 || [ -x /usr/sbin/pppd ] \
-            || { echo "pppd missing after install -- openfortivpn cannot bring up ppp0"; exit 1; }
+            || { echo "pppd missing -- openfortivpn cannot bring up ppp0"; exit 1; }
+          # pppd needs the kernel ppp module + /dev/ppp, both absent on ubuntu-latest by default.
+          sudo modprobe ppp_generic
+          [ -e /dev/ppp ] || { echo "/dev/ppp missing -- pppd cannot bring up ppp0"; exit 1; }
 
-      - name: Bring up VPN (openfortivpn, ppp0)
+      - name: Connect to SSL-VPN
         env:
           VPN_GATEWAY_HOST: ${{ secrets.VPN_GATEWAY_HOST }}
           VPN_GATEWAY_PORT: ${{ secrets.VPN_GATEWAY_PORT }}
@@ -54,64 +54,75 @@ jobs:
           VPN_PASSWORD: ${{ secrets.VPN_PASSWORD }}
         run: |
           set -euo pipefail
-          umask 077                                   # vpn.conf must be 600 before any secret is written
-          # printf writes the INI body with no leading whitespace; openfortivpn's parser is strict.
-          printf 'host = %s\nport = %s\nusername = %s\npassword = %s\n' \
-            "$VPN_GATEWAY_HOST" "$VPN_GATEWAY_PORT" "$VPN_USERNAME" "$VPN_PASSWORD" > vpn.conf
-          # Start tunnel with -v so the pppd handoff (and any pppd failure) is surfaced in the log,
-          # instead of the process dying silently after "Authenticated.". stdbuf -oL -eL defeats
-          # block buffering so the real error reaches openfortivpn.log before the process exits.
-          # Capture the REAL openfortivpn pid (not sudo's) for clean teardown.
-          sudo stdbuf -oL -eL openfortivpn -v -c vpn.conf >openfortivpn.log 2>&1 &
-          sleep 1
-          PID=$(pgrep -x openfortivpn | head -n1 || true)
-          echo "$PID" > openfortivpn.pid
-          [ -n "$PID" ] || { echo "openfortivpn did not start"; cat openfortivpn.log; exit 1; }
+
+          # Config mode 600; secrets never on the CLI.
+          umask 077
+          printf 'host = %s\n'          "$VPN_GATEWAY_HOST"  >  vpn.conf
+          printf 'port = %s\n'          "$VPN_GATEWAY_PORT"  >> vpn.conf
+          printf 'username = %s\n'      "$VPN_USERNAME"      >> vpn.conf
+          printf 'password = %s\n'      "$VPN_PASSWORD"      >> vpn.conf
+
+          # Pre-create as runner so root's append-writes stay readable.
+          : > openfortivpn.log
+          : > openfortivpn.pid
+
+          # Capture openfortivpn's REAL pid inside the root shell (not sudo's) for clean teardown.
+          sudo sh -c 'openfortivpn -c vpn.conf >> openfortivpn.log 2>&1 & echo $! > openfortivpn.pid'
+
+          # Wait for ppp0; bail fast if the process dies mid-bring-up.
+          echo "Waiting for ppp0 interface..."
           for i in $(seq 1 30); do
-            kill -0 "$PID" 2>/dev/null || {
-              echo "openfortivpn died during bring-up -- full log:"; cat openfortivpn.log
-              # Most common cause: pppd absent/unusable at the post-auth handoff.
-              command -v pppd >/dev/null 2>&1 || [ -x /usr/sbin/pppd ] \
-                || echo "HINT: pppd is not on PATH -- install the 'ppp' package."
+            if ip link show ppp0 >/dev/null 2>&1; then
+              echo "VPN tunnel is up (ppp0 present)."
+              rm -f vpn.conf
+              ip -brief addr show ppp0 || true
+              exit 0
+            fi
+            if ! sudo kill -0 "$(cat openfortivpn.pid 2>/dev/null)" 2>/dev/null; then
+              echo "ERROR: openfortivpn exited before ppp0 came up. VPN log:"
+              cat openfortivpn.log || true
+              rm -f vpn.conf
               exit 1
-            }
-            if ip link show ppp0 >/dev/null 2>&1; then echo "ppp0 is up"; break; fi
+            fi
             sleep 2
           done
-          ip link show ppp0 >/dev/null 2>&1 || { echo "VPN failed to bring up ppp0"; cat openfortivpn.log; exit 1; }
-          kill -0 "$PID" 2>/dev/null || { echo "openfortivpn died before deploy"; cat openfortivpn.log; exit 1; }
-          rm -f vpn.conf                              # remove credential file as soon as tunnel is up
+
+          echo "ERROR: ppp0 did not come up within timeout. VPN log:"
+          cat openfortivpn.log || true
+          rm -f vpn.conf
+          exit 1
 
       - name: Assert FTP route goes through the VPN (fail closed)
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
         run: |
           set -euo pipefail
-          # Resolve FTP host and assert the kernel route egresses via ppp0. ping is NOT proof.
+          # Assert the kernel route to the FTP host egresses ppp0 (ping is not proof).
           IP=$(getent hosts "$FTP_SERVER" | awk '{print $1; exit}')
           DEV=$(ip route get "$IP" | grep -oP 'dev \K\S+' || true)
           echo "Route to FTP host ($IP) uses dev: ${DEV:-<none>}"
           [ "$DEV" = "ppp0" ] || { echo "FTP route is NOT via VPN (dev=$DEV). Refusing to deploy."; exit 1; }
-          # Killswitch: the FTP deploy runs inside a third-party action we can't make VPN-aware, and
-          # plain FTP is cleartext. The route check above only proves ppp0 at THIS instant -- if the
-          # tunnel drops mid-transfer the kernel would silently fail over to eth0 and leak the FTP
-          # password + site over the public internet. This rule rejects any packet to the FTP host
-          # that doesn't egress ppp0, so a dropped tunnel = failed deploy, never a cleartext leak.
-          sudo iptables -A OUTPUT -d "$IP" ! -o ppp0 -j REJECT
 
-      - name: Deploy to FTP (delete-mirror)
+      - name: Deploy to FTP (mirror with delete)
         uses: SamKirkland/FTP-Deploy-Action@110f9186c050f71550953127052e77650219c287 # v4.4.0
         with:
-          protocol: ftp                 # simple server; egress is protected by the VPN, not TLS
+          protocol: ftp                 # egress protected by the VPN, not TLS
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./_site/           # trailing slash required
+          local-dir: ./_site/           # trailing slash required; Jekyll output dir
           server-dir: /sharedirs/sharedir01/tchaves/public_html/
 
-      - name: Tear down VPN
-        if: always()                  # MUST run even on failure; never leave the tunnel up
+      - name: Disconnect SSL-VPN
+        if: always()                  # run even on failure; never leave the tunnel up
         run: |
-          [ -f openfortivpn.pid ] && sudo kill "$(cat openfortivpn.pid)" 2>/dev/null || true
-          sudo pkill -x openfortivpn 2>/dev/null || true
-          rm -f vpn.conf openfortivpn.pid openfortivpn.log
+          if [ -f openfortivpn.pid ]; then
+            VPN_PID="$(cat openfortivpn.pid)"
+            if [ -n "${VPN_PID}" ]; then
+              echo "Stopping openfortivpn (PID ${VPN_PID})..."
+              sudo kill "${VPN_PID}" 2>/dev/null || true
+            fi
+          fi
+          sudo pkill -f openfortivpn 2>/dev/null || true
+          rm -f vpn.conf openfortivpn.pid
+          echo "VPN teardown complete."

@@ -28,9 +28,11 @@ metadata:
 which already ran `bundle install` internally. Frozen enforcement only guards subsequent explicit bundle invocations,
 not the install step itself. With a committed lockfile this is safe but the ordering is counterintuitive.
 
-**Known CI quirk (blocker-class):** vpn.conf heredoc has 10-space indentation from YAML block scalar.
-openfortivpn is strict about its config format — leading whitespace on `host/port/username/password` lines
-may cause VPN connection failures. Fix: use `cat > vpn.conf <<-EOF` with tab-indented body, or redirect to a file without indentation.
+**Prior blocker (resolved 2026-06-19):** vpn.conf heredoc indentation issue is gone. The workflow now writes vpn.conf via `printf` redirects (no heredoc), so leading-whitespace is not a concern.
+
+**CI workflow simplification (2026-06-19):** VPN bring-up replaced with a simpler ppp0-wait loop. The iptables REJECT killswitch was dropped (deliberate user decision). Route-assert (`ip route get`, dev must be ppp0) is kept. SamKirkland/FTP-Deploy-Action replaces lftp. Teardown renamed "Disconnect SSL-VPN", `if: always()`.
+
+**Known minor regression (2026-06-19):** The ppp0 wait loop does not check openfortivpn liveness — if the process dies mid-wait, the step spins the full 60 s before reporting timeout, obscuring the real error. Recommended fix: add `sudo kill -0 $(cat openfortivpn.pid)` inside the loop to detect early death immediately.
 
 **Permalink strategy:** All pages/overviews have explicit `permalink:` in front matter (e.g., `/program/`, `/talks/`). No `/pt/` leakage in built URLs. No `/en/` path leakage in en build.
 
