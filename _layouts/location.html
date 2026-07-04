@@ -1,0 +1,45 @@
+{% include header.html %}
+
+  {% assign this_room = page %}
+
+  <h1 class="display-5 mb-3 text-break">
+    {% if page.title %}
+      {{ page.title }}
+    {% else %}
+      {{ site.data.lang[site.conference.lang].location.name | default: "Location" }}
+    {% endif %}
+  </h1>
+
+  {% unless page.hide %}
+    {% include navbar_rooms.html %}
+  {% endunless %}
+
+  {% if page.postal_address %}
+    <address>
+      {%- if page.postal_address.name %}
+      <strong>{{ page.postal_address.name }}</strong><br />
+      {%- else %}
+      <strong>{{ site.conference.event.venue }}</strong><br />
+      {%- endif %}
+      {%- if page.postal_address.street %}
+      {{ page.postal_address.street }}<br />
+      {%- endif %}
+      {%- if page.postal_address.region %}
+      {{ page.postal_address.region }}
+      {%- endif %}
+      {%- if page.postal_address.postal_code %}
+      {{ page.postal_address.postal_code }}
+      {%- endif %}
+      {%- if page.postal_address.locality %}
+      {{ page.postal_address.locality }}
+      {%- endif %}
+    </address>
+  {% endif %}
+
+  {{ content }}
+
+  {% if page.map %}
+    <div id="map" class="w-100 rounded shadow-sm" aria-label="{{ site.data.lang[site.conference.lang].location.map_label | default: 'Interactive conference location map' }}"></div>
+  {% endif %}
+
+{% include footer.html %}
