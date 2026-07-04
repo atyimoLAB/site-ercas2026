@@ -2,7 +2,9 @@ title: ERCAS 2026
 description: >-
   Escola Regional de Computação Aplicada à Saúde (ERCAS): evento que promove o uso de computação na saúde, incentivando troca de conhecimento e integração entre profissionais, pesquisadores, docentes, estudantes e instituições da área.
 url: "https://ercas2026.ufba.br"
-# baseurl is set per-language config
+baseurl: ""
+
+lang: pt-BR
 
 theme: jekyll-theme-conference
 plugins:
@@ -38,14 +40,48 @@ include:
   - .htaccess
 
 exclude:
+  - en
   - GUIDE.md
   - README.md
 
+collections_dir: pt
+data_dir: pt/_data
+
 conference:
+  lang: pt
   name: "ERCAS"
   year: "2026"
   tz: "-03:00"
-  show_errors: true   # set false in production build
+  show_errors: true
+
+  navigation:
+    # All sections disabled until content is ready - only the home (brand) link is active.
+    # Remove `disabled: true` from a link to re-enable it.
+    links:
+      - name: Programação
+        relative_url: /programacao/
+        disabled: true
+      - name: Palestras
+        relative_url: /palestras/
+        disabled: true
+      - name: Palestrantes
+        relative_url: /palestrantes/
+        disabled: true
+      - name: Comitês
+        relative_url: /comites/
+        disabled: true
+      - name: Patrocínio
+        relative_url: /patrocinio/
+        disabled: true
+      - name: Datas
+        relative_url: /datas/
+        disabled: true
+      - name: Local
+        relative_url: /local/
+        disabled: true
+      - name: Inscrições
+        absolute_url: "https://ercas2026.ufba.br/inscricoes"
+        disabled: true
 
   event:
     dates: "5–6 de Outubro de 2026"

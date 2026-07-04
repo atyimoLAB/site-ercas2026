@@ -1,5 +1,5 @@
 ---
 layout: program
-permalink: /program/
+permalink: /programacao/
 title: Programação
 ---
