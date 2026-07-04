@@ -1,5 +1,5 @@
 ---
 layout: talk-overview
-permalink: /talks/
+permalink: /palestras/
 title: Palestras
 ---

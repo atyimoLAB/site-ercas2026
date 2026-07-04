@@ -29,8 +29,8 @@ jobs:
           ruby-version: '3.4'
           bundler-cache: true            # gems cached by Gemfile.lock hash
 
-      - name: Build site (pt)
-        run: bundle exec jekyll build --config _config.yml,_config.pt.yml -d _site
+      - name: Build site
+        run: bundle exec jekyll build -d _site
         env:
           JEKYLL_ENV: production
 

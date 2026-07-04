@@ -1,5 +1,5 @@
 ---
 layout: speaker-overview
-permalink: /speakers/
+permalink: /palestrantes/
 title: Palestrantes
 ---

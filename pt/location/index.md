@@ -1,6 +1,6 @@
 ---
 layout: location
-permalink: /location/
+permalink: /local/
 title: Local
 
 postal_address:

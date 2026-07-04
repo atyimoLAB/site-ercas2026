@@ -1,6 +1,6 @@
 ---
 layout: page
-permalink: /important-dates/
+permalink: /datas/
 title: Datas Importantes
 ---
 

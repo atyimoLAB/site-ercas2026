@@ -10,18 +10,16 @@ No Ruby on your machine — one command:
 docker compose up dev
 ```
 
-Site (Portuguese): <http://localhost:4000/> — served at root (PT `baseurl`
-is now `""` for the `ercas2026.ufba.br` custom domain). Live reload is on.
+Site (PT-BR): <http://localhost:4000/>. Live reload is on.
 
 | Task | Command |
 |------|---------|
-| Dev server, PT, live reload | `docker compose up dev` |
-| Dev server, EN | `JEKYLL_CONFIG=_config.yml,_config.en.yml docker compose up dev` |
-| Production-parity build + preview (PT) | `docker compose up prod` |
+| Dev server, live reload | `docker compose up dev` |
+| Production-parity build + preview | `docker compose up prod` |
 | Rebuild after a `Gemfile.lock` change | `docker compose build` |
 | Full reset (clears gem/cache volumes) | `docker compose down -v` |
 
-- After editing any `_config*.yml`, restart: `docker compose restart dev`
+- After editing `_config.yml`, restart: `docker compose restart dev`
   (Jekyll doesn't reload config).
 - `prod` builds with `JEKYLL_ENV=production` and serves the exact `_site/` that
   ships — use it to verify production output.
@@ -39,11 +37,11 @@ Requires **Ruby 3.4.x** and **Bundler 4.x** (a version manager like
 ```bash
 bundle install
 
-# Dev (PT) — a layered --config is REQUIRED or nothing renders:
-bundle exec jekyll serve --config _config.yml,_config.pt.yml --livereload
+# Dev (PT-BR)
+bundle exec jekyll serve --livereload
 
 # Production build (what CI runs):
-JEKYLL_ENV=production bundle exec jekyll build --config _config.yml,_config.pt.yml -d _site
+JEKYLL_ENV=production bundle exec jekyll build -d _site
 ```
 
 ## Project structure
@@ -59,6 +57,9 @@ _site/           # generated output (gitignored)
 > Conference content (talks, speakers, program) is added under `_data/` —
 > see the [theme docs](https://github.com/DigiLab-OVGU/jekyll-theme-conference)
 > for the expected data files.
+
+Current setup is single-language PT-BR. Source content lives in `pt/` with
+`collections_dir: pt` and `data_dir: pt/_data` configured in `_config.yml`.
 
 ## Notes
 
