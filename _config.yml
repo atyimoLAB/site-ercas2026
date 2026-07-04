@@ -78,7 +78,6 @@ conference:
         disabled: true
       - name: Local
         relative_url: /local/
-        disabled: true
       - name: Inscrições
         absolute_url: "https://ercas2026.ufba.br/inscricoes"
         disabled: true
@@ -86,7 +85,7 @@ conference:
   event:
     dates: "5–6 de Outubro de 2026"
     city: "Salvador, BA"
-    venue: "Instituto de Computação da Universidade Federal da Bahia (UFBA)"
+    venue: "Instituto de Computação da Universidade Federal da Bahia (IC/UFBA)"
     registration_url: "https://ercas2026.ufba.br/inscricoes"
 
   social:
