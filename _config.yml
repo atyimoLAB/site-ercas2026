@@ -58,6 +58,8 @@ conference:
     # All sections disabled until content is ready - only the home (brand) link is active.
     # Remove `disabled: true` from a link to re-enable it.
     links:
+      - name: Sobre
+        relative_url: /sobre/
       - name: Programação
         relative_url: /programacao/
         disabled: true
