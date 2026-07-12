@@ -62,13 +62,10 @@ conference:
         relative_url: /sobre/
       - name: Programação
         relative_url: /programacao/
-        disabled: true
       - name: Palestras
         relative_url: /palestras/
-        disabled: true
       - name: Palestrantes
         relative_url: /palestrantes/
-        disabled: true
       - name: Comitês
         relative_url: /comites/
         disabled: true
@@ -96,12 +93,18 @@ conference:
 
   talks:
     tracks:
-      - name: Pesquisa
+      - name: Minicurso
         color: info
-      - name: Indústria
+      - name: Palestra
+        color: primary
+      - name: Workshop
         color: success
-      - name: Educação
+      - name: Abertura
         color: warning
+      - name: Encerramento
+        color: dark
+      - name: Logística
+        color: secondary
     tags:
       - name: Keynote
         icon: star
