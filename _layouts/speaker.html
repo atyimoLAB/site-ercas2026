@@ -1,0 +1,81 @@
+{%- assign speaker = page -%}
+
+{%- unless speaker.hide -%}
+  {%- include header.html -%}
+
+  <p class="h6">
+    {{ site.data.lang[site.conference.lang].speaker.title | default: "Speaker" }}
+  </p>
+
+  <h1 class="fw-light mb-3 text-break">
+    {{ speaker.first_name }} {{ speaker.last_name }}
+  </h1>
+
+  {{ content }}
+
+  {% include get_link_types.html %}
+
+  {% if has_icon_links > 0 %}
+    <ul class="list-unstyled">
+      {% for link in speaker.links %}
+        {% include get_link.html type="icon" %}
+        {% if link_valid %}
+          {{ link_list_item }}
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if has_regular_links > 0 %}
+    <h5 class="mt-4 mb-1">{{ site.data.lang[site.conference.lang].more_information | default: "More Information" }}:</h5>
+
+    <ul class="list-unstyled">
+      {% for link in speaker.links %}
+        {% include get_link.html %}
+        {% if link_valid %}
+          {{ link_list_item }}
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% assign active_speaker = false %}
+  {% for talk in site.talks %}
+    {% for speaker_name in talk.speakers %}
+      {% if speaker_name == speaker.name %}
+        {% assign active_speaker = true %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  {% if active_speaker %}
+    <h5 class="mt-4 mb-2">{{ site.data.lang[site.conference.lang].speaker.talks | default: "Talks at this conference" }}:</h5>
+
+    <table class="mw-100">
+    {%- for d in site.data.program.days -%}
+      {%- include get_day_hash.html -%}
+      {%- for r in d.rooms -%}
+        {%- for t in r.talks -%}
+          {%- assign talk = site.talks | where: 'name', t.name | first -%}
+
+          {%- for speaker_name in talk.speakers -%}
+            {%- if speaker_name == speaker.name -%}
+              {%- include show_talk_listed.html hide_speakers=true -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endfor -%}
+      {%- endfor -%}
+    {%- endfor -%}
+    </table>
+  {% endif %}
+
+  <p class="d-print-none d-pwa-none mt-5">
+    <a href="{{ '/palestrantes/' | prepend: site.baseurl }}" class="btn btn-outline-secondary">
+      <i class="bi bi-people" aria-hidden="true"></i>&nbsp;{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
+    </a>
+  </p>
+
+  {%- include footer.html -%}
+{%- endunless -%}

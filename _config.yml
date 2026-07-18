@@ -16,6 +16,7 @@ collections:
     output: true
   speakers:
     output: true
+    permalink: /palestrantes/:path/
   rooms:
     output: true
 
