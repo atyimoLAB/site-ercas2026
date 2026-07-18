@@ -5,34 +5,39 @@ metadata:
   type: feedback
 ---
 
-**Issues found in first review (2026-06-18) — still open as of second review (2026-06-18):**
+**Resolved since last check (verify still true, don't just trust this):**
+- GUIDE.md/README.md leaking into `_site/` — now in `exclude:` in `_config.yml`, confirmed absent
+  from a fresh build 2026-07-10.
+- Old fake program/speaker/room placeholder content — fully replaced with real ERCAS 2026
+  schedule 2026-07-10, see [[data-schema]].
 
-1. **GUIDE.md and README.md publish to _site (both pt and en builds)** — neither has front matter and neither is in any `exclude:` list. They appear at `/GUIDE.md` and `/README.md` in both the pt and en built sites. Confirmed published in `_site/GUIDE.md`, `_site/README.md`, `_site/en/GUIDE.md`, `_site/en/README.md`. Fix: add `GUIDE.md` and `README.md` to `exclude:` in `_config.yml` (base config, so applies to all builds).
+**Open / newly discovered (2026-07-10):**
+1. **Track-less talks trigger a false-positive theme build error, rendered site-wide.** See
+   [[data-schema]] "Theme quirk" section for full mechanics. Any `_talks/*.md` without a
+   `track:` field (even `hide: true` logistics rows, which the theme's own README says are
+   allowed to omit `track`) causes `_includes/checks.html` in the gem to add them to a
+   "tracks not defined" error, which renders as a red `alert-danger` box on every page because
+   `show_errors: true` is unconditional in prod now (see [[site-architecture]]). This is the
+   single highest-value check for future reviews of `_talks/` changes: grep built HTML for
+   `alert-danger` after every build touching talks.
 
-2. **sponsors.yml references a logo file that doesn't exist** — `sponsors/logo-placeholder.svg` is referenced in both `pt/_data/sponsors.yml:5` and `en/_data/sponsors.yml:5` but `assets/images/sponsors/` is an empty directory (confirmed). Causes a broken `<img>` at `/sponsors/` and `/en/sponsors/`. Fix: either create a placeholder SVG at `assets/images/sponsors/logo-placeholder.svg` or remove the `logo:` key from the placeholder sponsor entry.
+2. **"A confirmar" as a fake `speakers:` entry renders as a broken empty-href link, not plain
+   text (discovered/verified in built HTML 2026-07-17).** After the `_includes/list_speakers.html`
+   repo override was reverted (restoring the gem's stock include with no empty-state branch),
+   editors started typing the literal name "A confirmar" into `speakers:` lists as a manual
+   placeholder for unconfirmed speakers. The gem's include only suppresses the `<a>` wrapper when
+   `speaker.hide` is truthy; a non-matching name gives a `nil` speaker object, so `speaker.hide`
+   is falsy and it still emits `<a href="">A confirmar</a>` (confirmed in `talks/*.html` and
+   8x on `programacao/index.html`). **Decided 2026-07-17: accepted as-is, not a bug to fix.**
+   User was asked and explicitly chose to leave the empty-href anchor rather than add a
+   `hide: true` speaker stub doc — the stub was rejected because the gem's
+   `speaker-overview.html` doesn't skip hidden speakers, so it would leak a fake "A confirmar"
+   row onto the public `/palestrantes/` page. **Do not propose the stub-doc fix again** unless
+   the user revisits this trade-off. Do not flag the empty-href anchor as a review finding.
 
-3. **important_dates.html first column header uses wrong lang key** — `site.data.lang[site.conference.lang].program.title` resolves to "Programa" (pt) / "Program" (en). The column is meant to label the deadline event, not the conference program. Confirmed: pt build shows `<th>Programa</th>`, en shows `<th>Program</th>` — both semantically wrong. Fix: use a hardcoded bilingual label or a dedicated lang key.
-
-4. **important_dates.html second column header "Data" is hardcoded Portuguese** — `_includes/important_dates.html:6` has literal `Data` — renders as "Data" in the English build too (confirmed). Fix: replace with `{{ site.data.lang[site.conference.lang].program.time | default: "Date" }}` or a dedicated key.
-
-5. **pt/_data/lang.yml has two typos** — line 195: "Transmissãos" should be "Transmissões"; line 202: "hà" should be "há". These affect live streaming UI strings (low-impact until live streaming is used).
-
-6. **`_config.pt.yml` exclude array replaces base exclude** — Jekyll replaces arrays wholesale on merge, so if base ever adds an `exclude:` list, `_config.pt.yml`'s `exclude: [en]` would clobber it. Currently fine since base has no `exclude:`. If GUIDE.md/README.md are added to base `exclude:`, verify pt and en per-lang configs don't override it.
-
-**Confirmed clean (second review):**
-- Scaffold pages (index.markdown, about.markdown, root 404.html) correctly absent from repo root.
-- Build artifacts (_site/, .jekyll-cache/) not tracked; .gitignore correct.
-- Both pt and en builds pass cleanly (no warnings, no errors).
-- show_errors: false in both pt and en production configs; base has show_errors: true; no theme error-bar in _site/ output.
-- conference.name/year/event/social survive config merge; no clobbering.
-- All talk speakers cross-references valid; all track/tag values match configured names.
-- program.yml talk names and room names match collection name: fields exactly.
-- All pages have explicit permalink; pt builds to /site-ercas2026/program/ etc.; en builds under /en/.
-- lang.yml version 10 in both pt and en _data/; pt block at line 177.
-- PT nav labels Portuguese; EN nav labels English. i18n UI strings work via lang.yml.
-- Bootstrap responsive classes present in all three custom includes.
-- Alt text present on sponsor logos.
-- Gemfile.lock committed (correct for this repo).
-- ERCAS acronym in index.md body is about the acronym itself — borderline nit, not a strict violation.
-
-**How to apply:** Check items 1-5 in every future review. Item 6 becomes load-bearing once GUIDE.md/README.md exclusion is added to base config.
+**How to apply:** Check item 1 in every future review that adds or edits `_talks/*.md`,
+especially hidden/logistics-style entries (breaks, lunch, registration) that don't naturally
+have a track. Check item 2 whenever a talk's `speakers:` list contains a placeholder/unconfirmed
+name rather than a real matching `_speakers` doc. Re-verify the "resolved" items above still
+hold before citing them, since prior memory snapshots in this file described a different
+(multi-config, bilingual) architecture that turned out to be stale.

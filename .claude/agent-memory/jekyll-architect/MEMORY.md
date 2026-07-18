@@ -1,0 +1,1 @@
+- [Theme program layout](theme-program-layout.md) — how program timetable renders tracks/tags/legend; repo overrides _layouts/program.html; hide_legend front-matter toggle

@@ -16,6 +16,7 @@ collections:
     output: true
   speakers:
     output: true
+    permalink: /palestrantes/:path/
   rooms:
     output: true
 
@@ -62,13 +63,10 @@ conference:
         relative_url: /sobre/
       - name: Programação
         relative_url: /programacao/
-        disabled: true
       - name: Palestras
         relative_url: /palestras/
-        disabled: true
       - name: Palestrantes
         relative_url: /palestrantes/
-        disabled: true
       - name: Comitês
         relative_url: /comites/
         disabled: true
@@ -85,7 +83,7 @@ conference:
         disabled: true
 
   event:
-    dates: "5–6 de Outubro de 2026"
+    dates: "5–7 de Outubro de 2026"
     city: "Salvador, BA"
     venue: "Instituto de Computação da Universidade Federal da Bahia (IC/UFBA)"
     registration_url: "https://ercas2026.ufba.br/inscricoes"
@@ -96,14 +94,25 @@ conference:
 
   talks:
     tracks:
-      - name: Pesquisa
+      - name: Diagnóstico por Imagem e Visão Computacional
+        color: primary
+      - name: Processamento de Linguagem Natural e Saúde Mental
         color: info
-      - name: Indústria
+      - name: Ciência de Dados Clínicos e Epidemiologia
         color: success
-      - name: Educação
+      - name: Fundamentos de IA e Aprendizado de Máquina
+        color: danger
+      - name: IoT, Sistemas e Infraestrutura em Saúde
         color: warning
+      - name: Sessões Técnicas
+        color: dark
+      - name: Institucional
+        color: secondary
     tags:
       - name: Keynote
         icon: star
       - name: Tutorial
         icon: mortarboard
+      - name: Minicurso
+      - name: Palestra
+      - name: Workshop

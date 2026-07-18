@@ -1,6 +1,6 @@
 # Jekyll Reviewer Memory — ERCAS 2026
 
-- [Site architecture](site-architecture.md) — bilingual multi-config, pt ships now, en authored not deployed
-- [Data schema](data-schema.md) — _talks, _speakers, _rooms fields; program.yml structure; custom data files
-- [Known issues](known-issues.md) — recurring problems to watch for in future reviews
-- [Build notes](build-notes.md) — build commands, warnings, and CI configuration
+- [Site architecture](site-architecture.md) — single-config PT-BR site now, show_errors:true unconditional in prod
+- [Data schema](data-schema.md) — real program content (2026-07-10) + track-less-talk theme quirk
+- [Known issues](known-issues.md) — track-less talks trip a false-positive error banner; "A confirmar" placeholder speakers render as broken empty-href links
+- [Build notes](build-notes.md) — build command, and why CLI-clean != HTML-clean (must grep for alert-danger)

@@ -1,27 +1,100 @@
 days:
+  - name: Segunda-feira
+    abbr: Seg
+    date: 2026-10-05
+    rooms:
+      - name: Auditório
+        talks:
+          - name: Credenciamento
+            time_start: "08:00"
+            time_end: "09:00"
+          - name: Fundamentos de Internet das Coisas para Healthcare
+            time_start: "09:00"
+            time_end: "10:30"
+          - name: Intervalo
+            time_start: "10:30"
+            time_end: "10:40"
+          - name: O uso de imagens para suporte ao diagnóstico
+            time_start: "10:40"
+            time_end: "12:00"
+          - name: Almoço
+            time_start: "12:00"
+            time_end: "14:00"
+          - name: Epidemiologia Genômica de Coortes Brasileiras
+            time_start: "14:00"
+            time_end: "15:20"
+          - name: Intervalo
+            time_start: "15:20"
+            time_end: "15:30"
+          - name: Sessão Técnica 1
+            time_start: "15:30"
+            time_end: "17:00"
+          - name: Abertura Oficial
+            time_start: "17:00"
+            time_end: "18:00"
   - name: Terça-feira
     abbr: Ter
-    date: 2026-10-13
+    date: 2026-10-06
     rooms:
-      - name: Sala Principal
+      - name: Auditório
         talks:
-          - name: Keynote de Abertura
+          - name: Credenciamento
+            time_start: "08:00"
+            time_end: "09:00"
+          - name: Criando uma Rede Neural do Zero
             time_start: "09:00"
-            time_end: "10:00"
-          - name: Telemedicina em Hospitais Públicos
+            time_end: "10:30"
+          - name: Intervalo
             time_start: "10:30"
-            time_end: "11:30"
+            time_end: "10:40"
+          - name: "Analisando dados multimodais em saúde: uma experiência usando a base de dados MIMIC-IV"
+            time_start: "10:40"
+            time_end: "12:00"
+          - name: Almoço
+            time_start: "12:00"
+            time_end: "14:00"
+          - name: Uso de Inteligência Artificial e Processamento de Linguagem Natural para Identificação de Transtornos de Saúde Mental
+            time_start: "14:00"
+            time_end: "15:20"
+          - name: Intervalo
+            time_start: "15:20"
+            time_end: "15:30"
+          - name: Sessão Técnica 2
+            time_start: "15:30"
+            time_end: "17:00"
+          - name: Detecção e Diagnóstico de Doenças usando Inteligência Artificial
+            time_start: "17:00"
+            time_end: "18:00"
   - name: Quarta-feira
     abbr: Qua
-    date: 2026-10-14
+    date: 2026-10-07
     rooms:
-      - name: Sala Principal
+      - name: Auditório
         talks:
-          - name: IA para Vigilância Epidemiológica
+          - name: Credenciamento
+            time_start: "08:00"
+            time_end: "09:00"
+          - name: Análise Sintática em Transformers com Cabeças de Atenção
+            time_start: "09:00"
+            time_end: "10:30"
+          - name: Intervalo
+            time_start: "10:30"
+            time_end: "10:40"
+          - name: "Visão Computacional com IA Generativa para capacitação médica e apoio ao diagnóstico em Mieloma Múltiplo"
+            time_start: "10:40"
+            time_end: "12:00"
+          - name: Almoço
+            time_start: "12:00"
+            time_end: "14:00"
+          - name: "Modelos preditivos na saúde: desafios e estratégias para mitigar vieses e desigualdades"
             time_start: "14:00"
-            time_end: "16:00"
-      - name: Sala Workshop
-        talks:
-          - name: Telemedicina em Hospitais Públicos
-            time_start: "14:00"
-            time_end: "15:00"
+            time_end: "15:20"
+          - name: Intervalo
+            time_start: "15:20"
+            time_end: "15:30"
+          - name: Sessão Técnica 3
+            time_start: "15:30"
+            time_end: "17:00"
+          - name: Premiação e Encerramento
+            time_start: "17:00"
+            time_end: "18:00"

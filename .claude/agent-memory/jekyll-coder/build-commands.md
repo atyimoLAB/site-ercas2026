@@ -1,37 +1,40 @@
 ---
 name: build-commands
-description: Exact Jekyll build and serve commands for pt and en builds
+description: Exact Jekyll build/serve commands for the current single-config PT-BR site
 metadata:
   type: reference
 ---
 
-## Production pt build (CI)
+## Current setup (single `_config.yml`, no per-lang configs)
 
+The old `_config.pt.yml` / `_config.en.yml` multi-config split is gone. See
+[project-structure](project-structure.md) — one `_config.yml` at repo root drives everything,
+with `conference.show_errors: true` always on.
+
+Production build (what CI runs, per `.github/workflows/deploy.yml`):
 ```bash
-bundle exec jekyll build --config _config.yml,_config.pt.yml -d _site
+bundle exec jekyll build -d _site
 ```
 
-JEKYLL_ENV=production in deploy.yml. show_errors: false comes from _config.pt.yml.
-
-## Local dev pt (show_errors: true from base config, overridden to false by pt config)
-
-To enable show_errors locally, temporarily set it in _config.pt.yml or use a local override:
+Local dev with live reload:
 ```bash
-bundle exec jekyll serve --config _config.yml,_config.pt.yml
+bundle exec jekyll serve --livereload
 ```
 
-Note: _config.pt.yml has show_errors: false. For dev with error checking, create a _config.local.yml with `conference:\n  show_errors: true` and add it as third config.
+**Restart the server after any `_config.yml` edit** — config is not auto-reloaded.
 
-## En sanity build (not in CI yet)
+No `--config` flag juggling needed anymore. If you see instructions referencing
+`_config.pt.yml`/`_config.en.yml`, they're stale — verify against the repo's `/CLAUDE.md`
+before trusting them.
 
+## Verifying a content/data change
+
+`show_errors: true` makes broken cross-references (talk → speaker/room/track/tag name
+mismatch) render as visible error content in `_site/**/*.html`, not just build-time
+warnings. After `bundle exec jekyll build -d _site`, grep the output for stray error text
+in addition to checking the build log, e.g.:
 ```bash
-bundle exec jekyll build --config _config.yml,_config.en.yml -d _site/en
+grep -rli "error" _site --include="*.html" | grep -v assets
 ```
-
-## When custom domain goes live (GUIDE.md)
-
-1. Set `url: "https://ercas2026.ufba.br"` in base _config.yml
-2. Set `baseurl: ""` in _config.pt.yml
-3. Add en build step to deploy.yml (pt first, then en into _site/en)
-4. Add language switcher links to both per-lang navigation.links
-5. Add CNAME file
+A clean build log alone is not sufficient proof — the theme's error reporting shows up in
+rendered HTML.
