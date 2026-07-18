@@ -50,6 +50,10 @@ a {
   font-size: 0.72rem;
 }
 
+.program-talk-tag {
+  font-weight: 800;
+}
+
 .program-talk-tag,
 .program-talk-track {
   text-transform: uppercase;
@@ -69,13 +73,15 @@ a {
   background-color: #fff !important;
   background-image: repeating-linear-gradient(
     45deg,
-    rgba(var(--bs-secondary-rgb), 0.09) 0,
-    rgba(var(--bs-secondary-rgb), 0.09) 6px,
+    rgba(var(--bs-secondary-rgb), 0.050) 0,
+    rgba(var(--bs-secondary-rgb), 0.050) 6px,
     #fff 6px,
     #fff 12px
   );
   display: flex;
   align-items: center;
+  font-weight: 600;
+  font-style: italic;
 }
 
 .program-talk-institucional .program-talk-title {
