@@ -176,20 +176,39 @@
                     {%- endunless -%}
 
                     {%- include get_track_properties.html -%}
+                    {%- assign tag_str = talk.tags | join: " · " -%}
+                    {%- assign is_institutional = false -%}
+                    {%- if talk.track == "Institucional" -%}
+                      {%- assign is_institutional = true -%}
+                    {%- endif -%}
                     <td rowspan="{{ talk_nbr_steps }}" class="program-talk p-0 h-100">
-                      <div class="h-100 p-2 bg-{{ track_color }}-subtle text-{{ track_color }}-emphasis border-4 border-start border-{{ track_color }}-subtle shadow-sm overflow-hidden">
+                      <div class="h-100 p-2 bg-{{ track_color }}-subtle text-{{ track_color }}-emphasis border-4 border-start border-{{ track_color }}-subtle shadow-sm overflow-hidden{% if is_institutional %} program-talk-institucional{% endif %}">
+
+                        {%- unless is_institutional -%}
+                          <p class="program-talk-meta mb-1">
+                            {%- if tag_str != "" -%}
+                              <span class="program-talk-tag">{{ tag_str }}</span>
+                            {%- endif -%}
+                            {%- if tag_str != "" and talk.track -%}
+                              <span class="program-talk-meta-sep" aria-hidden="true"> · </span>
+                            {%- endif -%}
+                            {%- if talk.track -%}
+                              <span class="program-talk-track">{{ talk.track }}</span>
+                            {%- endif -%}
+                          </p>
+                        {%- endunless -%}
 
                         {%- include show_live_icon.html class="mb-2" %}
 
-                        <p class="mb-2">
+                        <p class="program-talk-title mb-2">
                           {%- include show_talk.html %}
                         </p>
-                        <p class="fw-light mb-2">
+
+                        {%- unless is_institutional -%}
+                        <p class="mb-1">
                           {%- include list_speakers.html %}
                         </p>
-                        <p class="mb-1">
-                          {%- include list_tags.html class="text-reset" %}
-                        </p>
+                        {%- endunless -%}
                       </div>
                     </td>
                     {%- assign active_talk = true %}

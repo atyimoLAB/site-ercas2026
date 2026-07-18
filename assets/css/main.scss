@@ -5,3 +5,40 @@
   min-width: 0;
   max-width: none;
 }
+
+.program-talk-meta {
+  font-size: 0.72rem;
+}
+
+.program-talk-tag,
+.program-talk-track {
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.program-talk-meta-sep {
+  opacity: 0.6;
+}
+
+.program-talk-title {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.program-talk-institucional {
+  background-color: #fff !important;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(var(--bs-secondary-rgb), 0.09) 0,
+    rgba(var(--bs-secondary-rgb), 0.09) 6px,
+    #fff 6px,
+    #fff 12px
+  );
+  display: flex;
+  align-items: center;
+}
+
+.program-talk-institucional .program-talk-title {
+  font-weight: 400;
+  margin-bottom: 0;
+}

@@ -104,15 +104,27 @@ Read from gem source, not assumed:
   tracks. Sessões Técnicas and Institucional talks get no format tag (redundant with the
   track name itself).
 
-## Empty-speakers fallback (repo override, added 2026-07)
+## Empty-speakers fallback — REVERTED (2026-07-17)
 
-Theme's `_includes/list_speakers.html` has no empty-state — a talk with no `speakers:` just
-renders blank. Repo now overrides this include (copied from gem 4.0.2, wrapped in
-`{%- if talk.speakers.size > 0 -%} ...gem loop... {%- else -%} fallback {%- endif -%}`) to
-show `site.data.lang[site.conference.lang].speaker.tba` (added key, default "A confirmar")
-as `<em class="text-muted">` (or plain text when `include.text_only`). This include is used
-by every speaker-rendering call site (talk page, program grid, overview) — one override
-covers all of them.
+The repo-local `_includes/list_speakers.html` override described here previously (added
+2026-07) has been deleted. The theme gem's original `list_speakers.html` (no empty-state
+branch) is back in effect via Jekyll's local-then-gem include resolution: a talk with no
+`speakers:` field now renders **no speaker line at all**, everywhere the include is used
+(talk page, program grid, overview). The `speaker.tba` key ("A confirmar") was removed from
+`pt/_data/lang.yml`.
+
+"A confirmar" is no longer a theme-wide fallback — it is now a **manual, per-talk literal
+string** that editors type directly into a talk's `speakers:` front-matter list when a real
+talk's speaker isn't confirmed yet, e.g.:
+```yaml
+speakers:
+  - A confirmar
+```
+It renders as plain unlinked text (inside an empty-href anchor, since it won't match any
+`_speakers` doc `name:`) — cosmetically harmless, same as any other unmatched speaker name.
+Institucional-track ceremony/logistics talks (Abertura Oficial, Almoço, Credenciamento,
+Intervalo, Premiação e Encerramento) intentionally have **no** `speakers:` field at all, so
+they render with no speaker line — do not add "A confirmar" to those.
 
 ## program.html override for single-room full-width (repo override, added 2026-07)
 

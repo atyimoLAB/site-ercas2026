@@ -56,6 +56,30 @@ every `program.yml` talk name matches a `_talks` file `name:` exactly; every tal
 entry matches a `_speakers` file `name:` exactly; the room name matches; all `track:` values
 match a configured track name; no time-slot overlaps within a room/day.
 
+**Note (2026-07-17, CORRECTED same day after actual build verification):** the literal string
+"A confirmar" appearing in a talk's `speakers:` list (e.g. `analise-sintatica-transformers.md`,
+`criando-rede-neural-do-zero.md`, `epidemiologia-genomica-coortes.md`,
+`fundamentos-iot-healthcare.md`, `imagens-suporte-diagnostico.md`, `sessao-tecnica-1/2/3.md`) is
+an intentional, non-matching placeholder name, not a broken cross-reference — don't flag the
+*name mismatch* itself. **But it does NOT render as plain unlinked text as previously assumed
+here.** Verified in built HTML (`talks/*.html` and `programacao/index.html`): the gem's stock
+`list_speakers.html` only prints plain text when `speaker.hide` is truthy; since "A confirmar"
+has no matching `_speakers` doc, `speaker` resolves to `nil`, `speaker.hide` is falsy, and the
+`else` branch fires, producing `<a href="">A confirmar</a>` — an anchor with an **empty href**
+(links to the current page), on every one of the 8 talks and duplicated on the program page.
+This is a real accessibility/UX defect (misleading affordance, WCAG 2.4.4 link-purpose concern),
+not the plain-text fallback the revert intended. **Recommended fix, still unapplied as of
+2026-07-17:** add a `_speakers/*.md` stub doc with `name: A confirmar` and `hide: true` — the
+theme's own `speaker.hide` branch then renders plain text with no link everywhere
+`list_speakers.html` is used, no custom override needed. Side effect to weigh: gem's
+`speaker-overview.html` does NOT skip `hide: true` speakers (line ~32), so this stub would also
+appear as a plain-text "A confirmar" row in the alphabetized speakers overview page — likely
+acceptable but flag it to the user/jekyll-coder rather than assuming. The five
+Institucional-track ceremony/logistics talks (`abertura-oficial`, `almoco`, `credenciamento`,
+`intervalo`, `premiacao-encerramento`) still have no `speakers:` field at all — confirmed via
+`git diff` they're untouched — and correctly render no speaker line at all (that code path is
+fine; only the "A confirmar"-as-fake-speaker-name path is broken).
+
 **Track/tag taxonomy overhaul (2026-07-12, verified clean):** `conference.talks.tracks` is now
 7 thematic/institutional tracks (Diagnóstico por Imagem e Visão Computacional/primary,
 Processamento de Linguagem Natural e Saúde Mental/info, Ciência de Dados Clínicos e
@@ -73,17 +97,13 @@ respects the [[known-issues]] track-less-talk quirk correctly.
 
 **Theme override inventory (added 2026-07-12, first-time overrides — will NOT auto-track gem
 updates, re-diff on theme version bumps):**
-- `_includes/list_speakers.html`: wraps the gem's per-speaker loop in
-  `{% if talk.speakers.size > 0 %}...{% else %}` fallback rendering
-  `site.data.lang[pt].speaker.tba` ("A confirmar") as `<em class="text-muted">` (or plain text
-  under `include.text_only`). Verified via build: nil `talk.speakers` (field entirely absent)
-  correctly falls into the else branch — `talk.speakers.size` on a nil value does not error in
-  Liquid and is not `> 0`. Verified multi-speaker talks (e.g. `dados-multimodais-mimic-iv.md`,
-  2 speakers) still render both names via the original loop, unaffected. This include is the
-  single choke point for all speaker rendering (talk page, program grid, overview, video-link
-  modal subtitle) — one override covers all call sites. `schema_talk.html` (JSON-LD) does NOT
-  use this include — it has its own independent `talk.speakers.size > 0` guarded loop, so the
-  "A confirmar" fallback text never leaks into structured data. Safe pattern, no bug found.
+- `_includes/list_speakers.html` override — **reverted 2026-07-17.** The repo-local wrapper
+  (which added an `{% else %}` fallback rendering `site.data.lang[pt].speaker.tba` / "A
+  confirmar" for any talk with no `speakers:`) was deleted; the theme gem's original include
+  (no empty-state branch) is back in effect via local-then-gem resolution. A talk with no
+  `speakers:` now renders no speaker line at all, everywhere the include is used. The
+  `speaker.tba` key was removed from `pt/_data/lang.yml`. "A confirmar" now only appears when
+  an editor manually types it into a specific talk's `speakers:` list — see below.
 - `_layouts/program.html`: hoists the existing `nbr_rooms = d.rooms | size` assign from inside
   the room `<th>` loop to just above the `<table>` tag (single assignment, no shadowing/dupes
   elsewhere in the file — checked), and appends ` program-rooms-1 w-100` to `.program-table`
