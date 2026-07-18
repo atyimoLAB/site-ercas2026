@@ -80,3 +80,47 @@ days:
 ## Room front matter
 
 `name` (req, unique, matches program.yml room names), `hide`, `live`.
+
+## Tracks vs tags — confirmed theme rendering behavior (2026-07)
+
+Read from gem source, not assumed:
+- `talk.track` is a **singular string** matched against `conference.talks.tracks[].name`.
+  Track `color:` (Bootstrap color name) **is used** — border/badge/legend in both the talk
+  page and the program grid (`get_track_properties.html` → `bg-{color}-subtle` etc).
+- `talk.tags` is a **list** of strings matched against `conference.talks.tags[].name`. Tag
+  `color:` is defined in the schema but the theme **ignores** it — don't bother setting it.
+  A tag with an `icon:` renders **icon-only** on the talk page (the tag word is hidden,
+  screen-reader/tooltip only) via `list_tags.html`. If you want the tag word visible, omit
+  `icon:` — name-only tags render as `<span class="me-2">{name}</span>` (test to confirm
+  this holds in future theme versions).
+- Hidden talks (`hide: true`, e.g. logistics/breaks) still render as colored program-grid
+  cells and **must** have a `track:` set or the previous cell's `track_color` bleeds forward
+  in the grid — don't leave `track:` unset on hidden talks.
+- ERCAS 2026 taxonomy (as of 2026-07): 7 tracks — 5 thematic (Diagnóstico por Imagem e Visão
+  Computacional/primary, Processamento de Linguagem Natural e Saúde Mental/info, Ciência de
+  Dados Clínicos e Epidemiologia/success, Fundamentos de IA e Aprendizado de Máquina/danger,
+  IoT Sistemas e Infraestrutura em Saúde/warning) + Sessões Técnicas/dark + Institucional/
+  secondary. Session-format words (Minicurso/Palestra/Workshop) live as name-only tags, not
+  tracks. Sessões Técnicas and Institucional talks get no format tag (redundant with the
+  track name itself).
+
+## Empty-speakers fallback (repo override, added 2026-07)
+
+Theme's `_includes/list_speakers.html` has no empty-state — a talk with no `speakers:` just
+renders blank. Repo now overrides this include (copied from gem 4.0.2, wrapped in
+`{%- if talk.speakers.size > 0 -%} ...gem loop... {%- else -%} fallback {%- endif -%}`) to
+show `site.data.lang[site.conference.lang].speaker.tba` (added key, default "A confirmar")
+as `<em class="text-muted">` (or plain text when `include.text_only`). This include is used
+by every speaker-rendering call site (talk page, program grid, overview) — one override
+covers all of them.
+
+## program.html override for single-room full-width (repo override, added 2026-07)
+
+Theme's `_layouts/program.html` table is fixed-width (`.program-talk { width: 15rem }`) with
+no per-day room-count hook. Repo now overrides this layout (copied from gem 4.0.2) to hoist
+the existing `nbr_rooms = d.rooms | size` assign above the `<table>` tag and add a
+conditional class: `program-rooms-1 w-100` when `nbr_rooms == 1`, else the original `w-auto`.
+Paired with `assets/css/main.scss` rule `.program-table.program-rooms-1 .program-talk { width:
+auto; min-width: 0; max-width: none; }`. This is a first-time override of `program.html` —
+it will NOT auto-track future `jekyll-theme-conference` gem updates to that layout; re-diff
+against the gem source on theme version bumps.

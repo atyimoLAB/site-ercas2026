@@ -1,6 +1,7 @@
 ---
 name: "Analisando dados multimodais em saúde: uma experiência usando a base de dados MIMIC-IV"
-track: Minicurso
+track: Ciência de Dados Clínicos e Epidemiologia
+tags: [Minicurso]
 speakers:
   - Robespierre Pita
   - Mirlei Moura da Silva

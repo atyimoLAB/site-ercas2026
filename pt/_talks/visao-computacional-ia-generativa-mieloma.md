@@ -1,6 +1,7 @@
 ---
 name: "Visão Computacional com IA Generativa para capacitação médica e apoio ao diagnóstico em Mieloma Múltiplo"
-track: Minicurso
+track: Diagnóstico por Imagem e Visão Computacional
+tags: [Minicurso]
 speakers:
   - Ricardo Rios
 ---

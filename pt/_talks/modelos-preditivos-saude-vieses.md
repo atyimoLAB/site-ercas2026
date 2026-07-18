@@ -1,6 +1,7 @@
 ---
 name: "Modelos preditivos na saúde: desafios e estratégias para mitigar vieses e desigualdades"
-track: Palestra
+track: Ciência de Dados Clínicos e Epidemiologia
+tags: [Palestra]
 speakers:
   - Mariana Recamonde
 ---

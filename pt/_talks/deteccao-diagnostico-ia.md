@@ -1,6 +1,7 @@
 ---
 name: Detecção e Diagnóstico de Doenças usando Inteligência Artificial
-track: Palestra
+track: Fundamentos de IA e Aprendizado de Máquina
+tags: [Palestra]
 speakers:
   - Rodrigo de Melo Souza Veras
 ---

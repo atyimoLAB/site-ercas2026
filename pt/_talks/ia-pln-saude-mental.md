@@ -1,6 +1,7 @@
 ---
 name: Uso de Inteligência Artificial e Processamento de Linguagem Natural para Identificação de Transtornos de Saúde Mental
-track: Palestra
+track: Processamento de Linguagem Natural e Saúde Mental
+tags: [Palestra]
 speakers:
   - Helena Caseli
 ---

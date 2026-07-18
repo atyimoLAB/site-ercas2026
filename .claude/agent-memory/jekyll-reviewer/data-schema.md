@@ -55,3 +55,44 @@ data file, not leftover fake-speaker content. Don't confuse the two if grepping 
 every `program.yml` talk name matches a `_talks` file `name:` exactly; every talk `speakers:`
 entry matches a `_speakers` file `name:` exactly; the room name matches; all `track:` values
 match a configured track name; no time-slot overlaps within a room/day.
+
+**Track/tag taxonomy overhaul (2026-07-12, verified clean):** `conference.talks.tracks` is now
+7 thematic/institutional tracks (Diagnóstico por Imagem e Visão Computacional/primary,
+Processamento de Linguagem Natural e Saúde Mental/info, Ciência de Dados Clínicos e
+Epidemiologia/success, Fundamentos de IA e Aprendizado de Máquina/danger, "IoT, Sistemas e
+Infraestrutura em Saúde" [comma, not slash]/warning, Sessões Técnicas/dark, Institucional/
+secondary) — the old format-as-track values (Minicurso/Palestra/Workshop/Abertura/
+Encerramento/Logística) are gone from `_config.yml` and from every `_talks/*.md`, confirmed
+via grep. Minicurso/Palestra/Workshop now live as name-only entries in `conference.talks.tags`
+(no `color`/`icon` — confirmed via gem source `get_tag_icon.html`/`list_tags.html` that tags
+render fine with no icon, falling back to plain text; tag `color:` is schema-valid but the
+theme ignores it, so omitting it is correct, not an oversight). All logistics/hidden talks
+(`credenciamento`, `almoco`, `intervalo`) and ceremony talks (`abertura-oficial`,
+`premiacao-encerramento`) now carry `track: Institucional` instead of being omitted — this
+respects the [[known-issues]] track-less-talk quirk correctly.
+
+**Theme override inventory (added 2026-07-12, first-time overrides — will NOT auto-track gem
+updates, re-diff on theme version bumps):**
+- `_includes/list_speakers.html`: wraps the gem's per-speaker loop in
+  `{% if talk.speakers.size > 0 %}...{% else %}` fallback rendering
+  `site.data.lang[pt].speaker.tba` ("A confirmar") as `<em class="text-muted">` (or plain text
+  under `include.text_only`). Verified via build: nil `talk.speakers` (field entirely absent)
+  correctly falls into the else branch — `talk.speakers.size` on a nil value does not error in
+  Liquid and is not `> 0`. Verified multi-speaker talks (e.g. `dados-multimodais-mimic-iv.md`,
+  2 speakers) still render both names via the original loop, unaffected. This include is the
+  single choke point for all speaker rendering (talk page, program grid, overview, video-link
+  modal subtitle) — one override covers all call sites. `schema_talk.html` (JSON-LD) does NOT
+  use this include — it has its own independent `talk.speakers.size > 0` guarded loop, so the
+  "A confirmar" fallback text never leaks into structured data. Safe pattern, no bug found.
+- `_layouts/program.html`: hoists the existing `nbr_rooms = d.rooms | size` assign from inside
+  the room `<th>` loop to just above the `<table>` tag (single assignment, no shadowing/dupes
+  elsewhere in the file — checked), and appends ` program-rooms-1 w-100` to `.program-table`
+  when `nbr_rooms == 1`, else the original ` w-auto`. Paired with new `assets/css/main.scss`:
+  `.program-table.program-rooms-1 .program-talk { width: auto; min-width: 0; max-width: none; }`
+  — 3-class selector correctly wins specificity over the gem's 2-class
+  `.program-table .program-talk { width: 15rem }` (`_sass/theme.scss`), and only applies when
+  the `program-rooms-1` class is present, so the multi-room fixed-15rem horizontal-scroll path
+  is untouched. **Caveat: the multi-room path is currently unexercised by real data** — ERCAS
+  2026 has exactly one room (Auditório) on all 3 program days, so this override has never been
+  visually verified against an actual multi-room table. Re-verify visually if/when a second
+  room is ever added to `program.yml`.

@@ -30,3 +30,9 @@ for reading theme source directly when diagnosing check.html-style errors).
 
 **`exclude:`** in `_config.yml` covers `en`, `GUIDE.md`, `README.md` — confirmed neither leaks
 into `_site/` anymore.
+
+**`--strict_variables` is not a real Jekyll 4.4.1 CLI flag** (confirmed 2026-07-12 — errors
+with "invalid option"). The CLAUDE.md/reviewer-instructions reference to it is aspirational;
+the only real strict flag available is `--strict_front_matter`. Don't waste a build cycle
+retrying it — go straight to `bundle exec jekyll build -d <dir> --strict_front_matter` and then
+grep the output HTML for `alert-danger` per the known-issues gate.

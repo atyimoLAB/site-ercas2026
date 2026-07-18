@@ -93,20 +93,25 @@ conference:
 
   talks:
     tracks:
-      - name: Minicurso
-        color: info
-      - name: Palestra
+      - name: Diagnóstico por Imagem e Visão Computacional
         color: primary
-      - name: Workshop
+      - name: Processamento de Linguagem Natural e Saúde Mental
+        color: info
+      - name: Ciência de Dados Clínicos e Epidemiologia
         color: success
-      - name: Abertura
+      - name: Fundamentos de IA e Aprendizado de Máquina
+        color: danger
+      - name: IoT, Sistemas e Infraestrutura em Saúde
         color: warning
-      - name: Encerramento
+      - name: Sessões Técnicas
         color: dark
-      - name: Logística
+      - name: Institucional
         color: secondary
     tags:
       - name: Keynote
         icon: star
       - name: Tutorial
         icon: mortarboard
+      - name: Minicurso
+      - name: Palestra
+      - name: Workshop
