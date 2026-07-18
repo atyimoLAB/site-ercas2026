@@ -5,7 +5,7 @@
     {% for member in group.members %}
     <li class="col">
       {% if member.url %}
-        <a href="{{ member.url }}" class="text-decoration-none text-body">
+        <a href="{{ member.url }}" class="text-body">
           <strong>{{ member.name }}</strong>
         </a>
       {% else %}

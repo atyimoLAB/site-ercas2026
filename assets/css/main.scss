@@ -1,5 +1,45 @@
 ---
 ---
+// ── Link underline (usability) ──────────────────────────────
+// Content links stay permanently underlined (no hover needed),
+// except UI chrome (navbar, buttons, tab/pill navs, badges,
+// dropdown menus). Two INDEPENDENT mechanisms are in play:
+//   1. text-decoration  — whether an underline line is drawn.
+//   2. --bs-link-underline-opacity — alpha of that line's colour;
+//      the theme's Bootstrap 5.3 .link-underline-opacity-0 utility
+//      sets it to 0 (invisible) until :hover, which is what makes
+//      talk titles / speaker names / room links "hover-only".
+
+// (1) Draw a line on every link. Bootstrap reboot already defaults
+//     to this, but it is stated explicitly because plain content
+//     links without a link-underline utility (e.g. committee names)
+//     rely on it directly.
+a {
+  text-decoration: underline;
+}
+
+// (2) The real fix: force the theme's opacity-0 content links to
+//     full underline opacity. Same specificity (0,1,0) as
+//     Bootstrap's rule; main.css loads AFTER conference.bundle.css,
+//     so source order wins — no !important needed.
+.link-underline-opacity-0 {
+  --bs-link-underline-opacity: 1;
+}
+
+// (3) UI chrome: no underline. text-decoration:none draws no line
+//     regardless of the opacity variable above, so this reliably
+//     wins for chrome even when a chrome link also carries the
+//     opacity utility. Every selector here outranks plain `a`.
+.navbar a,
+.nav-link,
+.btn,
+.nav-pills .nav-link,
+.nav-tabs .nav-link,
+.badge,
+.dropdown-item {
+  text-decoration: none;
+}
+
 .program-table.program-rooms-1 .program-talk {
   width: auto;
   min-width: 0;
