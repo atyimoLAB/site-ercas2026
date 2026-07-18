@@ -24,6 +24,11 @@
       <div class="lead d-print-none">
       {% assign btn_default = 'btn btn-outline-primary btn-lg mt-2 ms-1' %}
       {% for link in page.links %}
+        {% if link.primary %}
+          {% assign btn_default = 'btn btn-primary btn-lg mt-2 ms-1' %}
+        {% else %}
+          {% assign btn_default = 'btn btn-outline-primary btn-lg mt-2 ms-1' %}
+        {% endif %}
 
         {% if link.menu %}
           <div class="dropdown d-inline">
