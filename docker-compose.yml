@@ -8,6 +8,7 @@ services:
   dev:
     build: .
     image: ercas2026:dev
+    pull_policy: build              # always rebuild so a stale local image is never reused
     ports:
       - "4000:4000"
       - "35729:35729"          # livereload websocket; unpublished = silent no-refresh
@@ -15,21 +16,22 @@ services:
       JEKYLL_ENV: development
     volumes:
       - .:/srv/jekyll                   # live source
-      - bundle:/usr/local/bundle        # gems: not clobbered by the host mount
       - site:/srv/jekyll/_site          # build output kept off the host mount
       - cache:/srv/jekyll/.jekyll-cache
     # Uses the Dockerfile CMD (PT serve + livereload + force_polling).
+    # Gems live baked into the image (not a volume) so a Gemfile.lock change
+    # is picked up automatically on the next `docker compose up`.
 
   prod:
     build: .
     image: ercas2026:dev               # reuse the dev image; only the command differs
+    pull_policy: build
     ports:
       - "4000:4000"
     environment:
       JEKYLL_ENV: production
     volumes:
       - .:/srv/jekyll
-      - bundle:/usr/local/bundle
       - site:/srv/jekyll/_site
       - cache:/srv/jekyll/.jekyll-cache
     # Build exactly what CI ships, then serve that built _site verbatim (no
@@ -44,6 +46,5 @@ services:
         bundle exec jekyll serve -d _site --host 0.0.0.0 --skip-initial-build --no-watch
 
 volumes:
-  bundle:
   site:
   cache:

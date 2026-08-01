@@ -16,8 +16,7 @@ Site (PT-BR): <http://localhost:4000/>. Live reload is on.
 |------|---------|
 | Dev server, live reload | `docker compose up dev` |
 | Production-parity build + preview | `docker compose up prod` |
-| Rebuild after a `Gemfile.lock` change | `docker compose build` |
-| Full reset (clears gem/cache volumes) | `docker compose down -v` |
+| Full reset (clears cache volumes) | `docker compose down -v` |
 
 - After editing `_config.yml`, restart: `docker compose restart dev`
   (Jekyll doesn't reload config).
@@ -69,5 +68,10 @@ Current setup is single-language PT-BR. Source content lives in `pt/` with
 
 ## Deployment
 
-Built static output lives in `_site/`. Deploy that directory to any static host
-(GitHub Pages, Netlify, etc.).
+CD already wired up: to deploy: **open a PR, merge to `main`.** That's it.
+
+On merge, GitHub Actions
+([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)) builds the
+site and mirrors `_site/` to the UFBA host over FTP through a VPN tunnel
+(delete-mirror sync — removed local files are removed remotely too). No
+manual deploy step, no direct pushes to `main` needed.
