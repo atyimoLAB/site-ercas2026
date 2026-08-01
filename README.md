@@ -46,19 +46,31 @@ JEKYLL_ENV=production bundle exec jekyll build -d _site
 ## Project structure
 
 ```
-_config.yml      # site settings + theme config
-index.markdown   # home page
-about.markdown   # about page
-404.html         # not-found page
-_site/           # generated output (gitignored)
+_config.yml   # site settings + theme config
+pt/           # all content (collections_dir: pt, data_dir: pt/_data)
+  _talks/     # one file per talk
+  _speakers/  # one file per speaker
+  _rooms/     # one file per room
+  _data/      # program.yml, committees.yml, sponsors.yml, important_dates.yml, lang.yml
+  *.md        # pages: index, sobre, committees, sponsors, important-dates, location, program, talks, speakers
+_site/        # generated output (gitignored)
 ```
 
-> Conference content (talks, speakers, program) is added under `_data/` —
-> see the [theme docs](https://github.com/DigiLab-OVGU/jekyll-theme-conference)
-> for the expected data files.
+Current setup is single-language PT-BR: `collections_dir: pt`, `data_dir: pt/_data` in `_config.yml`.
 
-Current setup is single-language PT-BR. Source content lives in `pt/` with
-`collections_dir: pt` and `data_dir: pt/_data` configured in `_config.yml`.
+### Updating conference content
+
+References are by **name string**, not ID — rename something, update it everywhere it's named.
+`show_errors: true` surfaces broken refs (e.g. talk → missing speaker) as build errors, so rebuild after changes.
+
+- **Talk** — file in `pt/_talks/` with `name`, `track` (must match `conference.talks.tracks` in `_config.yml`), `speakers` (list of names).
+- **Speaker** — file in `pt/_speakers/` with `name`, `first_name`, `last_name`.
+- **Room** — file in `pt/_rooms/` with `name`.
+- **Schedule** — `pt/_data/program.yml`: talk/room names must match their docs exactly.
+- **Committees / Sponsors / Important dates** — `pt/_data/{committees,sponsors,important_dates}.yml`.
+- **UI labels** — `pt/_data/lang.yml`.
+
+Full front-matter fields: [theme docs](https://github.com/DigitaleGesellschaft/jekyll-theme-conference).
 
 ## Notes
 
