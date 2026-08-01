@@ -16,8 +16,7 @@ Site (PT-BR): <http://localhost:4000/>. Live reload is on.
 |------|---------|
 | Dev server, live reload | `docker compose up dev` |
 | Production-parity build + preview | `docker compose up prod` |
-| Rebuild after a `Gemfile.lock` change | `docker compose build` |
-| Full reset (clears gem/cache volumes) | `docker compose down -v` |
+| Full reset (clears cache volumes) | `docker compose down -v` |
 
 - After editing `_config.yml`, restart: `docker compose restart dev`
   (Jekyll doesn't reload config).
