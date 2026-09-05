@@ -1,27 +1,73 @@
-{% for tier in site.data.sponsors %}
-<section class="mb-5">
-  <h2 class="h4 border-bottom pb-2 mb-3">{{ tier.tier }}</h2>
-  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4 align-items-center">
-    {% for item in tier.items %}
-    <div class="col text-center">
-      {% if item.url %}
-        <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">
-      {% endif %}
-      {% if item.logo %}
-        <img
-          src="{{ item.logo | prepend: '/assets/images/' | prepend: site.baseurl }}"
-          alt="{{ item.name }}"
-          class="img-fluid"
-          style="max-height: 80px;"
-        />
-      {% else %}
-        <span class="fw-semibold">{{ item.name }}</span>
-      {% endif %}
-      {% if item.url %}
-        </a>
-      {% endif %}
+{% comment %}
+  Versão completa da seção de apoio (página /patrocinio/).
+  Renderiza site.data.sponsors: lista de { category, footer?, items: [ { name, url?, logo?, wide? } ] }.
+
+  Layout: os 3 grupos ficam lado a lado numa única linha no desktop (>= lg).
+  A largura de cada coluna é fixada por categoria via um `case` em group.category:
+    - Realização  → .sponsors-col-realizacao  (12,5% em lg+, ver main.scss)
+    - Organização → .sponsors-col-organizacao (62,5% em lg+, ver main.scss)
+    - Patrocínio  → col-lg-3                   (25%)
+  Abaixo de lg cada grupo ocupa a linha inteira (col-12). O `case` também escolhe
+  o par chip/logo de cada grupo (Realização e Organização têm logos maiores que
+  Patrocínio) e o alinhamento horizontal das chips: em lg+ Organização alinha à
+  esquerda (`justify-content-lg-start`), pois as duas linhas fixas devem começar
+  sob o título; abaixo de lg (colunas empilhadas) volta a centralizar. Realização
+  e Patrocínio ficam sempre centralizados. Em Organização, `wide: true` num
+  item aplica um chip ~2x mais largo (mesma altura) para os lockups horizontais, e
+  `break_before: true` força uma quebra de linha (`.w-100`) antes do item,
+  dividindo a coluna em linhas fixas. Se as categorias do _data/sponsors.yml
+  mudarem, ajuste o `case` abaixo.
+{% endcomment %}
+<div class="row gx-5 gy-4">
+  {%- for group in site.data.sponsors -%}
+  {%- case group.category -%}
+    {%- when "Realização" -%}
+      {%- assign col_class = "col-12 sponsors-col-realizacao" -%}
+      {%- assign chip_class = "sponsor-chip sponsor-chip-lg" -%}
+      {%- assign logo_class = "sponsor-logo sponsor-logo-lg" -%}
+      {%- assign justify_class = "justify-content-center" -%}
+    {%- when "Organização" -%}
+      {%- assign col_class = "col-12 sponsors-col-organizacao" -%}
+      {%- assign chip_class = "sponsor-chip sponsor-chip-org" -%}
+      {%- assign logo_class = "sponsor-logo sponsor-logo-org" -%}
+      {%- comment -%} lg+ (3 colunas lado a lado): alinhado à esquerda, as 2 linhas
+         fixas começam sob o título. Abaixo de lg (colunas empilhadas): centralizado
+         como os demais grupos. {%- endcomment -%}
+      {%- assign justify_class = "justify-content-center justify-content-lg-start" -%}
+    {%- else -%}
+      {%- assign col_class = "col-12 col-lg-3" -%}
+      {%- assign chip_class = "sponsor-chip" -%}
+      {%- assign logo_class = "sponsor-logo" -%}
+      {%- assign justify_class = "justify-content-center" -%}
+  {%- endcase -%}
+  <div class="{{ col_class }}">
+    <h2 class="h4 border-bottom pb-2 mb-3">{{ group.category }}</h2>
+    <div class="d-flex flex-wrap {{ justify_class }} gap-2">
+      {%- for item in group.items -%}
+      {%- assign item_chip_class = chip_class -%}
+      {%- assign item_logo_class = logo_class -%}
+      {%- if item.wide -%}
+        {%- assign item_chip_class = item_chip_class | append: " sponsor-chip-org-wide" -%}
+        {%- assign item_logo_class = item_logo_class | append: " sponsor-logo-org-wide" -%}
+      {%- endif -%}
+      {%- comment -%} classe extra por item (ex.: acerto de tamanho de um logo específico) {%- endcomment -%}
+      {%- if item.logo_class_extra -%}
+        {%- assign item_logo_class = item_logo_class | append: " " | append: item.logo_class_extra -%}
+      {%- endif -%}
+      {%- if item.break_before -%}<div class="w-100"></div>{%- endif -%}
+      <div class="text-center">
+        {%- if item.url -%}<a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{%- endif -%}
+        {%- if item.logo -%}
+        <span class="{{ item_chip_class }}">
+          <img src="{{ item.logo | prepend: 'assets/images/' | relative_url }}" alt="{{ item.name | escape }}" class="{{ item_logo_class }}" loading="lazy">
+        </span>
+        {%- else -%}
+        <span class="fw-semibold">{{ item.name | escape }}</span>
+        {%- endif -%}
+        {%- if item.url -%}<span class="visually-hidden"> (abre em nova aba)</span></a>{%- endif -%}
+      </div>
+      {%- endfor -%}
     </div>
-    {% endfor %}
   </div>
-</section>
-{% endfor %}
+  {%- endfor -%}
+</div>

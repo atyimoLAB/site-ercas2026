@@ -1,17 +1,50 @@
-- tier: Ouro
-  items:
-    - name: Empresa Exemplo S.A.
-      url: https://example.com
-      logo: sponsors/logo-placeholder.svg
+# Patrocinadores e apoiadores da ERCAS 2026, agrupados por categoria.
+# Cada item: name (obrigatório), url (opcional), logo (opcional, relativo a
+# assets/images/). Sem `logo`, o nome é exibido como texto. Para adicionar um
+# novo apoiador, basta acrescentar um item aqui — nenhum template precisa mudar.
+#
+# `footer: false` num grupo o mantém fora da faixa compacta do rodapé
+# (_includes/sponsors_footer.html); ele continua na grade de /patrocinio/.
 
-- tier: Prata
+- category: Realização
   items:
-    - name: Saúde Digital Ltda.
-      url: https://example.com/saudedigital
+    - name: Sociedade Brasileira de Computação
+      url: https://www.sbc.org.br/
+      logo: sponsors/sbc.png
 
-- tier: Apoio Institucional
+- category: Organização
   items:
     - name: Universidade Federal da Bahia
-      url: https://ufba.br
-    - name: Sociedade Brasileira de Computação
-      url: https://sbc.org.br
+      url: https://ufba.br/
+      logo: sponsors/ufba.png
+    - name: Universidade Estadual de Santa Cruz
+      url: https://www.uesc.br/
+      logo: sponsors/uesc.png
+    - name: CIDACS — Centro de Integração de Dados e Conhecimentos para Saúde
+      url: https://cidacs.bahia.fiocruz.br/
+      logo: sponsors/cidacs-fiocruz.png
+      wide: true   # lockup horizontal → chip largo (2 unidades) em /patrocinio/
+    - name: Computação UFBA
+      url: https://computacao.ufba.br/
+      logo: sponsors/computacao-ufba.png
+      break_before: true   # inicia a 2ª linha da coluna Organização em /patrocinio/
+    - name: PGCOMP UFBA
+      url: https://pgcomp.ufba.br/
+      logo: sponsors/pgcomp-ufba.png
+      logo_class_extra: sponsor-logo-org-pgcomp   # compensa a margem transparente do PNG p/ igualar o tamanho de "Computação UFBA" (ver main.scss)
+    - name: DEST/IME UFBA
+      url: https://est.ufba.br/
+      logo: sponsors/dest-ime-ufba.jpg
+    - name: PPGFAR UFBA
+      url: https://ppgfarmacia.far.ufba.br/
+      logo: sponsors/ppgfar-ufba.png
+      wide: true   # lockup horizontal → chip largo (2 unidades) em /patrocinio/
+
+- category: Patrocínio
+  items:
+    - name: NIC.br
+      url: https://www.nic.br/
+      logo: sponsors/nic-br.svg
+    - name: CGI.br
+      url: https://www.cgi.br/
+      logo: sponsors/cgi-br.svg
