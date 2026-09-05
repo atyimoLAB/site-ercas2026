@@ -35,6 +35,48 @@ metadata:
    row onto the public `/palestrantes/` page. **Do not propose the stub-doc fix again** unless
    the user revisits this trade-off. Do not flag the empty-href anchor as a review finding.
 
+3. **`/programacao/` day selector — history + current state (last touched 2026-09-05).**
+   `_layouts/program.html` line ~21 appends a date span after `{{ day_name }}` on each day
+   tab, and line 17 sets the `<ul>` nav style. Iterations:
+   - v1: `nav-pills` + `<span class="text-body-secondary">— N de Out.</span>` — FAILED WCAG
+     AA: on the active pill (`#0d6efd` bg, `#fff` text) `.text-body-secondary`'s
+     `color: var(--bs-secondary-color) !important` won over the inherited white → ~2.4:1.
+     (Pure white on `#0d6efd` is only ~4.9:1, so any opacity/desat on that blue pill fails.)
+   - v2: dropped the color class, span became `<span class="fw-normal">` inheriting the
+     pill color. AA OK.
+   - v3: `nav-pills` → `nav-tabs`; separator `— ` → `, ` (comma tight to name:
+     "Terça-feira, 6 de Out."); NEW scoped block in `assets/css/main.scss` under
+     `#program-tabs`. An interim v3 used `box-shadow: inset 0 -3px 0 var(--bs-primary)` for
+     the active accent — that FAILED WCAG 2.4.7 because Bootstrap's only focus indicator is
+     `.nav-link:focus-visible { outline:0; box-shadow:0 0 0 .25rem #0d6efd40 }` and the
+     higher-specificity `.active` box-shadow overrode it, so a focused active tab looked
+     identical to an unfocused one. Removed.
+   - v4 used `font-weight: 700` on `.nav-link.active` → the bold label was wider than the
+     inactive tab, so the tab visibly resized on click. Removed.
+   - v5 (current, APPROVED 2026-09-05): `#program-tabs` block =
+     `--bs-nav-tabs-border-width: 2px` (one override that keeps the strip's bottom line, each
+     link's negative bottom margin, and the active link's border width in lockstep → no
+     vertical drift); inactive `.nav-link` `color: var(--bs-secondary-color)`
+     (≈6.8:1 on #fff, AA); `.nav-link:hover,:focus` `color: var(--bs-emphasis-color)`;
+     `.nav-link.active` = `--bs-emphasis-color` (#000, ≈18:1 on the 8% primary tint) +
+     `background-color: rgba(var(--bs-primary-rgb),0.08)` +
+     `border-color: var(--bs-primary) var(--bs-primary) var(--bs-body-bg)` (classic bordered
+     tab: 2px blue top/sides, bottom painted `#fff` to overlap and hide the grey strip line;
+     ground behind the strip is body `#fff`, so the math works). **Only color / background /
+     border-color change on activation — font, padding, line-height, border-box all identical
+     both states, so the tab cannot reflow on click.** (`.nav-underline .nav-link.active`
+     sets `font-weight:700` but the `<ul>` is `nav-tabs`, not `nav-underline`, so it never
+     applies.) NO box-shadow → Bootstrap's stock `:focus-visible` ring is uncontested for
+     every tab. `#program-tabs` id beats Bootstrap's `.nav-tabs …`. main.css loads after
+     conference.bundle.css. `.fw-normal` date span is 400 in both states.
+   - **Dark mode: site forces `data-bs-theme="light"` via a MutationObserver in the repo's
+     `_includes/header.html` override, so dark never renders — dark-mode contrast is moot,
+     but the block uses `--bs-*` tokens so it'd still be sane if dark were re-enabled.**
+   When reviewing this selector in future: any `box-shadow` on `.nav-link.active` re-breaks
+   the focus ring (2.4.7); verify id-selector specificity still wins after a theme bump; the
+   `--bs-body-bg` bottom-border trick only works while the page ground behind the tab strip
+   stays `#fff`; re-confirm the light-force in header.html before dismissing dark mode.
+
 **How to apply:** Check item 1 in every future review that adds or edits `_talks/*.md`,
 especially hidden/logistics-style entries (breaks, lunch, registration) that don't naturally
 have a track. Check item 2 whenever a talk's `speakers:` list contains a placeholder/unconfirmed
