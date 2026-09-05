@@ -36,10 +36,10 @@ theme docs saying it's optional.
 **Current real content (populated 2026-07-10, replacing all prior placeholder/fake data):**
 - Tracks in `_config.yml`: Minicurso (info), Palestra (primary), Workshop (success), Abertura
   (warning), Encerramento (dark).
-- Room: `pt/_rooms/auditorio.md` → name "Auditório" (single room, all 3 days).
+- Room: `pt/_rooms/auditorio.md` → name "Auditório" (single room, both days).
 - Speakers: `helena-caseli.md`, `mariana-recamonde.md`, `mirlei-moura-da-silva.md`,
   `ricardo-rios.md`, `robespierre-pita.md`, `rodrigo-veras.md` (name: "Rodrigo de Melo Souza Veras").
-- Talks: 18 unique talks across 3 days (2026-10-05/06/07), including 3 reused-by-name
+- Talks: 14 unique talks across 2 days (2026-10-06/07), including 3 reused-by-name
   logistics talks (`credenciamento.md`, `almoco.md`, `intervalo.md`, all `hide: true`, no track)
   each scheduled multiple times across days without file duplication.
 - All previous fake identifiers (`keynote-abertura`, `telemedicina-hospitais`,
