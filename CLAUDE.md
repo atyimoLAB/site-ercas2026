@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Static website for **ERCAS 2026** (Escola Regional de Computação Aplicada à Saúde), a health-informatics conference in Salvador/BA, Oct 5–7 2026. Built with **Jekyll 4.4** + the **`jekyll-theme-conference`** (~4.0.2) theme, deployed to GitHub Pages. The site is currently **single-language PT-BR**.
+Static website for **ERCAS 2026** (Escola Regional de Computação Aplicada à Saúde), a health-informatics conference in Salvador/BA, Oct 6–7 2026. Built with **Jekyll 4.4** + the **`jekyll-theme-conference`** (~4.0.2) theme, deployed to GitHub Pages. The site is currently **single-language PT-BR**.
 
 `jekyll-theme-conference` is not a blog theme — it ships `home`, `program`, `talk`, `speaker`, `room`, `page` layouts but **no `post` layout**. Theme docs / source: https://github.com/DigiLab-OVGU/jekyll-theme-conference
 

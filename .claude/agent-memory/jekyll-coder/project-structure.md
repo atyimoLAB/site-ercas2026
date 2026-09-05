@@ -40,6 +40,6 @@ assets/css/main.scss  new as of 2026-07 (was previously linked by header.html bu
               exist — 404'd). Empty Jekyll front matter `---\n---\n` needed to compile to .css.
 ```
 
-Program schedule: all 3 days (Seg/Ter/Qua, 2026-10-05..07) use only the "Auditório" room —
+Program schedule: both days (Ter/Qua, 2026-10-06..07) use only the "Auditório" room —
 every day is single-room, so the `program-rooms-1` full-width CSS override (see
 theme-schemas.md) is live on every day tab, not just an edge case.

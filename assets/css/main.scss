@@ -88,3 +88,46 @@ a {
   font-weight: 400;
   margin-bottom: 0;
 }
+
+// ── Program day selector (#program-tabs) ────────────────────
+// The Bootstrap `.nav-tabs` default active state is only a faint
+// border + text-colour shift, which reads as too subtle for a
+// two-day switch. Scoped to #program-tabs so it never touches the
+// navbar or any other nav:
+//   • inactive tabs stay quiet — muted grey text, darken on hover;
+//   • the active tab gets the classic bordered-tab shape — a 2px
+//     primary (#0d6efd → --bs-primary) border on top/left/right,
+//     no visible bottom border (it is painted --bs-body-bg so it
+//     overlaps and hides the strip line, merging with the panel),
+//     and an 8% primary tint background.
+// One override of --bs-nav-tabs-border-width to 2px keeps the
+// strip's bottom line, each link's negative bottom margin, and the
+// active link's border-width in lockstep — so no vertical drift
+// between active and inactive tabs.
+// ONLY colour / background / border-colour change on activation —
+// font (family, size, weight), padding, line-height and border-box
+// are identical in both states, so the tab never resizes on click.
+// Contrast on the tint (≈ #e9f0fe over white): near-black body
+// text ≈ 18:1, muted inactive text ≈ 7:1 — both pass WCAG AA. The
+// "…, N de Out." date span is `.fw-normal`; it inherits this dark
+// text colour, so it stays AA on the active tab too.
+// The stock Bootstrap `:focus-visible` ring is left intact (no
+// competing box-shadow on the active link).
+#program-tabs {
+  --bs-nav-tabs-border-width: 2px;
+
+  .nav-link {
+    color: var(--bs-secondary-color);
+  }
+
+  .nav-link:hover,
+  .nav-link:focus {
+    color: var(--bs-emphasis-color);
+  }
+
+  .nav-link.active {
+    color: var(--bs-emphasis-color);
+    background-color: rgba(var(--bs-primary-rgb), 0.08);
+    border-color: var(--bs-primary) var(--bs-primary) var(--bs-body-bg);
+  }
+}

@@ -1,37 +1,4 @@
 days:
-  - name: Segunda-feira
-    abbr: Seg
-    date: 2026-10-05
-    rooms:
-      - name: Auditório
-        talks:
-          - name: Credenciamento
-            time_start: "08:00"
-            time_end: "09:00"
-          - name: Fundamentos de Internet das Coisas para Healthcare
-            time_start: "09:00"
-            time_end: "10:30"
-          - name: Intervalo
-            time_start: "10:30"
-            time_end: "10:40"
-          - name: O uso de imagens para suporte ao diagnóstico
-            time_start: "10:40"
-            time_end: "12:00"
-          - name: Almoço
-            time_start: "12:00"
-            time_end: "14:00"
-          - name: Epidemiologia Genômica de Coortes Brasileiras
-            time_start: "14:00"
-            time_end: "15:20"
-          - name: Intervalo
-            time_start: "15:20"
-            time_end: "15:30"
-          - name: Sessão Técnica 1
-            time_start: "15:30"
-            time_end: "17:00"
-          - name: Abertura Oficial
-            time_start: "17:00"
-            time_end: "18:00"
   - name: Terça-feira
     abbr: Ter
     date: 2026-10-06
@@ -40,6 +7,9 @@ days:
         talks:
           - name: Credenciamento
             time_start: "08:00"
+            time_end: "08:30"
+          - name: Abertura Oficial
+            time_start: "08:30"
             time_end: "09:00"
           - name: Criando uma Rede Neural do Zero
             time_start: "09:00"
@@ -59,7 +29,7 @@ days:
           - name: Intervalo
             time_start: "15:20"
             time_end: "15:30"
-          - name: Sessão Técnica 2
+          - name: Sessão Técnica 1
             time_start: "15:30"
             time_end: "17:00"
           - name: Detecção e Diagnóstico de Doenças usando Inteligência Artificial
@@ -92,7 +62,7 @@ days:
           - name: Intervalo
             time_start: "15:20"
             time_end: "15:30"
-          - name: Sessão Técnica 3
+          - name: Sessão Técnica 2
             time_start: "15:30"
             time_end: "17:00"
           - name: Premiação e Encerramento
