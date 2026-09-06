@@ -131,3 +131,122 @@ a {
     border-color: var(--bs-primary) var(--bs-primary) var(--bs-body-bg);
   }
 }
+
+// ── Apoiadores: chip claro atrás de cada logo ──────────────
+// data-bs-theme fica travado em "light" (ver _includes/header.html),
+// mas o chip branco também padroniza o conjunto de logos (fundos
+// transparentes variados) e resolve o retângulo branco dos logos
+// em JPEG, como dest-ime-ufba.jpg.
+@mixin sponsor-chip($pad-y, $pad-x) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border-radius: 0.375rem;
+  padding: $pad-y $pad-x;
+}
+
+// Grade completa (/patrocinio/) — _includes/sponsors.html
+// Os 3 grupos ficam lado a lado (col-lg-3 / col-lg-6 / col-lg-3). Para que os
+// logos pareçam ter o mesmo tamanho entre os grupos apesar das proporções bem
+// diferentes (brasões verticais vs. wordmarks horizontais), cada chip é uma
+// caixa de dimensão fixa e o logo se encaixa dentro via object-fit: contain,
+// limitado tanto em altura quanto em largura.
+.sponsor-chip {
+  @include sponsor-chip(0.5rem, 0.5rem);
+  width: 119px;
+  height: 97px;
+}
+
+.sponsor-logo {
+  max-height: 76px;
+  max-width: 104px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+// Larguras de coluna por categoria (grade completa /patrocinio/).
+// A grade de 12 colunas do Bootstrap não expressa 1/8 nem 5/8, então
+// abaixo de lg os grupos empilham via .col-12 e em lg+ estas classes
+// fixam as frações: Realização 12,5% + Organização 62,5% + Patrocínio
+// (col-lg-3) 25% = 100%. Mesmo padrão de .col-* do Bootstrap 5
+// (flex-basis auto + width em %).
+@media (min-width: 992px) {
+  .sponsors-col-realizacao {
+    flex: 0 0 auto;
+    width: 12.5%;
+  }
+
+  .sponsors-col-organizacao {
+    flex: 0 0 auto;
+    width: 62.5%;
+  }
+}
+
+// Realização: um único logo (SBC, vertical) numa coluna estreita e
+// alta — chip estreito/alto acompanhando a coluna e logo ampliado
+// para ler nitidamente maior que os de Patrocínio. Classes próprias
+// (não sobrecarregam o chip/logo de Patrocínio).
+.sponsor-chip-lg {
+  width: 100%;
+  height: 171px;
+  padding: 0.5rem 0.35rem;
+}
+
+.sponsor-logo-lg {
+  max-height: 153px;
+  max-width: 100%;
+}
+
+// Organização: coluna larga (62,5%), logos ~do mesmo tamanho que o
+// da Realização (SBC ≈ 153px). Dois tamanhos de chip com a MESMA
+// altura — estreito (brasões verticais / selos quadrados) e largo
+// exatamente 2 células + o gap-2 (2×122 + 8), para os lockups
+// horizontais: CIDACS, PPGFAR (marcados com `wide: true` no
+// _data/sponsors.yml). `break_before: true` em "Computação UFBA"
+// emite um `.w-100` e fixa 2 linhas: UFBA/UESC/CIDACS, depois
+// Computação/PGCOMP/DEST-IME/PPGFAR. Cada linha é centralizada e as
+// células têm dimensão fixa → alinhamento em grade.
+.sponsor-chip-org {
+  width: 122px;
+  height: 158px;
+}
+
+.sponsor-chip-org-wide {
+  width: 252px;
+}
+
+.sponsor-logo-org {
+  max-height: 142px;
+  max-width: 101px;
+}
+
+.sponsor-logo-org-wide {
+  max-width: 216px;
+}
+
+// Acerto de tamanho do PGCOMP (item com `logo_class_extra` no
+// _data/sponsors.yml). Os dois logos têm a MESMA arte (proporção
+// 0,604), mas o PNG do PGCOMP vem num canvas quadrado 240×240 com a
+// arte ocupando só 136×225 (≈44% de margem transparente lateral),
+// enquanto computacao-ufba.png (145×240) não tem margem. Sob os caps
+// compartilhados a arte do PGCOMP renderiza bem menor.
+// Truque: ignorar os caps e dar ao <img> uma altura de canvas
+// explícita (151,5px = 142 ÷ 225 × 240) para que a ARTE saia na mesma
+// caixa que "Computação UFBA" (~85×142). O canvas transparente extra
+// extrapola o chip, mas é invisível; a tinta visível fica dentro.
+// Escala uniforme (aspecto preservado), object-fit/centralização
+// mantidos. Referência é o Computação — não mexer nele.
+.sponsor-logo-org-pgcomp {
+  max-width: none;
+  max-height: none;
+  width: auto;
+  height: 151.5px;
+}
+
+// ── Rodapé de apoiadores ──────────────────────────────────
+// _includes/sponsors_footer.html reusa a mesma grade de /patrocinio/
+// (sponsors.html) numa faixa só com borda superior; sem fundo. O
+// dimensionamento é o das classes .sponsor-* acima — nada a acrescentar
+// aqui (utilitários Bootstrap border-top/mt-5/py-4 fazem a faixa).

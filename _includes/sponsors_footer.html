@@ -1,0 +1,10 @@
+{% comment %}
+  Rodapé de apoiadores: a mesma grade de /patrocinio/ (sponsors.html), sem os
+  textos da página. Faixa com borda superior e sem fundo. Ocultada em /patrocinio/
+  por _includes/footer.html para não duplicar.
+{% endcomment %}
+<aside class="sponsors-site-footer border-top mt-5 py-4 d-print-none" aria-label="Apoiadores e patrocinadores">
+  <div class="container">
+    {%- include sponsors.html -%}
+  </div>
+</aside>
