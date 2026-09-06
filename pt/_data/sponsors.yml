@@ -2,9 +2,8 @@
 # Cada item: name (obrigatório), url (opcional), logo (opcional, relativo a
 # assets/images/). Sem `logo`, o nome é exibido como texto. Para adicionar um
 # novo apoiador, basta acrescentar um item aqui — nenhum template precisa mudar.
-#
-# `footer: false` num grupo o mantém fora da faixa compacta do rodapé
-# (_includes/sponsors_footer.html); ele continua na grade de /patrocinio/.
+# A mesma grade (sponsors.html) aparece em /patrocinio/ e no rodapé de todas
+# as outras páginas.
 
 - category: Realização
   items:

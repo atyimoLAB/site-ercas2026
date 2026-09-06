@@ -1,5 +1,12 @@
 # Plan — ERCAS 2026 sponsor / support section
 
+> **Update (post-ship):** the "compact strip" footer described below was replaced.
+> The footer of every page (except `/patrocinio/`) now renders the **full `sponsors.html`
+> grid** — same 3-column layout and logo sizes as the `/patrocinio/` page, minus the intro
+> text and CTA — inside `_includes/sponsors_footer.html` (`<aside class="sponsors-site-footer">`,
+> `border-top`, no background). The `.sponsors-footer-*` strip classes were removed from
+> `assets/css/main.scss`.
+
 ## Context
 
 The site has placeholder-only sponsor scaffolding: `_includes/sponsors.html`, `pt/sponsors.md`

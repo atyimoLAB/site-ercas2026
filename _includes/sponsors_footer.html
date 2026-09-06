@@ -1,29 +1,10 @@
 {% comment %}
-  Faixa compacta de apoiadores, exibida no rodapé das páginas (exceto /patrocinio/,
-  ver _includes/footer.html). Mesmos dados de site.data.sponsors usados por
-  sponsors.html. Grupos marcados com `footer: false` no _data/sponsors.yml ficam
-  fora desta faixa — aparecem apenas na grade completa da página /patrocinio/.
+  Rodapé de apoiadores: a mesma grade de /patrocinio/ (sponsors.html), sem os
+  textos da página. Faixa com borda superior e sem fundo. Ocultada em /patrocinio/
+  por _includes/footer.html para não duplicar.
 {% endcomment %}
-{%- assign footer_groups = site.data.sponsors | where_exp: "group", "group.footer != false" -%}
-<div class="sponsors-footer border-top bg-body-tertiary py-4 mt-5 d-print-none">
+<aside class="sponsors-site-footer border-top mt-5 py-4 d-print-none" aria-label="Apoiadores e patrocinadores">
   <div class="container">
-    {%- for group in footer_groups -%}
-    <div class="sponsors-footer-group d-flex flex-column flex-md-row align-items-md-center gap-2 gap-md-3">
-      <span class="sponsors-footer-label text-uppercase small fw-semibold text-muted flex-shrink-0">{{ group.category }}</span>
-      <div class="d-flex flex-wrap align-items-center gap-3 gap-md-4">
-        {%- for item in group.items -%}
-          {%- if item.url -%}<a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{%- endif -%}
-          {%- if item.logo -%}
-          <span class="sponsors-footer-chip">
-            <img src="{{ item.logo | prepend: 'assets/images/' | relative_url }}" alt="{{ item.name | escape }}" class="sponsors-footer-logo" loading="lazy">
-          </span>
-          {%- else -%}
-          <span class="small fw-semibold">{{ item.name | escape }}</span>
-          {%- endif -%}
-          {%- if item.url -%}<span class="visually-hidden"> (abre em nova aba)</span></a>{%- endif -%}
-        {%- endfor -%}
-      </div>
-    </div>
-    {%- endfor -%}
+    {%- include sponsors.html -%}
   </div>
-</div>
+</aside>

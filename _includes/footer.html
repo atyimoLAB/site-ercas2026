@@ -1,7 +1,7 @@
 {%- comment -%}
   Cópia de jekyll-theme-conference v4.0.2 (_includes/footer.html) com uma única
-  adição: a faixa de apoiadores (sponsors_footer.html) antes do rodapé fixo,
-  oculta na própria página /patrocinio/ para não duplicar a grade completa.
+  adição: a seção de apoiadores (sponsors_footer.html) antes do rodapé fixo,
+  oculta na própria página /patrocinio/ para não duplicar a grade.
   Ao atualizar o tema, re-comparar este arquivo com o footer.html do gem e
   reaplicar a adição.
 {%- endcomment -%}
@@ -9,9 +9,7 @@
   </main>
 
   {%- unless page.url == '/patrocinio/' -%}
-  <aside class="sponsors-site-footer" aria-label="Apoiadores e patrocinadores">
     {%- include sponsors_footer.html -%}
-  </aside>
   {%- endunless -%}
 
   <footer class="fixed-bottom">
