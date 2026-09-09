@@ -1,3 +1,9 @@
+{%- comment -%}
+  ERCAS — fork de jekyll-theme-conference 4.0.2 _layouts/speaker.html.
+  Delta único: o botão do rodapé aponta para /palestrantes/ (permalink PT) com
+  o rótulo speaker.overview, em vez do link genérico `page.collection` +
+  "Overview".
+{%- endcomment -%}
 {%- assign speaker = page -%}
 
 {%- unless speaker.hide -%}
@@ -73,7 +79,7 @@
 
   <p class="d-print-none d-pwa-none mt-5">
     <a href="{{ '/palestrantes/' | prepend: site.baseurl }}" class="btn btn-outline-secondary">
-      <i class="bi bi-people" aria-hidden="true"></i>&nbsp;{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
+      <i class="bi bi-people" aria-hidden="true"></i>&nbsp;{{ site.data.lang[site.conference.lang].speaker.overview | default: "Speakers" }}
     </a>
   </p>
 

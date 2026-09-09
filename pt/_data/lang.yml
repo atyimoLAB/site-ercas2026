@@ -222,18 +222,20 @@ pt:
     focus_conf: Centralizar o mapa para o local da conferência
     focus_me: Mostrar minha localização atual
   program:
-    title: Programa
+    title: Programação
     legend: Legenda
     schedule: Programação da conferência
     days: Dias da conferência
     time: Hora
+    plenary: "Atividade plenária"
   speaker:
     overview: Palestrantes
     title: Palestrante
     talks: Apresentações nesta conferência
   talk:
-    overview: Apresentações
+    overview: Palestras
     title: Apresentação
+    tbd: "À definir"
   important_dates:
     event: Evento
     date: Data

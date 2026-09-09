@@ -1,3 +1,19 @@
+{%- comment -%}
+  ERCAS — fork de jekyll-theme-conference 4.0.2 _layouts/location.html.
+  Deltas vs. o tema:
+   1. `<address>`: quando `page.postal_address.name` está ausente, usa
+      `site.conference.event.venue` como nome do local.
+   2. Seção de salas em LISTA SIMPLES (substitui `navbar_rooms.html` nesta
+      página): a ordem passa a ser h1 -> <address> -> {{ content }} (o iframe do
+      mapa, que continua em pt/location/index.md) -> "Salas" (h2) com um
+      `<ul class="list-unstyled">`, um `<li>` por sala: nome da sala (h3) com
+      link para `room.url` + o corpo da sala (linha de capacidade). Sem abas,
+      sem tab-content, sem listagem de sessões por sala. O `navbar_rooms.html`
+      do tema segue nas páginas de sala individuais (room.html, sem fork),
+      então elas continuam navegáveis. A lista fica dentro de um bloco
+      "unless page.hide" — pt/location/index.md NÃO pode ter `hide: true`
+      (removê-lo foi requisito do T2; não restaurar).
+{%- endcomment -%}
 {% include header.html %}
 
   {% assign this_room = page %}
@@ -9,10 +25,6 @@
       {{ site.data.lang[site.conference.lang].location.name | default: "Location" }}
     {% endif %}
   </h1>
-
-  {% unless page.hide %}
-    {% include navbar_rooms.html %}
-  {% endunless %}
 
   {% if page.postal_address %}
     <address>
@@ -41,5 +53,23 @@
   {% if page.map %}
     <div id="map" class="w-100 rounded shadow-sm" aria-label="{{ site.data.lang[site.conference.lang].location.map_label | default: 'Interactive conference location map' }}"></div>
   {% endif %}
+
+  {%- comment -%} ERCAS delta 2 — salas em lista simples (substitui navbar_rooms.html) {%- endcomment -%}
+  {% unless page.hide %}
+    {%- assign visible_rooms = site.rooms | where_exp: "r", "r.hide != true" -%}
+    {% if visible_rooms.size > 0 %}
+      <h2 class="h4 mt-5 mb-3">{{ site.data.lang[site.conference.lang].location.rooms | default: "Rooms" }}</h2>
+      <ul class="list-unstyled">
+        {% for room in visible_rooms %}
+          <li class="mb-3">
+            <h3 class="h6 mb-1">
+              <a href="{{ room.url | prepend: site.baseurl }}">{{ room.name }}</a>
+            </h3>
+            {{ room.content }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endunless %}
 
 {% include footer.html %}

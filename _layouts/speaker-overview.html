@@ -1,0 +1,56 @@
+{%- comment -%}
+  ERCAS — fork de jekyll-theme-conference 4.0.2 _layouts/speaker-overview.html.
+  Delta único: agrupamento e ordenação pelo PRIMEIRO nome, não pelo sobrenome
+  (linhas `sort_natural` e `slice: 0` do original). O tema não expõe opção de
+  configuração para isso (`conference.speakers.show_firstname` é explicitamente
+  rejeitado em checks.html). Todo o resto (layout de 3 colunas, cabeçalhos de
+  letra que são o menu A-Z, tratamento de `hide`, rótulo
+  "{{ first_name }} {{ last_name }}") permanece igual ao tema.
+{%- endcomment -%}
+{% include header.html %}
+
+  <h1 class="display-5 mb-4 text-break">
+    {% if page.title %}
+      {{ page.title }}
+    {% else %}
+      {{ site.data.lang[site.conference.lang].speaker.overview | default: "Speakers" }}
+    {% endif %}
+  </h1>
+
+  {{ content }}
+
+  <div class="col-count-1 col-count-md-2 col-count-lg-3">
+    {% assign cur_letter = false %}
+    {% assign speakers = site.speakers | sort_natural: 'first_name' %}{%- comment -%} ERCAS: era last_name {%- endcomment -%}
+    {% for speaker in speakers %}
+
+      {% assign last_letter = speaker.first_name | slice: 0 | capitalize %}{%- comment -%} ERCAS: era last_name {%- endcomment -%}
+      {% if cur_letter != last_letter %}
+        {% if cur_letter %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% assign cur_letter = last_letter %}
+        <div class="col-count">
+          <h3>{{ cur_letter }}</h3>
+          <ul class="list-unstyled">
+      {% endif %}
+
+      <li class="fw-light">
+        {% if speaker.hide %}
+          {{ speaker.first_name }} {{ speaker.last_name }}
+        {% else %}
+          <a class="link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ speaker.url | prepend: site.baseurl }}">
+            {{ speaker.first_name }} {{ speaker.last_name }}
+          </a>
+        {% endif %}
+      </li>
+
+    {% endfor %}
+
+      </ul>
+    </div>
+  </div>
+
+{% include footer.html %}

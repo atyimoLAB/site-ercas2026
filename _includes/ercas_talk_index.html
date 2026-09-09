@@ -1,0 +1,44 @@
+{%- comment -%}
+  ERCAS — sem equivalente no tema. Constrói UMA vez por página o índice
+  cronológico dos itens da grade (`site.data.program`) que possuem `tags`,
+  deduplicado por `name`. Alimenta ercas_talk_title.html (numeração "Tag N:").
+
+  ATENÇÃO — DISCIPLINA DE NAMESPACE (load-bearing):
+  este include roda preguiçosamente a partir de show_talk.html, ou seja, DENTRO
+  do loop de linhas de _layouts/program.html, onde `talk`, `t`, `r`, `d`, `room`,
+  `start_times`, `track_color`, `has_started`, `talk_nbr_steps`… estão vivos.
+  `assign` dentro de `{% include %}` escreve no escopo do chamador. Portanto
+  TODA variável atribuída aqui DEVE ter prefixo `ercas_`. Variáveis de `for`
+  são block-scoped e seguras. Não reusar get_start_times.html (ele sobrescreve
+  `start_times` e lê `d`).
+{%- endcomment -%}
+{%- unless ercas_idx_built -%}
+  {%- assign ercas_idx_names = "" | split: "," -%}
+  {%- assign ercas_idx_tags  = "" | split: "," -%}
+  {%- for ercas_d in site.data.program.days -%}
+    {%- assign ercas_times = "" | split: "," -%}
+    {%- for ercas_r in ercas_d.rooms -%}{%- for ercas_t in ercas_r.talks -%}
+      {%- unless ercas_times contains ercas_t.time_start -%}
+        {%- assign ercas_times = ercas_times | push: ercas_t.time_start -%}
+      {%- endunless -%}
+    {%- endfor -%}{%- endfor -%}
+    {%- assign ercas_times = ercas_times | sort -%}
+    {%- for ercas_time in ercas_times -%}
+      {%- for ercas_r in ercas_d.rooms -%}
+        {%- for ercas_t in ercas_r.talks -%}
+          {%- if ercas_t.time_start == ercas_time -%}
+            {%- unless ercas_idx_names contains ercas_t.name -%}
+              {%- assign ercas_doc = site.talks | where: 'name', ercas_t.name | first -%}
+              {%- assign ercas_dtag = ercas_doc.tags | first -%}
+              {%- if ercas_dtag -%}
+                {%- assign ercas_idx_names = ercas_idx_names | push: ercas_t.name -%}
+                {%- assign ercas_idx_tags  = ercas_idx_tags  | push: ercas_dtag -%}
+              {%- endif -%}
+            {%- endunless -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endfor -%}
+    {%- endfor -%}
+  {%- endfor -%}
+  {%- assign ercas_idx_built = true -%}
+{%- endunless -%}

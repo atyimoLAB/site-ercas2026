@@ -46,6 +46,23 @@ a {
   max-width: none;
 }
 
+// Multi-room (parallel-session) grid — _layouts/program.html delta 5.
+// The theme pins every .program-talk cell to a fixed 15rem, so a 2-room
+// table stays a narrow centred block on wide screens. Below lg keep that
+// (fixed columns + horizontal scroll-snap = the mobile UX); from lg up let
+// the table fill its parent container and the columns share the width.
+@media (min-width: 992px) {
+  .program-table.program-rooms-multi {
+    width: 100%;
+  }
+
+  .program-table.program-rooms-multi .program-talk {
+    width: auto;
+    min-width: 0;
+    max-width: none;
+  }
+}
+
 .program-talk-meta {
   font-size: 0.72rem;
 }
@@ -64,12 +81,58 @@ a {
   opacity: 0.6;
 }
 
+// Chip de sala — _includes/ercas_room_chip.html. Um só componente para o nome
+// da sala no `<th>` das colunas concorrentes e no cartão plenário. Sempre um
+// link colorido para `/salas/…`. Sem sublinhado: a afordância de link é dada
+// pela cor + ícone + cursor de ponteiro. O `a` global do site recebe
+// `text-decoration: underline` (main.scss ~l.17), então o chip precisa zerar
+// isso explicitamente na regra base (o anel de foco do teclado é mantido).
+//
+// Cor por sala: `color:` no doc de `_rooms/` -> classe `.program-room-chip-{c}`
+// (nome contextual Bootstrap). Fundo OPACO `var(--bs-{c}-bg-subtle)` + texto
+// `var(--bs-{c}-text-emphasis)` — par que o Bootstrap 5.3 desenha para passar
+// AA junto (≥ 5,5:1 para as 4 cores em uso). Como o fundo é opaco, o contraste
+// do texto NÃO depende do tint do cartão embaixo (`bg-*-subtle`) nem do branco
+// da tabela — se alguém trocar por `rgba(...)`, a garantia cai.
+//
+// Borda de 1px em `-text-emphasis` (não `-border-subtle`): mantém uma silhueta
+// legível mesmo quando o chip cai sobre um cartão do MESMO matiz — hoje o chip
+// `info` (Auditório) renderiza sobre o cartão `bg-info-subtle` da trilha PLN.
+// As cores `-text-emphasis` são todas escuras, então a borda fica ≥ 7:1 contra
+// qualquer `-bg-subtle` e contra o branco. Não remover "por ficar mais limpo".
+.program-room-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap; // nunca quebrar no hífen do nome (ex.: "IC - SC IV")
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.25rem;
+  border: 1px solid; // cor definida no modificador
+  background-color: var(--ercas-room-bg);
+  color: var(--ercas-room-fg);
+  border-color: var(--ercas-room-fg);
+  text-decoration: none; // anula o `a { text-decoration: underline }` global
+}
+
+// Modificadores — @each sobre a lista contextual do Bootstrap.
+@each $c in (primary, secondary, success, danger, warning, info, light, dark) {
+  .program-room-chip-#{$c} {
+    --ercas-room-bg: var(--bs-#{$c}-bg-subtle);
+    --ercas-room-fg: var(--bs-#{$c}-text-emphasis);
+  }
+}
+
 .program-talk-title {
   font-weight: 700;
   font-size: 1rem;
 }
 
-.program-talk-institucional {
+// Faixa plenária (banner de largura total) — _layouts/program.html delta 2/3.
+.program-banner {
   background-color: #fff !important;
   background-image: repeating-linear-gradient(
     45deg,
@@ -79,20 +142,29 @@ a {
     #fff 12px
   );
   display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   font-weight: 600;
   font-style: italic;
 }
 
-.program-talk-institucional .program-talk-title {
+.program-banner .program-talk-title {
   font-weight: 400;
   margin-bottom: 0;
 }
 
-// ── Program day selector (#program-tabs) ────────────────────
+// ── Seletor de abas (.conf-tabs) ────────────────────────────
+// Usado apenas por #program-tabs (/programacao/, seletor de dia). Era
+// `#program-tabs`; virou classe (não há motivo para acoplar o estilo
+// ao id). O id `program-tabs` CONTINUA no <ul> da programação —
+// conference.bundle.js depende dele (abre a aba do dia via data-ts +
+// deep-link por hash).
+//
 // The Bootstrap `.nav-tabs` default active state is only a faint
 // border + text-colour shift, which reads as too subtle for a
-// two-day switch. Scoped to #program-tabs so it never touches the
+// two-day switch. Scoped to .conf-tabs so it never touches the
 // navbar or any other nav:
 //   • inactive tabs stay quiet — muted grey text, darken on hover;
 //   • the active tab gets the classic bordered-tab shape — a 2px
@@ -113,7 +185,7 @@ a {
 // text colour, so it stays AA on the active tab too.
 // The stock Bootstrap `:focus-visible` ring is left intact (no
 // competing box-shadow on the active link).
-#program-tabs {
+.conf-tabs {
   --bs-nav-tabs-border-width: 2px;
 
   .nav-link {
