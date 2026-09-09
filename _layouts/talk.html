@@ -1,3 +1,13 @@
+{%- comment -%}
+  ERCAS — fork de jekyll-theme-conference 4.0.2 _layouts/talk.html.
+  Deltas vs. o tema:
+   1. Layout dos badges de trilha/tags: coluna única (flex-column) em vez de
+      flex-md-row; remove margens me-1/ms-1 laterais.
+   2. Botões do rodapé: link "Palestras" aponta para /palestras/ (permalink PT)
+      e usa o rótulo talk.overview; removido o botão genérico "Overview".
+   3. h1 renderiza ercas_talk_title (prefixo "Tag N: " + "À definir" quando
+      `tbd: true`) em vez de talk.name cru.
+{%- endcomment -%}
 {%- assign talk = page -%}
 
 {%- unless talk.hide -%}
@@ -25,7 +35,8 @@
     </div>
   {% endif %}
 
-  <h1 class="fw-light text-break">{{ talk.name }}</h1>
+  {%- include ercas_talk_title.html -%}
+  <h1 class="fw-light text-break">{{ ercas_talk_title }}</h1>
 
   <p class="mb-3 fw-light">
     {% include list_speakers.html %}
@@ -73,13 +84,13 @@
   {% endif %}
 
   <p class="d-print-none d-pwa-none mt-5">
-    <a href="{{ '/palestras/' | prepend: site.baseurl }}" class="btn btn-outline-secondary me-2">
-      <i class="bi bi-megaphone" aria-hidden="true"></i>&nbsp;{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
+    {%- include get_program_config.html -%}
+    <a href="{{ program_url | prepend: site.baseurl }}" class="btn btn-outline-secondary me-2">
+      <i class="bi bi-calendar4-week" aria-hidden="true"></i>&nbsp;{{ site.data.lang[site.conference.lang].program.title | default: "Program" }}
     </a>
 
-    {%- include get_program_config.html -%}
-    <a href="{{ program_url | prepend: site.baseurl }}" class="btn btn-outline-secondary">
-      <i class="bi bi-calendar4-week" aria-hidden="true"></i>&nbsp;{{ site.data.lang[site.conference.lang].program.title | default: "Program" }}
+    <a href="{{ '/palestras/' | prepend: site.baseurl }}" class="btn btn-outline-secondary">
+      <i class="bi bi-megaphone" aria-hidden="true"></i>&nbsp;{{ site.data.lang[site.conference.lang].talk.overview | default: "Talks" }}
     </a>
   </p>
 

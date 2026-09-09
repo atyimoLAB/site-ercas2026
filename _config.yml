@@ -19,6 +19,7 @@ collections:
     permalink: /palestrantes/:path/
   rooms:
     output: true
+    permalink: /salas/:path/
 
 defaults:
   - scope:
@@ -45,6 +46,11 @@ exclude:
   - GUIDE.md
   - README.md
   - docs
+  - CLAUDE.md
+  - Dockerfile
+  - docker-compose.yml
+  - skills-lock.json
+  - .claude
 
 collections_dir: pt
 data_dir: pt/_data
@@ -94,8 +100,6 @@ conference:
 
   talks:
     tracks:
-      - name: Diagnóstico por Imagem e Visão Computacional
-        color: primary
       - name: Processamento de Linguagem Natural e Saúde Mental
         color: info
       - name: Ciência de Dados Clínicos e Epidemiologia
@@ -104,8 +108,6 @@ conference:
         color: danger
       - name: IoT, Sistemas e Infraestrutura em Saúde
         color: warning
-      - name: Sessões Técnicas
-        color: dark
       - name: Institucional
         color: secondary
     tags:
@@ -115,4 +117,10 @@ conference:
         icon: mortarboard
       - name: Minicurso
       - name: Palestra
+      # Sem `icon:` de propósito: get_tag_icon.html troca o TEXTO da tag pelo
+      # ícone; um ícone tornaria estes badges só-ícone em /palestras/ e na
+      # página da atividade, inconsistente com Minicurso/Palestra.
+      - name: Credenciamento
+      - name: Abertura
+      - name: Fechamento
       - name: Workshop

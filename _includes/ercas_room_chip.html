@@ -1,0 +1,40 @@
+{%- comment -%}
+  ERCAS — sem equivalente no tema. Chip de sala usado na grade de /programacao/:
+  renderiza o nome da sala como um link colorido para a página da sala
+  (`room.url` -> `/salas/:path/`), com ícone de local; a afordância de link vem
+  da cor + ícone + cursor.
+  Compartilhado por dois pontos de _layouts/program.html:
+    - o `<th>` das colunas de sala concorrente (thead);
+    - o cartão plenário (`ercas_talk_card.html`, via `room_name`).
+
+  Contrato:
+    include ercas_room_chip.html room_name=<string> [extra_class=<string>]
+    - room_name  — REQUIRED. Nome de exibição da sala; a mesma string usada em
+      `_data/program.yml`, no `name:` de `pt/_rooms/*.md` e nas referências dos
+      talks. O lookup é por esse nome.
+    - extra_class — opcional. Utilitários de espaçamento do chamador (ex.: `mb-2`).
+
+  Cor: chave custom `color:` no front matter do doc de sala (nome contextual
+  Bootstrap: primary|secondary|success|danger|warning|info|light|dark). Fallback
+  `secondary` se ausente ou se a sala não existir — o chip ainda renderiza.
+
+  Ramo link vs. <span>: vira `<span>` (sem href) quando a sala tem `hide: true`,
+  quando a página de local tem `hide: true` (`location_hide`, já em escopo — o
+  layout chama `get_location_config.html`), ou quando o nome não casa com
+  nenhum doc de sala (sala inexistente / `name` divergente).
+
+  Namespace `ercas_room_` OBRIGATÓRIO em todos os assigns: o include roda dentro
+  do loop de linhas de `program.html`, onde `assign` sem prefixo clobbera as
+  variáveis de célula do layout (`room`, `talk`, `t`, `r`, `d`, `track_color`).
+{%- endcomment -%}
+{%- assign ercas_room_doc = site.rooms | where: 'name', include.room_name | first -%}
+{%- assign ercas_room_color = ercas_room_doc.color | default: 'secondary' -%}
+{%- assign ercas_room_link = true -%}
+{%- if ercas_room_doc.hide or location_hide or ercas_room_doc.url == nil -%}
+  {%- assign ercas_room_link = false -%}
+{%- endif -%}
+{%- if ercas_room_link -%}
+<a class="program-room-chip program-room-chip-{{ ercas_room_color }}{% if include.extra_class %} {{ include.extra_class }}{% endif %}" href="{{ ercas_room_doc.url | prepend: site.baseurl }}"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i><span class="program-room-chip-name">{{ include.room_name }}</span></a>
+{%- else -%}
+<span class="program-room-chip program-room-chip-{{ ercas_room_color }}{% if include.extra_class %} {{ include.extra_class }}{% endif %}"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i><span class="program-room-chip-name">{{ include.room_name }}</span></span>
+{%- endif -%}

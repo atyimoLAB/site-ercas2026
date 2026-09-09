@@ -1,3 +1,65 @@
+{%- comment -%}
+  ERCAS 2026 — fork of jekyll-theme-conference 4.0.2 _layouts/program.html.
+  Deltas vs. the gem (keep this list current for 3-way merges on a theme bump):
+
+  1. Chronological rows: `start_times` from get_start_times.html is collected in
+     room order, not sorted. Added `| sort` after the include so multi-room days
+     (parallel sessions) render rows in ascending time. Zero-padded "HH:MM" sorts
+     lexically = chronologically.
+  2. Plenary lanes: program.yml gives each day DUAS faixas `plenary: true`. Both
+     are split out of the per-room loops (`parallel_rooms = where_exp "r.plenary
+     != true"`). thead + tbody room loops iterate `parallel_rooms` ONLY (as salas
+     IC); `nbr_rooms` / `banner_span` count parallel rooms only
+     (`banner_span = nbr_rooms*2-1`). A faixa plenária NÃO vira coluna.
+  3. Banner branch (before the per-room <td> loop): iterates BOTH plenary lanes
+     (`d.rooms | where: "plenary", true`), detects a plenary talk starting on /
+     active over the current row, emits ONE full-width `<td colspan rowspan
+     class="program-talk p-0 h-100">`. Two modes, decided by the LANE:
+       - `is_break: true` lane (Intervalo/Almoço) -> tira plana `.program-banner`;
+       - `name: Auditório de Farmácia` lane (Credenciamento/Abertura/Palestras/
+         Fechamento) -> cartão de largura total via o include
+         ercas_talk_card.html (plenary=true, room_name=plenary_room_name) — o
+         MESMO cartão das salas paralelas
+         (tint + TAG·TRILHA + título + palestrantes), só que ocupando `colspan`
+         de todas as colunas. Como o cartão plenário não tem `<th>` de sala,
+         passamos `room_name` (a faixa não vira coluna) e o cartão o anexa à
+         linha `.program-talk-meta`. `plenary_room_name` capturado de `pr.name`
+         no bloco de captura (o loop `pr` fecha antes do render do banner).
+     `plenary_is_break` capturado de `pr.is_break`. Ambos os modos mantêm o
+     prefixo visualmente oculto "Atividade plenária: ". Else falls through to the
+     stock parallel loop (plenary + parallel lanes are temporally disjoint).
+  4. Track meta: `track_color` reset to 'light' before get_track_properties.html
+     (the gem include never resets it -> colour bleed between iterations). The
+     gem's `is_institutional` de-emphasis block is removed — those activities now
+     live in the plenary banner, so that path is dead code (net delta shrinks).
+  5. Responsive width: multi-room tables get `program-rooms-multi` instead of the
+     gem's `w-auto`. Below lg they keep the theme's fixed 15rem columns + scroll;
+     from lg up (main.scss) the table expands to the container width. (1-room days
+     already used `program-rooms-1 w-100` in the prior fork.)
+  6. Card extraído: a marcação do cartão de atividade (tint + `TAG · TRILHA` +
+     título + palestrantes) mora agora em `_includes/ercas_talk_card.html`,
+     compartilhada pelo <td> de sala paralela e pelo <td> de faixa plenária em
+     modo "sessão". O corpo do layout encolhe.
+  7. Faixa plenária com dois modos, decididos pela FAIXA (lane) do program.yml,
+     não pela atividade: 2ª faixa `plenary: true` + `is_break: true` sem `name`
+     carrega Intervalo/Almoço -> tira plana `.program-banner`; a faixa 1
+     (`Auditório de Farmácia`) -> cartão cheio via `ercas_talk_card.html
+     plenary=true`. `plenary_is_break` é capturado de `pr.is_break`. Ambos os
+     modos ocupam `colspan` de todas as colunas e mantêm o prefixo visualmente
+     oculto "Atividade plenária: ".
+  8. `conf-tabs` (classe) adicionada ao <ul id="program-tabs"> — o CSS das abas
+     migrou de `#program-tabs` para `.conf-tabs` (compartilhado com /local/);
+     o id program-tabs permanece (conference.bundle.js depende dele).
+  9. Cabeçalho de sala: o `<th>` das colunas concorrentes não usa mais o `<a>`
+     do gem (`text-reset link-underline-*`) nem o `assign room` local; chama
+     `_includes/ercas_room_chip.html`, o mesmo chip usado no cartão plenário.
+     Cor por sala vem de `color:` no doc de `_rooms/`.
+  Nota: o título exibido passa por `_includes/show_talk.html` (fork) ->
+  `ercas_talk_title.html` (prefixo "Tag N: " + "À definir"). Fork de include,
+  não deste layout.
+  Também carregado do fork anterior: `program-rooms-1` table class, a
+  `.program-talk-meta` tag/track line, `.program-talk-title`, `list_tags.html` dropped.
+{%- endcomment -%}
 {%- include get_location_config.html -%}
 {% include header.html %}
   {% assign nbr_days = site.data.program.days | size -%}
@@ -14,7 +76,7 @@
 
   {%- if nbr_days > 1 %}
     <nav aria-label="{{ site.data.lang[site.conference.lang].program.days | default: 'Conference days' }}">
-      <ul class="nav nav-tabs justify-content-center mb-3" id="program-tabs" role="tablist">
+      <ul class="nav nav-tabs conf-tabs justify-content-center mb-3" id="program-tabs" role="tablist">
         {%- for d in site.data.program.days -%}
           {%- include get_day_hash.html %}
           <li class="nav-item" role="presentation">
@@ -32,23 +94,21 @@
       <div class="tab-pane {%- if forloop.index == 1 %} active{% endif %}" id="{{ day_hash }}" role="tabpanel" aria-labelledby="tab-{{ day_hash }}">
     {%- endif %}
 
+    {%- comment -%} ERCAS delta 2 — split plenary vs. parallel lanes {%- endcomment -%}
+    {%- assign plenary_rooms  = d.rooms | where: "plenary", true -%}
+    {%- assign parallel_rooms = d.rooms | where_exp: "r", "r.plenary != true" -%}
+    {%- assign nbr_rooms   = parallel_rooms | size -%}
+    {%- assign banner_span = nbr_rooms | times: 2 | minus: 1 -%}
+
     <div class="program-table-container w-100 overflow-x-scroll">
-      {%- assign nbr_rooms = d.rooms | size -%}
-      <table class="table program-table mx-auto align-top mb-0{% if nbr_rooms == 1 %} program-rooms-1 w-100{% else %} w-auto{% endif %}" role="grid" aria-label="{{ site.data.lang[site.conference.lang].program.schedule | default: 'Conference schedule' }}{% if nbr_days > 1 %} - {{ day_name }}{% endif %}">
+      <table class="table program-table mx-auto align-top mb-0{% if nbr_rooms == 1 %} program-rooms-1 w-100{% else %} program-rooms-multi{% endif %}" role="grid" aria-label="{{ site.data.lang[site.conference.lang].program.schedule | default: 'Conference schedule' }}{% if nbr_days > 1 %} - {{ day_name }}{% endif %}">
         <thead>
           <tr>
             <th scope="col" class="program-time text-center" aria-label="{{ site.data.lang[site.conference.lang].program.time | default: 'Time' }}">#</th>
             <th scope="col" class="program-space"></th>
-            {%- for r in d.rooms -%}
-              {%- assign room = site.rooms | where: 'name', r.name | first %}
+            {%- for r in parallel_rooms -%}
               <th scope="col" class="program-talk text-center" id="room-{{ day_hash }}-{{ forloop.index }}">
-                {%- if room.hide or location_hide -%}
-                  {{- room.name -}}
-                {%- else -%}
-                  <a class="text-reset link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ room.url | prepend: site.baseurl }}">
-                    {{- room.name -}}
-                  </a>
-                {%- endif -%}
+                {%- include ercas_room_chip.html room_name=r.name -%}
               </th>
               {%- unless forloop.last %}
                 <th scope="col" class="program-space" aria-hidden="true"></th>
@@ -72,6 +132,7 @@
           {%- else -%}
             {%- assign time_steps = 1 -%}
             {%- include get_start_times.html -%}
+            {%- assign start_times = start_times | sort -%}{%- comment -%} ERCAS delta 1 {%- endcomment -%}
             {%- assign nbr_steps = start_times.size %}
           {%- endunless -%}
 
@@ -119,7 +180,84 @@
               {%- endif %}
               <td></td>
 
-              {%- for r in d.rooms -%}
+              {%- comment -%}
+                ERCAS delta 3 — plenary banner. Iterates BOTH `plenary: true`
+                lanes. Same has_started / has_ended arithmetic as the per-room
+                loop below. This schedule keeps the plenary and parallel lanes
+                temporally disjoint, so a row never has both a plenary activity
+                and a parallel talk; the banner branch therefore fully replaces
+                the parallel loop on its rows.
+              {%- endcomment -%}
+              {%- assign plenary_active = false -%}
+              {%- assign plenary_starts_here = false -%}
+              {%- assign plenary_talk_name = "" -%}
+              {%- assign plenary_room_name = "" -%}
+              {%- assign plenary_is_break = false -%}{%- comment -%} ERCAS delta 7 {%- endcomment -%}
+              {%- assign banner_steps = 1 -%}
+              {%- for pr in plenary_rooms -%}
+                {%- for t in pr.talks -%}
+                  {%- assign talk = site.talks | where: 'name', t.name | first -%}
+                  {%- include get_talk_time.html -%}
+
+                  {%- assign d_start_hour = current_hour | minus: talk_start_hour -%}
+                  {%- assign d_start_min = current_min | minus: talk_start_min -%}
+                  {%- assign d_end_hour = current_hour | minus: talk_end_hour -%}
+                  {%- assign d_end_min = current_min | minus: talk_end_min -%}
+
+                  {%- assign has_started = false -%}
+                  {%- if d_start_hour > 0 or d_start_hour == 0 and d_start_min >= 0 -%}
+                    {%- assign has_started = true -%}
+                  {%- endif -%}
+                  {%- assign has_ended = false -%}
+                  {%- if d_end_hour > 0 or d_end_hour == 0 and d_end_min >= 0 -%}
+                    {%- assign has_ended = true -%}
+                  {%- endif -%}
+                  {%- if has_started and has_ended == false -%}
+                    {%- assign plenary_active = true -%}
+                  {%- endif -%}
+
+                  {%- if d_start_hour == 0 and d_start_min == 0 -%}
+                    {%- assign plenary_starts_here = true -%}
+                    {%- assign plenary_talk_name = t.name -%}
+                    {%- assign plenary_room_name = pr.name -%}
+                    {%- assign plenary_is_break = pr.is_break -%}{%- comment -%} ERCAS delta 7 {%- endcomment -%}
+                    {%- assign banner_steps = 0 -%}
+                    {%- for start_time in start_times -%}
+                      {%- assign s_hour = start_time | split: ":" | first | plus: 0 -%}
+                      {%- assign s_min = start_time | split: ":" | last | plus: 0 -%}
+                      {%- assign s_ts = s_hour | minus: talk_start_hour | times: 60 | plus: s_min | minus: talk_start_min -%}
+                      {%- if s_ts >= 0 and s_ts < talk_duration_min -%}
+                        {%- assign banner_steps = banner_steps | plus: 1 -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                    {%- if banner_steps < 1 -%}{%- assign banner_steps = 1 -%}{%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endfor -%}
+
+              {%- if plenary_starts_here -%}
+                {%- assign talk = site.talks | where: 'name', plenary_talk_name | first -%}
+                <td colspan="{{ banner_span }}" rowspan="{{ banner_steps }}" class="program-talk p-0 h-100">
+                  {%- comment -%} ERCAS delta 7 — modo pausa (.program-banner) vs. modo sessão (cartão) {%- endcomment -%}
+                  {%- if plenary_is_break -%}
+                    {%- assign track_color = 'light' -%}
+                    {%- include get_track_properties.html -%}
+                    <div class="h-100 p-2 bg-{{ track_color }}-subtle text-{{ track_color }}-emphasis border-4 border-start border-{{ track_color }}-subtle shadow-sm overflow-hidden program-banner">
+                      {%- include show_live_icon.html class="mb-2" %}
+                      <p class="program-talk-title mb-0">
+                        <span class="visually-hidden">{{ site.data.lang[site.conference.lang].program.plenary | default: 'Plenary activity' }}: </span>
+                        {%- include show_talk.html %}
+                      </p>
+                    </div>
+                  {%- else -%}
+                    {%- include ercas_talk_card.html plenary=true room_name=plenary_room_name -%}
+                  {%- endif -%}
+                </td>
+              {%- elsif plenary_active -%}
+                {%- comment -%} covered by a previous banner's rowspan — emit nothing {%- endcomment -%}
+              {%- else -%}
+
+              {%- for r in parallel_rooms -%}
                 {%- assign room = site.rooms | where: 'name', r.name | first -%}
 
                 {%- assign active_talk = false -%}
@@ -175,41 +313,9 @@
                       {%- endfor -%}
                     {%- endunless -%}
 
-                    {%- include get_track_properties.html -%}
-                    {%- assign tag_str = talk.tags | join: " · " -%}
-                    {%- assign is_institutional = false -%}
-                    {%- if talk.track == "Institucional" -%}
-                      {%- assign is_institutional = true -%}
-                    {%- endif -%}
+                    {%- comment -%} ERCAS delta 6 — cartão compartilhado (ercas_talk_card.html) {%- endcomment -%}
                     <td rowspan="{{ talk_nbr_steps }}" class="program-talk p-0 h-100">
-                      <div class="h-100 p-2 bg-{{ track_color }}-subtle text-{{ track_color }}-emphasis border-4 border-start border-{{ track_color }}-subtle shadow-sm overflow-hidden{% if is_institutional %} program-talk-institucional{% endif %}">
-
-                        {%- unless is_institutional -%}
-                          <p class="program-talk-meta mb-1">
-                            {%- if tag_str != "" -%}
-                              <span class="program-talk-tag">{{ tag_str }}</span>
-                            {%- endif -%}
-                            {%- if tag_str != "" and talk.track -%}
-                              <span class="program-talk-meta-sep" aria-hidden="true"> · </span>
-                            {%- endif -%}
-                            {%- if talk.track -%}
-                              <span class="program-talk-track">{{ talk.track }}</span>
-                            {%- endif -%}
-                          </p>
-                        {%- endunless -%}
-
-                        {%- include show_live_icon.html class="mb-2" %}
-
-                        <p class="program-talk-title mb-2">
-                          {%- include show_talk.html %}
-                        </p>
-
-                        {%- unless is_institutional -%}
-                        <p class="mb-1">
-                          {%- include list_speakers.html %}
-                        </p>
-                        {%- endunless -%}
-                      </div>
+                      {%- include ercas_talk_card.html -%}
                     </td>
                     {%- assign active_talk = true %}
 
@@ -226,6 +332,8 @@
                 {%- endif -%}
 
               {%- endfor %}
+
+              {%- endif -%}{%- comment -%} end ERCAS delta 3 banner branch {%- endcomment -%}
 
             </tr>
           {%- endfor %}

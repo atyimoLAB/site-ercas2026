@@ -1,0 +1,46 @@
+{%- comment -%}
+  ERCAS — sem equivalente no tema. Deriva o título EXIBIDO de um item da grade:
+  "Tag N: " + (nome | "À definir" se `tbd: true`). O `name` do documento nunca
+  muda — ele é a chave de referência cruzada de program.yml / speakers / rooms.
+
+  Regras:
+   * uma tag com exatamente 1 item agendado NÃO recebe número;
+   * um prefixo idêntico ao título é suprimido (evita "Abertura: Abertura" e
+     faz Credenciamento / Abertura / Fechamento lerem normalmente).
+
+  ATENÇÃO — DISCIPLINA DE NAMESPACE (load-bearing): roda dentro do loop de
+  linhas de _layouts/program.html via show_talk.html. `assign` aqui escreve no
+  escopo do chamador. TODA variável atribuída DEVE ter prefixo `ercas_`.
+  Espera `talk` (documento da coleção talks). Define `ercas_talk_title`.
+{%- endcomment -%}
+{%- include ercas_talk_index.html -%}
+
+{%- assign ercas_base = talk.name -%}
+{%- if talk.tbd -%}
+  {%- assign ercas_base = site.data.lang[site.conference.lang].talk.tbd | default: "À definir" -%}
+{%- endif -%}
+{%- assign ercas_talk_title = ercas_base -%}
+
+{%- assign ercas_tag = talk.tags | first -%}
+{%- if ercas_tag -%}
+  {%- assign ercas_seq = 0 -%}{%- assign ercas_total = 0 -%}{%- assign ercas_found = false -%}
+  {%- for ercas_n in ercas_idx_names -%}
+    {%- assign ercas_i = forloop.index0 -%}
+    {%- if ercas_idx_tags[ercas_i] == ercas_tag -%}
+      {%- assign ercas_total = ercas_total | plus: 1 -%}
+      {%- unless ercas_found -%}{%- assign ercas_seq = ercas_total -%}{%- endunless -%}
+    {%- endif -%}
+    {%- if ercas_n == talk.name -%}{%- assign ercas_found = true -%}{%- endif -%}
+  {%- endfor -%}
+
+  {%- if ercas_found -%}
+    {%- if ercas_total > 1 -%}
+      {%- assign ercas_label = ercas_tag | append: " " | append: ercas_seq -%}
+    {%- else -%}
+      {%- assign ercas_label = ercas_tag -%}
+    {%- endif -%}
+    {%- unless ercas_label == ercas_base -%}
+      {%- assign ercas_talk_title = ercas_label | append: ": " | append: ercas_base -%}
+    {%- endunless -%}
+  {%- endif -%}
+{%- endif -%}

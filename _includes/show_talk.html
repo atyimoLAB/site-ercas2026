@@ -1,0 +1,15 @@
+{%- comment -%}
+  ERCAS — fork de jekyll-theme-conference 4.0.2 _includes/show_talk.html.
+  Delta único: o texto exibido passa por ercas_talk_title.html (prefixo
+  "Tag N: " + fallback "À definir" quando `tbd: true`). O `name` do documento
+  continua intacto — ele é a chave de referência cruzada usada por
+  program.yml / speakers / rooms. Resolvido pelo Jekyll antes do include do
+  tema, então todos os call sites (grade, /palestras/, páginas de palestrante
+  e de sala) herdam a numeração de uma vez.
+{%- endcomment -%}
+{%- include ercas_talk_title.html -%}
+{%- if talk.hide -%}
+  {{ ercas_talk_title }}
+{%- else -%}
+  <a class="text-reset link-underline-{{ track_color }} link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ talk.url | prepend: site.baseurl }}">{{ ercas_talk_title }}</a>
+{%- endif -%}

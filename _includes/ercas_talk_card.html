@@ -1,0 +1,59 @@
+{%- comment -%}
+  ERCAS — sem equivalente no tema. Cartão de atividade da grade de programação,
+  extraído verbatim de _layouts/program.html para ser compartilhado pelo <td> de
+  sala paralela e pelo <td> de faixa plenária em modo "sessão".
+
+  Espera `talk` (documento da coleção talks) já definido pelo chamador.
+  Param opcional `plenary=true` -> insere o prefixo visualmente oculto
+  "Atividade plenária: " antes do título (única pista, para leitores de tela, de
+  que o cartão ocupa todas as colunas de sala).
+  Param opcional `room_name` -> SÓ no modo `plenary=true`: o cartão plenário não
+  tem `<th>` de sala (a faixa não vira coluna), então a sala é renderizada como
+  bloco próprio via `_includes/ercas_room_chip.html` — um chip colorido que é
+  link para `/salas/…`, logo abaixo da linha `.program-talk-meta` e acima do
+  título. No caminho de sala paralela (sem `plenary`) o param é ignorado — a
+  sala está no `<th>` do cabeçalho (mesmo chip) e nada é renderizado aqui.
+
+  Reatribui `track_color` e `tag_str` sem prefixo `ercas_` DE PROPÓSITO: são
+  variáveis locais de célula que o próprio program.html recalcula a cada <td>
+  (mesmo comportamento do código inline original). Este include NÃO roda dentro
+  do loop de linhas via show_talk.html — é chamado diretamente pelo layout.
+{%- endcomment -%}
+{%- assign track_color = 'light' -%}
+{%- include get_track_properties.html -%}
+{%- assign tag_str = talk.tags | join: " · " -%}
+{%- assign show_room = false -%}
+{%- if include.plenary and include.room_name != "" and include.room_name -%}
+  {%- assign show_room = true -%}
+{%- endif -%}
+<div class="h-100 p-2 bg-{{ track_color }}-subtle text-{{ track_color }}-emphasis border-4 border-start border-{{ track_color }}-subtle shadow-sm overflow-hidden">
+
+  <p class="program-talk-meta mb-1">
+    {%- if tag_str != "" -%}
+      <span class="program-talk-tag">{{ tag_str }}</span>
+    {%- endif -%}
+    {%- if tag_str != "" and talk.track -%}
+      <span class="program-talk-meta-sep" aria-hidden="true"> · </span>
+    {%- endif -%}
+    {%- if talk.track -%}
+      <span class="program-talk-track">{{ talk.track }}</span>
+    {%- endif -%}
+  </p>
+
+  {%- if show_room -%}
+    {%- include ercas_room_chip.html room_name=include.room_name extra_class="mb-2" -%}
+  {%- endif -%}
+
+  {%- include show_live_icon.html class="mb-2" %}
+
+  <p class="program-talk-title mb-2">
+    {%- if include.plenary -%}
+      <span class="visually-hidden">{{ site.data.lang[site.conference.lang].program.plenary | default: 'Plenary activity' }}: </span>
+    {%- endif -%}
+    {%- include show_talk.html %}
+  </p>
+
+  <p class="mb-1">
+    {%- include list_speakers.html %}
+  </p>
+</div>

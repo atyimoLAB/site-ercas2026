@@ -1,70 +1,76 @@
+# Convenção deste site (lida por _layouts/program.html):
+#   `plenary: true` marca uma "sala" cujas atividades valem para todo o público;
+#   elas são renderizadas como faixa (banner) ocupando a largura das salas
+#   paralelas e NÃO viram coluna no cabeçalho da tabela.
+#
+#   Cada dia tem DUAS faixas plenárias:
+#     1. `name: Auditório de Farmácia` — atividades REAIS (Credenciamento,
+#        Abertura, Palestras, Fechamento). Viram cartão de largura total e
+#        aparecem em /salas/auditorio-farmacia/.
+#     2. SEM `name` + `is_break: true` — PAUSAS de todo o evento
+#        (Intervalo/Almoço). Sem `name` => nenhuma sala: não aparecem em
+#        /salas/*, nem na navegação de salas, nem no "em <sala>".
+#        `is_break: true` => _layouts/program.html usa a faixa plana
+#        (.program-banner) em vez do cartão.
+#
+# Numeração dos títulos ("Minicurso N:", "Palestra N:") é derivada em tempo de
+# render por _includes/ercas_talk_index.html a partir da ORDEM CRONOLÓGICA;
+# empates de horário são desempatados pela ordem das faixas neste arquivo.
+# Reordenar faixas renumera os rótulos.
+#
+# Minicursos que atravessam o intervalo do meio da manhã são DUAS entradas com
+# o mesmo `name` (08:30–10:00 e 10:30–12:00) — mantém cada bloco numa única
+# linha da tabela e os dois recebem o mesmo número.
 days:
   - name: Terça-feira
     abbr: Ter
     date: 2026-10-06
     rooms:
-      - name: Auditório
+      - name: Auditório de Farmácia
+        plenary: true
         talks:
-          - name: Credenciamento
-            time_start: "08:00"
-            time_end: "08:30"
-          - name: Abertura Oficial
-            time_start: "08:30"
-            time_end: "09:00"
-          - name: Criando uma Rede Neural do Zero
-            time_start: "09:00"
-            time_end: "10:30"
-          - name: Intervalo
-            time_start: "10:30"
-            time_end: "10:40"
-          - name: "Analisando dados multimodais em saúde: uma experiência usando a base de dados MIMIC-IV"
-            time_start: "10:40"
-            time_end: "12:00"
-          - name: Almoço
-            time_start: "12:00"
-            time_end: "14:00"
-          - name: Uso de Inteligência Artificial e Processamento de Linguagem Natural para Identificação de Transtornos de Saúde Mental
-            time_start: "14:00"
-            time_end: "15:20"
-          - name: Intervalo
-            time_start: "15:20"
-            time_end: "15:30"
-          - name: Sessão Técnica 1
-            time_start: "15:30"
-            time_end: "17:00"
-          - name: Detecção e Diagnóstico de Doenças usando Inteligência Artificial
-            time_start: "17:00"
-            time_end: "18:00"
+          - { name: Credenciamento, time_start: "08:00", time_end: "08:30" }
+          - { name: Abertura,       time_start: "15:30", time_end: "16:00" }
+          - { name: Palestra 1,     time_start: "16:00", time_end: "17:00" }
+      - plenary: true
+        is_break: true
+        talks:
+          - { name: Intervalo, time_start: "10:00", time_end: "10:30" }
+          - { name: Almoço,    time_start: "12:00", time_end: "13:30" }
+          - { name: Intervalo, time_start: "15:00", time_end: "15:30" }
+      - name: IC - SC I
+        talks:
+          - { name: Análise de grandes volumes de dados em saúde usando R, time_start: "08:30", time_end: "10:00" }
+          - { name: Análise de grandes volumes de dados em saúde usando R, time_start: "10:30", time_end: "12:00" }  # 2ª parte
+          - { name: Minicurso 4, time_start: "13:30", time_end: "15:00" }
+      - name: IC - SC IV
+        talks:
+          - { name: Prompt engineering para apoio à revisão sistemática, time_start: "08:30", time_end: "10:00" }
+          - { name: Integrando grandes volumes de dados com o CIDACS-RL, time_start: "10:30", time_end: "12:00" }
+          - { name: "Uso de blockchain para prontuários eletrônicos: aprimorando a gestão de dados em hospitais", time_start: "13:30", time_end: "15:00" }
+
   - name: Quarta-feira
     abbr: Qua
     date: 2026-10-07
     rooms:
-      - name: Auditório
+      - name: Auditório de Farmácia
+        plenary: true
         talks:
-          - name: Credenciamento
-            time_start: "08:00"
-            time_end: "09:00"
-          - name: Análise Sintática em Transformers com Cabeças de Atenção
-            time_start: "09:00"
-            time_end: "10:30"
-          - name: Intervalo
-            time_start: "10:30"
-            time_end: "10:40"
-          - name: "Visão Computacional com IA Generativa para capacitação médica e apoio ao diagnóstico em Mieloma Múltiplo"
-            time_start: "10:40"
-            time_end: "12:00"
-          - name: Almoço
-            time_start: "12:00"
-            time_end: "14:00"
-          - name: "Modelos preditivos na saúde: desafios e estratégias para mitigar vieses e desigualdades"
-            time_start: "14:00"
-            time_end: "15:20"
-          - name: Intervalo
-            time_start: "15:20"
-            time_end: "15:30"
-          - name: Sessão Técnica 2
-            time_start: "15:30"
-            time_end: "17:00"
-          - name: Premiação e Encerramento
-            time_start: "17:00"
-            time_end: "18:00"
+          - { name: Credenciamento, time_start: "08:00", time_end: "08:30" }
+          - { name: Palestra 2,     time_start: "13:30", time_end: "15:00" }
+          - { name: Uso de inteligência artificial e processamento de linguagem natural para identificação de transtornos de saúde mental, time_start: "15:30", time_end: "17:00" }
+          - { name: Fechamento,     time_start: "17:00", time_end: "17:30" }
+      - plenary: true
+        is_break: true
+        talks:
+          - { name: Intervalo, time_start: "10:00", time_end: "10:30" }
+          - { name: Almoço,    time_start: "12:00", time_end: "13:30" }
+          - { name: Intervalo, time_start: "15:00", time_end: "15:30" }
+      - name: IC - SC II
+        talks:
+          - { name: Usando o SHAP para interpretabilidade de modelos de IA em saúde, time_start: "08:30", time_end: "10:00" }
+          - { name: Usando o SHAP para interpretabilidade de modelos de IA em saúde, time_start: "10:30", time_end: "12:00" }  # 2ª parte
+      - name: IC - SC IV
+        talks:
+          - { name: Sumarizando prontuários eletrônicos com modelos de linguagem, time_start: "08:30", time_end: "10:00" }
+          - { name: Sumarizando prontuários eletrônicos com modelos de linguagem, time_start: "10:30", time_end: "12:00" }  # 2ª parte
