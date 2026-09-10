@@ -52,6 +52,8 @@ Because links are name-based, renaming anything means updating every place that 
 
 The theme has no native committees / sponsors / important-dates rendering, so `_includes/committees.html`, `_includes/sponsors.html`, `_includes/important_dates.html` render those from the corresponding `_data/*.yml`. The page markdown is a thin shell that sets layout/permalink and calls `{% include … %}`.
 
+The **important-dates / "Datas"** section is intentionally dormant for the 2026 edition (issue #42): `pt/important-dates.md` has `published: false` (so `/datas/` is not built) and the `Datas` nav entry in `_config.yml` is commented out. The include and `pt/_data/important_dates.yml` are kept as a template for future editions. Note: `disabled: true` on a nav link does **not** hide it — the theme renders a greyed-out inactive link — so hiding a section requires commenting out the nav entry and setting `published: false` on the page.
+
 ### i18n strings: `lang.yml`
 
 `_data/lang.yml` is the theme's translation table (keys like `program.*`, `speaker.*`, `location.*`), shipped with `en/de/fr/pt`. Custom keys have been **added** to it (e.g. `important_dates.{event,date}`) for the custom includes; includes read `site.data.lang[site.conference.lang].<key>` with a `| default:` fallback. When adding a custom include that needs labels, add the keys to `pt/_data/lang.yml`.
