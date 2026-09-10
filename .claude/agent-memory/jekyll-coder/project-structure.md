@@ -40,6 +40,22 @@ assets/css/main.scss  new as of 2026-07 (was previously linked by header.html bu
               exist — 404'd). Empty Jekyll front matter `---\n---\n` needed to compile to .css.
 ```
 
-Program schedule: both days (Ter/Qua, 2026-10-06..07) use only the "Auditório" room —
-every day is single-room, so the `program-rooms-1` full-width CSS override (see
-theme-schemas.md) is live on every day tab, not just an edge case.
+Program schedule (as of 2026-09, `pt/_data/program.yml`): 2 days (Ter/Qua,
+2026-10-06..07), each with **2 parallel IC rooms** + **3 `plenary: true` lanes**:
+  1. `name: Auditório de Farmácia` (color `secondary`) — Abertura, keynotes, Fechamento;
+     full-width session card.
+  2. `name: Saguão do IC` (color `dark`) — Credenciamento only, 08:00–08:30 both days;
+     full-width session card. Added when D7 was reversed — Credenciamento moved out of the
+     Auditório lane into its own named plenary lane.
+  3. unnamed + `is_break: true` — Intervalo/Almoço; flat `.program-banner`.
+The two named plenary lanes never overlap in time, so the layout's "last plenary talk
+starting on this row wins" logic is safe. Adding a 4th plenary lane that shares a start
+time with another named one WOULD collide (only one banner `<td>` per row).
+
+`pt/_rooms/` has 5 room docs: `auditorio-farmacia`, `ic-sc-1` (IC - SC I/success),
+`ic-sc-2` (IC - SC II/warning), `ic-sc-4` (IC - SC IV/info), `saguao-do-ic` (dark).
+
+`pt/_speakers/` (14): Breno Silva, Bruno Oliveira, Carlos Cardoso, Fernando Oliveira,
+Gabriel Teixeira, Helena Caseli, José Augusto, Laís Sacramento, Marcus Eustórgio,
+Mariana Recamonde-Mendoza, Matheus Villa, Ricardo Gomes (file `ricardo-gomes.md` —
+renamed 2026-09 from "Ricardo Oliveira"), Ricardo Rocha, Rodrigo Veras.
