@@ -79,9 +79,13 @@ conference:
         disabled: true
       - name: Patrocínio
         relative_url: /patrocinio/
-      - name: Datas
-        relative_url: /datas/
-        disabled: true
+      # Seção "Datas Importantes" oculta na edição 2026 — ver issue #42.
+      # `disabled: true` NÃO oculta o link (o tema renderiza um link cinza inativo);
+      # para reativar, descomente as 3 linhas abaixo e remova `published: false`
+      # de pt/important-dates.md.
+      # - name: Datas
+      #   relative_url: /datas/
+      #   disabled: true
       - name: Local
         relative_url: /local/
       - name: Inscrições
