@@ -3,11 +3,13 @@
 #   elas são renderizadas como faixa (banner) ocupando a largura das salas
 #   paralelas e NÃO viram coluna no cabeçalho da tabela.
 #
-#   Cada dia tem DUAS faixas plenárias:
-#     1. `name: Auditório de Farmácia` — atividades REAIS (Credenciamento,
-#        Abertura, Palestras, Fechamento). Viram cartão de largura total e
-#        aparecem em /salas/auditorio-farmacia/.
-#     2. SEM `name` + `is_break: true` — PAUSAS de todo o evento
+#   Cada dia tem TRÊS faixas plenárias:
+#     1. `name: Auditório de Farmácia` — atividades REAIS (Abertura, Palestras,
+#        Fechamento). Viram cartão de largura total e aparecem em
+#        /salas/auditorio-farmacia/.
+#     2. `name: Saguão do IC` — Credenciamento (08:00–08:30, nos dois dias).
+#        Cartão de largura total próprio; aparece em /salas/saguao-do-ic/.
+#     3. SEM `name` + `is_break: true` — PAUSAS de todo o evento
 #        (Intervalo/Almoço). Sem `name` => nenhuma sala: não aparecem em
 #        /salas/*, nem na navegação de salas, nem no "em <sala>".
 #        `is_break: true` => _layouts/program.html usa a faixa plana
@@ -29,9 +31,12 @@ days:
       - name: Auditório de Farmácia
         plenary: true
         talks:
-          - { name: Credenciamento, time_start: "08:00", time_end: "08:30" }
           - { name: Abertura,       time_start: "15:30", time_end: "16:00" }
-          - { name: Palestra 1,     time_start: "16:00", time_end: "17:00" }
+          - { name: "Modelos preditivos na saúde: desafios e estratégias para mitigar vieses e desigualdades", time_start: "16:00", time_end: "17:30" }
+      - name: Saguão do IC
+        plenary: true
+        talks:
+          - { name: Credenciamento, time_start: "08:00", time_end: "08:30" }
       - plenary: true
         is_break: true
         talks:
@@ -42,7 +47,7 @@ days:
         talks:
           - { name: Análise de grandes volumes de dados em saúde usando R, time_start: "08:30", time_end: "10:00" }
           - { name: Análise de grandes volumes de dados em saúde usando R, time_start: "10:30", time_end: "12:00" }  # 2ª parte
-          - { name: Minicurso 4, time_start: "13:30", time_end: "15:00" }
+          - { name: Aplicações de LLMs na saúde, time_start: "13:30", time_end: "15:00" }
       - name: IC - SC IV
         talks:
           - { name: Prompt engineering para apoio à revisão sistemática, time_start: "08:30", time_end: "10:00" }
@@ -56,10 +61,13 @@ days:
       - name: Auditório de Farmácia
         plenary: true
         talks:
-          - { name: Credenciamento, time_start: "08:00", time_end: "08:30" }
-          - { name: Palestra 2,     time_start: "13:30", time_end: "15:00" }
+          - { name: Detecção e diagnóstico de doenças usando inteligência artificial, time_start: "13:30", time_end: "15:00" }
           - { name: Uso de inteligência artificial e processamento de linguagem natural para identificação de transtornos de saúde mental, time_start: "15:30", time_end: "17:00" }
           - { name: Fechamento,     time_start: "17:00", time_end: "17:30" }
+      - name: Saguão do IC
+        plenary: true
+        talks:
+          - { name: Credenciamento, time_start: "08:00", time_end: "08:30" }
       - plenary: true
         is_break: true
         talks:

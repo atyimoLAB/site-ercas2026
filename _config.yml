@@ -104,12 +104,14 @@ conference:
 
   talks:
     tracks:
-      - name: Processamento de Linguagem Natural e Saúde Mental
-        color: info
+      - name: IA Generativa e LLMs
+        color: ercas-violet
       - name: Ciência de Dados Clínicos e Epidemiologia
         color: success
-      - name: Fundamentos de IA e Aprendizado de Máquina
+      - name: IA Responsável e Equidade
         color: danger
+      - name: IA para Diagnóstico
+        color: ercas-blue
       - name: IoT, Sistemas e Infraestrutura em Saúde
         color: warning
       - name: Institucional
