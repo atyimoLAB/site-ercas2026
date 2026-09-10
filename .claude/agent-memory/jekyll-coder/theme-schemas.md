@@ -96,13 +96,18 @@ Read from gem source, not assumed:
 - Hidden talks (`hide: true`, e.g. logistics/breaks) still render as colored program-grid
   cells and **must** have a `track:` set or the previous cell's `track_color` bleeds forward
   in the grid — don't leave `track:` unset on hidden talks.
-- ERCAS 2026 taxonomy (as of 2026-07): 7 tracks — 5 thematic (Diagnóstico por Imagem e Visão
-  Computacional/primary, Processamento de Linguagem Natural e Saúde Mental/info, Ciência de
-  Dados Clínicos e Epidemiologia/success, Fundamentos de IA e Aprendizado de Máquina/danger,
-  IoT Sistemas e Infraestrutura em Saúde/warning) + Sessões Técnicas/dark + Institucional/
-  secondary. Session-format words (Minicurso/Palestra/Workshop) live as name-only tags, not
-  tracks. Sessões Técnicas and Institucional talks get no format tag (redundant with the
-  track name itself).
+- ERCAS 2026 taxonomy (as of 2026-09): 5 tracks in `_config.yml` conference.talks.tracks —
+  `LLMs em Saúde`/info (renamed 2026-09 from `Processamento de Linguagem Natural e Saúde
+  Mental`; same `info` color/position), `Ciência de Dados Clínicos e Epidemiologia`/success,
+  `Fundamentos de IA e Aprendizado de Máquina`/danger, `IoT, Sistemas e Infraestrutura em
+  Saúde`/warning, `Institucional`/secondary. Session-format words (Minicurso/Palestra) live
+  as name-only tags, not tracks. Institucional ceremony/logistics talks (Abertura/
+  Credenciamento/Fechamento/Almoço/Intervalo) still carry a format tag (Abertura/
+  Credenciamento/Fechamento) — those tags exist in config for the numbering include.
+- Renaming a track = edit the one `_config.yml` entry + every `track:` line in `pt/_talks/*`
+  that named the old value (grep the old string across `pt/` and `_config.yml`). `checks.html`
+  DOES catch a talk pointing at an undefined track — it pushes a "missing tracks" error box
+  when `show_errors: true` — so a clean build confirms every `track:` resolves.
 
 ## Empty-speakers fallback — REVERTED (2026-07-17)
 

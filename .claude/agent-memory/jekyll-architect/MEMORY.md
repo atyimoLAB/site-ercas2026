@@ -1,1 +1,2 @@
-- [Theme program layout](theme-program-layout.md) — how program timetable renders tracks/tags/legend; repo overrides _layouts/program.html; hide_legend front-matter toggle
+- [Theme program layout](theme-program-layout.md) — how program timetable renders tracks/tags/legend, how track colors resolve (and why `light` = white), repo overrides, schedule invariants
+- [Track naming rules](feedback-track-naming.md) — short 2-4 word modern pt-BR track names; group aggressively, avoid one-talk tracks

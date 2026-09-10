@@ -1,5 +1,7 @@
 ---
 ---
+@use "sass:list";
+
 // ── Link underline (usability) ──────────────────────────────
 // Content links stay permanently underlined (no hover needed),
 // except UI chrome (navbar, buttons, tab/pill navs, badges,
@@ -97,7 +99,8 @@ a {
 //
 // Borda de 1px em `-text-emphasis` (não `-border-subtle`): mantém uma silhueta
 // legível mesmo quando o chip cai sobre um cartão do MESMO matiz — hoje o chip
-// `info` (Auditório) renderiza sobre o cartão `bg-info-subtle` da trilha PLN.
+// `success` (IC - SC I) renderiza sobre o cartão `bg-success-subtle` da trilha
+// "Ciência de Dados Clínicos e Epidemiologia" (minicurso de R).
 // As cores `-text-emphasis` são todas escuras, então a borda fica ≥ 7:1 contra
 // qualquer `-bg-subtle` e contra o branco. Não remover "por ficar mais limpo".
 .program-room-chip {
@@ -123,6 +126,41 @@ a {
   .program-room-chip-#{$c} {
     --ercas-room-bg: var(--bs-#{$c}-bg-subtle);
     --ercas-room-fg: var(--bs-#{$c}-text-emphasis);
+  }
+}
+
+// ── Cores de trilha (track colors) ──────────────────────────
+// O tema interpola track_color (= conference.talks.tracks[].color) direto no nome
+// das classes: bg-{c}-subtle, text-{c}-emphasis, border-{c}-subtle e
+// link-underline-{c} (em _layouts/program.html, _includes/ercas_talk_card.html,
+// _layouts/talk.html, _layouts/talk-overview.html, show_talk.html, list_speakers.html,
+// e o conference.bundle.js do modo live). Qualquer nome com esse quarteto definido
+// funciona como cor de trilha; não precisa ser nome contextual do Bootstrap.
+//
+// Por que cores próprias: os tints -bg-subtle do Bootstrap (20% da cor em branco)
+// são fracos demais sobre a tabela branca — info (#cff4fc) dá ~1,16:1 e lê como
+// cartão SEM cor (bug relatado). warning é ainda mais fraco; dark colide com o
+// Institucional; light é o FALLBACK silencioso de trilha inexistente — NUNCA usar
+// light como cor de trilha.
+//
+// Bases são as MESMAS do Bootstrap 5.3, um passo mais fundas:
+//   -bg-subtle 30% da base em branco / -border-subtle 45% / -text-emphasis shade 60%
+//
+//   nome            bg        borda     texto     rgb da base (p/ o sublinhado)
+$ercas-track-colors:
+  ("ercas-violet"  #d4c6ec   #beaae3   #2c1a4d   "111, 66, 193"),
+  ("ercas-blue"    #b6d4fe   #92befe   #052c65   "13, 110, 253");
+
+@each $t in $ercas-track-colors {
+  $name: list.nth($t, 1);
+
+  .bg-#{$name}-subtle     { background-color: list.nth($t, 2) !important; }
+  .border-#{$name}-subtle { border-color: list.nth($t, 3) !important; }
+  .text-#{$name}-emphasis { color: list.nth($t, 4) !important; }
+
+  .link-underline-#{$name} {
+    --bs-link-underline-opacity: 1;
+    text-decoration-color: rgba(#{list.nth($t, 5)}, var(--bs-link-underline-opacity)) !important;
   }
 }
 

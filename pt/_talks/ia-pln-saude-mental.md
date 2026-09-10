@@ -1,6 +1,6 @@
 ---
 name: Uso de inteligência artificial e processamento de linguagem natural para identificação de transtornos de saúde mental
-track: Processamento de Linguagem Natural e Saúde Mental   # trilha inferida — revisar
+track: IA para Diagnóstico
 tags: [Palestra]
 speakers:
   - Helena Caseli

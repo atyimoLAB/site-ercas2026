@@ -8,6 +8,64 @@ metadata:
 **Collections** (under `pt/`): `_talks/`, `_speakers/`, `_rooms/`. Configured in `_config.yml`
 with layout defaults.
 
+**CURRENT STATE (verified 2026-09-10, supersedes the 2026-07 snapshots lower in this file):**
+- **Tracks** in `_config.yml` `conference.talks.tracks` (6, taxonomy reworked 2026-09-10):
+  `IA Generativa e LLMs`/ercas-violet, `Ciência de Dados Clínicos e Epidemiologia`/success,
+  `IA Responsável e Equidade`/danger, `IA para Diagnóstico`/ercas-blue, `IoT, Sistemas e
+  Infraestrutura em Saúde`/warning, `Institucional`/secondary. Retired names (still in
+  ricardo-gomes.md minibio prose only, fine): `Fundamentos de IA e Aprendizado de Máquina`,
+  `LLMs em Saúde`, `Processamento de Linguagem Natural e Saúde Mental`.
+- **Track colors**: theme interpolates `track.color` straight into class names
+  (`bg-{c}-subtle`, `border-{c}-subtle`, `text-{c}-emphasis`, `link-underline-{c}`) both
+  server-side and in `conference.bundle.js` (live mode). `ercas-violet`/`ercas-blue` are
+  custom colors defined in `assets/css/main.scss` via `$ercas-track-colors` list + `@each`
+  (needs `@use "sass:list"` at file top — bare `nth()` warns `global-builtin` and fails the
+  clean-build gate). Bootstrap `-bg-subtle` tints are ~1.1–1.2:1 on the white timetable
+  (renders as no color — the `info` bug that triggered this); ercas tints are one step
+  deeper (30% base in white): violet #d4c6ec ~1.7:1, blue #b6d4fe ~1.5:1 vs white — stronger
+  than every stock track tint. NEVER use `light` as a track color (silent fallback for a
+  missing track). `!important` on the emitted rules is correct (mirrors Bootstrap's own
+  subtle utilities; main.css loads after conference.bundle.css).
+- **Tags** (name-only unless noted): Keynote(icon star), Tutorial(icon mortarboard), Minicurso,
+  Palestra, Credenciamento, Abertura, Fechamento, Workshop. Only Minicurso/Palestra/Credenciamento/
+  Abertura/Fechamento are actually used by talks. Keynote/Tutorial/Workshop are unused (harmless).
+- **Rooms** (5): `auditorio-farmacia.md` "Auditório de Farmácia"/secondary, `ic-sc-1.md`
+  "IC - SC I"/success, `ic-sc-2.md` "IC - SC II"/warning, `ic-sc-4.md` "IC - SC IV"/info,
+  `saguao-do-ic.md` "Saguão do IC"/dark (Credenciamento only, added 2026-09).
+- **program.yml plenary convention** (documented in the file's header comment): each day has
+  THREE `plenary: true` lanes — "Auditório de Farmácia" (Abertura/Palestras/Fechamento,
+  full-width card + `/salas/auditorio-farmacia/`), "Saguão do IC" (Credenciamento 08:00–08:30
+  both days, own full-width card + `/salas/saguao-do-ic/`), and one unnamed `is_break: true`
+  (Intervalo/Almoço, flat `.program-banner`, no room page). Non-plenary lanes (IC - SC *)
+  become table columns. Verified 2026-09-10: multiple named plenary lanes at different times
+  render correctly — theme emits one full-width `colspan` card per active plenary lane per row,
+  no empty/stray plenary cells on rows where a given plenary lane is idle. `_layouts/room.html`
+  is fine here because each plenary room name appears only once per day (no `{%- break -%}`
+  concat issue). All 8 `.program-room-chip-<color>` classes (incl. `-dark`) pre-exist in
+  `assets/css/main.css` mapped to `--bs-<color>-bg-subtle`/`-text-emphasis` — any Bootstrap
+  color is a valid room `color:` with no CSS change; `dark` gives ~13:1 contrast.
+- **"Minicurso N" / "Palestra N" numbering** is derived at render by
+  `_includes/ercas_talk_index.html` from CHRONOLOGICAL order across days, per tag, deduped by
+  talk `name`; same-`time_start` ties broken by lane order in `program.yml`. Two-part minicursos
+  (same name, 08:30–10:00 + 10:30–12:00) share one number. Current mapping: M1 analise-R,
+  M2 prompt-engineering(→IA Generativa e LLMs), M3 integrando-cidacs, M4 aplicacoes-llms
+  (→IA Generativa e LLMs), M5 blockchain, M6 shap(→IA Responsável e Equidade),
+  M7 sumarizacao(→IA Generativa e LLMs); P1 modelos-preditivos(→IA Responsável e Equidade,
+  Mariana, 06/10 16:00), P2 deteccao(→IA para Diagnóstico, Rodrigo Veras, 07/10 13:30),
+  P3 ia-pln-saude-mental(→IA para Diagnóstico, Helena, 07/10 15:30).
+- **Structural invariant**: plenary-lane and parallel-lane activities must be temporally
+  disjoint on a given day, or the parallel `<td>` loop is skipped and concurrent talks vanish
+  with no build error. Currently disjoint on both days — re-check on every schedule edit.
+- **Speakers** (14, all referenced): breno-silva, bruno-oliveira, carlos-cardoso,
+  fernando-oliveira, gabriel-teixeira, helena-caseli, jose-augusto, lais-sacramento,
+  marcus-eustorgio, mariana-recamonde-mendoza ("Mariana Recamonde-Mendoza"), matheus-villa,
+  ricardo-gomes ("Ricardo Gomes" — renamed 2026-09 from ricardo-oliveira.md/"Ricardo
+  Oliveira"; same minibio; M7 speaker), ricardo-rocha, rodrigo-veras ("Rodrigo Veras" — NOT the old
+  "Rodrigo de Melo Souza Veras" from the 2026-07 snapshot; that file was deleted and recreated).
+- Content-gathering pass in progress 2026-09: several talk bodies / speaker minibios are
+  intentionally just `<!-- resumo pendente -->` / `<!-- minibio pendente -->` HTML comments.
+  Empty bodies are EXPECTED, not a defect. NB these HTML comments DO render into public HTML.
+
 **_talks/*.md required fields:** `name` (must match `pt/_data/program.yml` talk name exactly,
 including accents/punctuation/quoting). Optional: `speakers` (list of speaker `name`s),
 `track` (must match a `conference.talks.tracks[].name` in `_config.yml` — see the theme-quirk
