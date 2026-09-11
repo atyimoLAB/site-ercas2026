@@ -24,7 +24,8 @@ assume it still applies; verify against `_config.yml` and CLAUDE.md before citin
   leak into _site" issue from prior reviews is resolved.
 - `en/` tree still exists but is excluded from the build (deferred, not part of CI).
 - Nav links use a `disabled: true` opt-out pattern (comment at `_config.yml:58-59`): entries
-  without `disabled: true` are live. As of 2026-07-10: Sobre, Programação, Palestras,
-  Palestrantes, Local are enabled; Comitês, Patrocínio, Datas, Inscrições remain disabled.
+  without `disabled: true` are live. As of 2026-09-10: Sobre, Programação, Palestras,
+  Palestrantes, Local, Organização (permalink `/organizacao/`, renamed from "Comitês") are
+  enabled; Patrocínio, Datas, Inscrições remain disabled.
 
 See [[data-schema]] for collection schemas and [[build-notes]] for build command details.

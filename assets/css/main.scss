@@ -28,6 +28,53 @@ a {
   --bs-link-underline-opacity: 1;
 }
 
+// ── Navbar: highlight the current page's link ───────────────
+// Bootstrap's stock `.nav-link.active` is colour-only, and this
+// navbar has no navbar-dark/light modifier, so active vs. inactive
+// only differ by black-alpha opacity (~90% vs ~55%) — too close to
+// tell apart at a glance. Avoid primary blue / underline for the
+// active state — both read as "this is a link", not "you are here".
+// A flat neutral chip (no hue) reads as a tab/location marker
+// instead of a link. rgba(emphasis, .08) auto-adapts to dark mode
+// since --bs-emphasis-color flips near-black/near-white with the
+// theme. Square corners, no border-radius — matches the site's
+// square-edge convention (see the /programacao .conf-tabs active
+// state below, which is also unrounded).
+// Colour-blind-safe by construction: every cue is achromatic
+// (background tint, font-weight, bottom rule) rather than hue-based,
+// so nothing depends on distinguishing one colour from another. The
+// bottom rule is a second, redundant cue beyond the tint alone
+// (WCAG 1.4.1 — don't signal state through a single subtle contrast
+// shift); it's a box-shadow, not a border, so it doesn't add to the
+// link's box height/misalign it against sibling links, and
+// currentColor keeps it out of primary blue so it still doesn't read
+// as a hyperlink underline.
+.navbar .nav-link.active {
+  background-color: rgba(var(--bs-emphasis-color-rgb), 0.08);
+  border-radius: 0;
+  font-weight: 600;
+  box-shadow: inset 0 -2px 0 currentColor;
+}
+
+// ── Organização (/organizacao/) ───────────────────────────
+// Card de cada membro: avatar circular + nome/instituição lado a
+// lado. avatar vem de _data/committees.yml (campo `avatar`); hoje
+// todos apontam para o mesmo placeholder genérico (silhueta cinza),
+// então nenhuma foto real é necessária até que uma seja adicionada.
+.committee-member {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.committee-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
 // (3) UI chrome: no underline. text-decoration:none draws no line
 //     regardless of the opacity variable above, so this reliably
 //     wins for chrome even when a chrome link also carries the

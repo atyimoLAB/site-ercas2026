@@ -1,19 +1,23 @@
 {% for group in site.data.committees %}
 <section class="mb-5">
-  <h2 class="h4 border-bottom pb-2 mb-3">{{ group.group }}</h2>
+  <h2 class="h4 border-bottom pb-2 mb-3">{{ group.group | escape }}</h2>
   <ul class="list-unstyled row row-cols-1 row-cols-md-2 row-cols-lg-3 g-2">
     {% for member in group.members %}
     <li class="col">
-      {% if member.url %}
-        <a href="{{ member.url }}" class="text-body">
-          <strong>{{ member.name }}</strong>
-        </a>
-      {% else %}
-        <strong>{{ member.name }}</strong>
-      {% endif %}
-      {% if member.affiliation %}
-        <br /><small class="text-muted">{{ member.affiliation }}</small>
-      {% endif %}
+      <div class="committee-member">
+        <img
+          src="{{ member.avatar | default: 'assets/images/committees/placeholder.svg' | relative_url }}"
+          alt="{{ member.first_name | escape }} {{ member.last_name | escape }}"
+          class="committee-avatar"
+          loading="lazy"
+        />
+        <div>
+          <strong>{{ member.first_name | escape }} {{ member.last_name | escape }}</strong>
+          {% if member.institution %}
+            <br /><small class="text-muted">{{ member.institution | escape }}</small>
+          {% endif %}
+        </div>
+      </div>
     </li>
     {% endfor %}
   </ul>
