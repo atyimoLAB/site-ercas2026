@@ -1,0 +1,30 @@
+{%- comment -%}
+  ERCAS — sem equivalente no tema. Avatar do palestrante com fallback para o
+  mesmo placeholder cinza (silhueta) usado por _includes/committees.html —
+  único lugar, além deste, onde o caminho do placeholder aparece. Dois pontos
+  de uso, com tamanhos diferentes definidos em assets/css/main.scss:
+  _layouts/speaker-overview.html (cartão, 96px, classe `.speaker-avatar-card`)
+  e _layouts/speaker.html (cabeçalho, 160px/120px, classe `.speaker-avatar-page`).
+
+  alt="" DE PROPÓSITO: em ambos os call sites o nome do palestrante já é texto
+  adjacente (heading do cartão com `.stretched-link`, ou o `<h1>` ao lado) —
+  um alt com o nome duplicaria o anúncio em leitores de tela.
+
+  Parâmetros (todos obrigatórios):
+   * speaker — documento da coleção `speakers` (page ou item de site.speakers).
+   * class   — classe de tamanho de main.scss (`.speaker-avatar-card` ou
+               `.speaker-avatar-page`).
+   * size    — lado em px, IDÊNTICO ao tamanho base da classe acima; vira
+               width/height explícitos no <img> (evita layout shift — CLS).
+               A troca de 160px->120px do avatar de página é só CSS
+               (media query); width/height aqui fixam a proporção 1:1, não o
+               tamanho renderizado.
+{%- endcomment -%}
+<img
+  src="{{ speaker.avatar | default: '/assets/images/committees/placeholder.svg' | relative_url }}"
+  alt=""
+  width="{{ include.size }}"
+  height="{{ include.size }}"
+  class="{{ include.class }}"
+  loading="lazy"
+/>

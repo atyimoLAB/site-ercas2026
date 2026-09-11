@@ -1,11 +1,35 @@
 {%- comment -%}
   ERCAS — fork de jekyll-theme-conference 4.0.2 _layouts/speaker-overview.html.
-  Delta único: agrupamento e ordenação pelo PRIMEIRO nome, não pelo sobrenome
-  (linhas `sort_natural` e `slice: 0` do original). O tema não expõe opção de
-  configuração para isso (`conference.speakers.show_firstname` é explicitamente
-  rejeitado em checks.html). Todo o resto (layout de 3 colunas, cabeçalhos de
-  letra que são o menu A-Z, tratamento de `hide`, rótulo
-  "{{ first_name }} {{ last_name }}") permanece igual ao tema.
+
+  Delta 1: agrupamento e ordenação pelo PRIMEIRO nome, não pelo sobrenome
+  (linhas `sort_natural` do original usavam `last_name`). O tema não expõe
+  opção de configuração para isso (`conference.speakers.show_firstname` é
+  explicitamente rejeitado em checks.html).
+
+  Delta 2: a lista alfabética em `column-count` (menu A-Z com um `<h3>` por
+  letra) vira uma grade de cartões (`row row-cols-1 row-cols-md-2 g-3`),
+  anatomia media-object igual a `/organizacao/` (avatar circular + nome),
+  só que numa superfície de cartão e com mais espaço (96px de avatar vs
+  64px, 2 colunas vs 3). Os cabeçalhos de letra são descartados de propósito:
+  9 letras para 14 pessoas é mais estrutura de navegação do que conteúdo, e
+  `column-count` fragmenta cartões altos no meio (avatar numa coluna, nome na
+  seguinte). Reavaliar se o quadro de palestrantes passar de ~40 pessoas.
+  2 colunas a partir de `md` (não `sm`): um avatar de 96px + padding num
+  cartão de largura `sm` deixa ~126px pro texto, o que quebra
+  "Mariana Recamonde-Mendoza" em três linhas.
+
+  Delta 3: cada cartão ganha a(s) sessão(ões) do palestrante — conteúdo que o
+  template original não tinha (só mostrava o nome). A sessão é DERIVADA de
+  `site.talks` pela mesma junção por nome usada em toda a grade
+  (`talk.speakers contains speaker.name`), passando por
+  `_includes/ercas_talk_title.html` para herdar a numeração "Minicurso N:" /
+  "Palestra N:" que já aparece em `/programacao/` — nenhuma cópia de título é
+  guardada no front matter do palestrante (divergiria em silêncio).
+
+  Acessibilidade: avatar com `alt=""` (o nome já é texto do link adjacente);
+  `.stretched-link` no nome torna o cartão inteiro clicável;
+  `position-relative` no cartão (ver `.speaker-card` em main.scss) é o que
+  faz o `.stretched-link` funcionar.
 {%- endcomment -%}
 {% include header.html %}
 
@@ -19,38 +43,35 @@
 
   {{ content }}
 
-  <div class="col-count-1 col-count-md-2 col-count-lg-3">
-    {% assign cur_letter = false %}
+  <div class="row row-cols-1 row-cols-md-2 g-3">
     {% assign speakers = site.speakers | sort_natural: 'first_name' %}{%- comment -%} ERCAS: era last_name {%- endcomment -%}
     {% for speaker in speakers %}
+      <div class="col">
+        <div class="speaker-card h-100">
+          {% include ercas_speaker_avatar.html speaker=speaker class="speaker-avatar-card" size=96 %}
 
-      {% assign last_letter = speaker.first_name | slice: 0 | capitalize %}{%- comment -%} ERCAS: era last_name {%- endcomment -%}
-      {% if cur_letter != last_letter %}
-        {% if cur_letter %}
-            </ul>
+          <div class="speaker-card-body">
+            <p class="mb-1">
+              <strong>
+                {% if speaker.hide %}
+                  {{ speaker.first_name | escape }} {{ speaker.last_name | escape }}
+                {% else %}
+                  <a class="stretched-link text-reset link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ speaker.url | prepend: site.baseurl }}">
+                    {{ speaker.first_name | escape }} {{ speaker.last_name | escape }}
+                  </a>
+                {% endif %}
+              </strong>
+            </p>
+
+            {%- assign ercas_speaker_talks = site.talks | where_exp: "talk", "talk.speakers contains speaker.name" -%}
+            {%- for talk in ercas_speaker_talks -%}
+              {%- include ercas_talk_title.html -%}
+              <p class="mb-0 small text-muted">{{ ercas_talk_title | escape }}</p>
+            {%- endfor -%}
           </div>
-        {% endif %}
-
-        {% assign cur_letter = last_letter %}
-        <div class="col-count">
-          <h3>{{ cur_letter }}</h3>
-          <ul class="list-unstyled">
-      {% endif %}
-
-      <li class="fw-light">
-        {% if speaker.hide %}
-          {{ speaker.first_name }} {{ speaker.last_name }}
-        {% else %}
-          <a class="link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ speaker.url | prepend: site.baseurl }}">
-            {{ speaker.first_name }} {{ speaker.last_name }}
-          </a>
-        {% endif %}
-      </li>
-
+        </div>
+      </div>
     {% endfor %}
-
-      </ul>
-    </div>
   </div>
 
 {% include footer.html %}

@@ -1,0 +1,62 @@
+{%- comment -%}
+  ERCAS — fork de jekyll-theme-conference 4.0.2 _includes/schema_speaker.html.
+
+  Delta 1: emite `Person.image` quando (e SÓ quando) `speaker.avatar`
+  existe. Sem essa guarda, os 5 palestrantes sem foto emitiriam a silhueta
+  cinza genérica como se fosse o retrato real da pessoa — uma afirmação
+  falsa e legível por máquina sobre a aparência de alguém.
+
+  Delta 2: corrige um bug do próprio tema (upstream, não introduzido aqui) —
+  `"name": "{{ ... | jsonify }}"` aspeava DUAS vezes o valor (jsonify já
+  devolve a string entre aspas), produzindo JSON-LD inválido
+  (`""Helena Caseli""`). `givenName`/`familyName`, logo abaixo, já faziam
+  certo (sem aspas extras); `name` agora segue o mesmo padrão.
+{%- endcomment -%}
+{%- assign speaker = page -%}
+{%- assign speaker_url = page.url | prepend: site.baseurl | prepend: site.url -%}
+
+{%- assign performer_in = "" -%}
+{%- assign first_talk = true -%}
+{%- for talk in site.talks -%}
+  {%- for speaker_name in talk.speakers -%}
+    {%- if speaker_name == speaker.name -%}
+      {%- unless first_talk -%}
+        {%- assign performer_in = performer_in | append: "," -%}
+      {%- else -%}
+        {%- assign first_talk = false -%}
+      {%- endunless -%}
+      {%- assign talk_url = talk.url | prepend: site.baseurl | prepend: site.url -%}
+      {%- assign performer_in = performer_in | append: '{"@type":"Event","url":"' | append: talk_url | append: '"}' -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endfor -%}
+
+{%- comment -%} ERCAS: URL absoluta do avatar, só quando ele existe {%- endcomment -%}
+{%- if speaker.avatar -%}
+  {%- assign speaker_image_url = speaker.avatar | prepend: site.baseurl | prepend: site.url -%}
+{%- endif -%}
+
+{%- unless site.conference.meta.schema_org.disable or speaker.hide -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": {{ speaker.first_name | append: " " | append: speaker.last_name | jsonify }},
+  "givenName": {{ speaker.first_name | jsonify }},
+  "familyName": {{ speaker.last_name | jsonify }},
+  "url": "{{ speaker_url }}",
+  {%- if speaker.avatar %}
+  "image": "{{ speaker_image_url }}",
+  {%- endif %}
+  "performerIn": [
+    {% if performer_in -%}
+      {{ performer_in }}
+    {%- else -%}
+      {%- comment -%} Link to conference event {%- endcomment -%}
+      {"@type":"Event","url":"{{ site.url | append: site.baseurl }}"}
+    {%- endif %}
+  ]
+}
+</script>
+{%- endunless -%}
