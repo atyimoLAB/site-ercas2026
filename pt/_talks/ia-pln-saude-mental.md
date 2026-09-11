@@ -1,5 +1,5 @@
 ---
-name: Uso de inteligência artificial e processamento de linguagem natural para identificação de transtornos de saúde mental
+name: Processamento de linguagem natural aplicado à saúde mental
 track: IA para Diagnóstico
 tags: [Palestra]
 speakers:
