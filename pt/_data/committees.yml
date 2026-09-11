@@ -1,18 +1,47 @@
-- group: Comitê Organizador
-  members:
-    - name: Ana Costa
-      affiliation: Universidade Federal da Bahia
-      url: https://example.com/anacosta
-    - name: Bruno Lima
-      affiliation: Hospital Universitário Prof. Edgard Santos
-    - name: Carla Mendes
-      affiliation: Instituto de Saúde Coletiva — UFBA
+# Organização da ERCAS 2026, agrupada por grupo (Coordenação Geral, Coordenação
+# Local). Cada membro: first_name, last_name, institution, avatar (caminho
+# relativo à raiz do site). Todos os membros usam por ora o mesmo avatar
+# placeholder — trocar por uma foto real é uma edição de uma linha por
+# pessoa, sem precisar mudar o template.
 
-- group: Comitê de Programa
+- group: Coordenação Geral
   members:
-    - name: Diana Rocha
-      affiliation: Universidade Estadual de Feira de Santana
-    - name: Eduardo Nunes
-      affiliation: Universidade Federal do Ceará
-    - name: Fernanda Peixoto
-      affiliation: Pontifícia Universidade Católica do Rio Grande do Sul
+    - first_name: Robespierre
+      last_name: Pita
+      institution: DCC/IC/UFBA
+      avatar: assets/images/committees/placeholder.svg
+    - first_name: Paulo
+      last_name: Ambrósio
+      institution: DEC/UESC
+      avatar: assets/images/committees/placeholder.svg
+    - first_name: Bethânia
+      last_name: Almeida
+      institution: CIDACS/Fiocruz-BA
+      avatar: assets/images/committees/placeholder.svg
+
+- group: Coordenação Local
+  members:
+    - first_name: Cynara
+      last_name: Gomes Barbosa
+      institution: DACT/FACFAR/UFBA
+      avatar: assets/images/committees/placeholder.svg
+    - first_name: Gecynalda
+      last_name: Gomes
+      institution: IME/DEST/UFBA
+      avatar: assets/images/committees/placeholder.svg
+    - first_name: Iago
+      last_name: Santo
+      institution: PGCOMP/IC/UFBA
+      avatar: assets/images/committees/placeholder.svg
+    - first_name: Mirlei
+      last_name: Moura
+      institution: PGCOMP/IC/UFBA
+      avatar: assets/images/committees/placeholder.svg
+    - first_name: Sâmela
+      last_name: Rocha
+      institution: PGCOMP/IC/UFBA
+      avatar: assets/images/committees/placeholder.svg
+    - first_name: Thiago
+      last_name: Colares
+      institution: PGCOMP/IC/UFBA
+      avatar: assets/images/committees/placeholder.svg

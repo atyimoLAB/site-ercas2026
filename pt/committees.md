@@ -1,7 +1,7 @@
 ---
 layout: page
-permalink: /comites/
-title: Comitês
+permalink: /organizacao/
+title: Organização
 ---
 
 {% include committees.html %}
