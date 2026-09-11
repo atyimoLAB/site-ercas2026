@@ -70,12 +70,12 @@ conference:
         relative_url: /sobre/
       - name: Organização
         relative_url: /organizacao/
+      - name: Palestrantes
+        relative_url: /palestrantes/
       - name: Programação
         relative_url: /programacao/
       - name: Palestras
         relative_url: /palestras/
-      - name: Palestrantes
-        relative_url: /palestrantes/
       - name: Patrocínio
         relative_url: /patrocinio/
       # Seção "Datas Importantes" oculta na edição 2026 — ver issue #42.

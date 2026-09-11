@@ -1,21 +1,36 @@
 {%- comment -%}
   ERCAS — fork de jekyll-theme-conference 4.0.2 _layouts/speaker.html.
-  Delta único: o botão do rodapé aponta para /palestrantes/ (permalink PT) com
+
+  Delta 1: o botão do rodapé aponta para /palestrantes/ (permalink PT) com
   o rótulo speaker.overview, em vez do link genérico `page.collection` +
   "Overview".
+
+  Delta 2: avatar de 160px AO LADO do eyebrow+`<h1>` (não acima — acima
+  empurraria o nome para abaixo da dobra num celular), caindo para 120px
+  abaixo de 576px via `.speaker-avatar-page` em main.scss. Sem foto
+  cadastrada, `_includes/ercas_speaker_avatar.html` cai no mesmo placeholder
+  cinza de `/organizacao/`. Ordem dos blocos abaixo (bio → links de ícone →
+  "Mais informações" → tabela de sessões → botão de volta) é a do tema,
+  inalterada.
 {%- endcomment -%}
 {%- assign speaker = page -%}
 
 {%- unless speaker.hide -%}
   {%- include header.html -%}
 
-  <p class="h6">
-    {{ site.data.lang[site.conference.lang].speaker.title | default: "Speaker" }}
-  </p>
+  <div class="d-flex align-items-center gap-3 mb-3">
+    {% include ercas_speaker_avatar.html speaker=speaker class="speaker-avatar-page" size=160 %}
 
-  <h1 class="fw-light mb-3 text-break">
-    {{ speaker.first_name }} {{ speaker.last_name }}
-  </h1>
+    <div>
+      <p class="h6 mb-1">
+        {{ site.data.lang[site.conference.lang].speaker.title | default: "Speaker" }}
+      </p>
+
+      <h1 class="fw-light mb-0 text-break">
+        {{ speaker.first_name | escape }} {{ speaker.last_name | escape }}
+      </h1>
+    </div>
+  </div>
 
   {{ content }}
 

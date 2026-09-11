@@ -1,6 +1,6 @@
 ---
-name: Marcus Eustórgio
-first_name: Marcus
+name: Marcos Eustórgio
+first_name: Marcos
 last_name: Eustórgio
 ---
 

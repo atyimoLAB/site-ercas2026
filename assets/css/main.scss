@@ -56,6 +56,20 @@ a {
   box-shadow: inset 0 -2px 0 currentColor;
 }
 
+// ── Avatares circulares (silhueta/foto) ──────────────────────
+// Forma compartilhada por /organizacao/ (.committee-avatar, 64px) e
+// /palestrantes/ (.speaker-avatar-card 96px / .speaker-avatar-page
+// 160px/120px). Mixin, não classe: os tamanhos divergem por seção, e
+// acoplar via uma classe única faria um ajuste futuro numa seção
+// reestilizar a outra sem querer.
+@mixin avatar-circle($size) {
+  width: $size;
+  height: $size;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
 // ── Organização (/organizacao/) ───────────────────────────
 // Card de cada membro: avatar circular + nome/instituição lado a
 // lado. avatar vem de _data/committees.yml (campo `avatar`); hoje
@@ -68,11 +82,50 @@ a {
 }
 
 .committee-avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
+  @include avatar-circle(64px);
+}
+
+// ── Palestrantes (/palestrantes/) ───────────────────────────
+// Mesma anatomia de /organizacao/ (avatar circular + nome), com mais
+// espaço: avatar maior (96px vs 64px) e mais respiro vertical, já que a
+// grade aqui é 2 colunas (vs 3 em /organizacao/) e cada item carrega uma
+// segunda linha de texto (a sessão do palestrante). Sem borda nem fundo:
+// o respiro sozinho separa os itens, como em /organizacao/.
+// `position: relative` é o que permite ao `.stretched-link` no nome
+// (_layouts/speaker-overview.html) tornar o item inteiro clicável.
+.speaker-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+// `min-width: 0` anula o padrão `min-width: auto` dos itens flex: sem
+// isso, um nome ou título de sessão com uma palavra longa demais para
+// quebrar alargaria a coluna de texto em vez de ser contido pelo cartão.
+// O conteúdo de hoje quebra sozinho (tudo tem espaço ou hífen); é defesa
+// contra um título futuro com um token longo e indivisível.
+.speaker-card-body {
+  min-width: 0;
+}
+
+.speaker-avatar-card {
+  @include avatar-circle(96px);
+}
+
+// Página de palestrante (/palestrantes/<slug>/): avatar ao lado do
+// eyebrow+<h1> (_layouts/speaker.html delta 2). 160px a partir de
+// 576px; abaixo disso 120px, para não empurrar o nome para fora da
+// tela num celular.
+.speaker-avatar-page {
+  @include avatar-circle(160px);
+}
+
+@media (max-width: 575.98px) {
+  .speaker-avatar-page {
+    @include avatar-circle(120px);
+  }
 }
 
 // (3) UI chrome: no underline. text-decoration:none draws no line

@@ -4,3 +4,4 @@
 - [Data schema](data-schema.md) — real program content (2026-07-10) + track-less-talk theme quirk
 - [Known issues](known-issues.md) — track-less talks trip a false-positive error banner; "A confirmar" placeholder speakers render as broken empty-href links
 - [Build notes](build-notes.md) — build command, and why CLI-clean != HTML-clean (must grep for alert-danger)
+- [Speakers rework](speakers-rework.md) — schema_speaker.html gem fork (jsonify double-quote bug, verified isolated to this file), avatar/links front-matter schema, avatar-circle mixin pattern
