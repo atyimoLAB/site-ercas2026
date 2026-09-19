@@ -20,11 +20,25 @@ bundle exec jekyll serve --livereload
 
 # Production build (what CI runs)
 bundle exec jekyll build -d _site
+
+# Horizontal-overflow guard (needs a build first)
+node _tools/check-overflow.mjs
 ```
 
 After editing `_config.yml`, **restart** the server — config is not auto-reloaded.
 
-There are no tests or linters. The build itself is the gate: `show_errors: true` (set in `_config.yml`) makes the theme surface broken cross-references (a talk pointing at a missing speaker, etc.) as visible page errors. **Run the local build and check for theme error output** before committing content changes.
+There is no test runner. Two gates:
+
+1. **The build**, via `show_errors: true` (set in `_config.yml`), which makes the theme surface broken cross-references (a talk pointing at a missing speaker, etc.) as visible page errors. **Run the local build and check for theme error output** before committing content changes.
+2. **`_tools/check-overflow.mjs`**, which fails if any built page can be panned horizontally. It serves `_site`, drives headless Chrome over raw CDP (no npm dependencies — needs Node ≥ 22 for the global `WebSocket`, and Chrome, or `CHROME_PATH`), and asserts `scrollWidth <= clientWidth` for every built route at 320/360/390/414/576/768/992/1200px. Routes are enumerated from `_site/**/index.html`, so new talks/speakers/rooms are covered automatically. `.github/workflows/checks.yml` runs both on every PR.
+
+`_tools/` is never published: Jekyll skips root entries beginning with `_`, so no `exclude:` entry is needed.
+
+### Layout rule: horizontal gutters inside `.container`
+
+A Bootstrap `.container` has 12px of side padding, and a `.row`'s negative side margin is half its `--bs-gutter-x`. **Inside a `.container`, a `.row` must not use a horizontal gutter above `gx-3` (1.5rem) without a breakpoint suffix** — `gx-4`/`gx-5` pull −24px against those 12px, so below `sm` (where the container is full-bleed) the row juts 12px past each viewport edge and the whole page pans sideways. Use `gx-lg-5` and friends. This is what `_includes/sponsors.html` does, and because that include renders in every page's footer, getting it wrong breaks the entire site at once.
+
+Related: `.navbar-nav` does not wrap, so the navbar's `conference.navigation.breakpoint` must stay at a width where all the links actually fit (currently `lg`). Adding a nav link means re-running the guard at 992/1200.
 
 ## Architecture
 

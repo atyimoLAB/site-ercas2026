@@ -1,3 +1,19 @@
+{%- comment -%}
+  ERCAS 2026 — fork de jekyll-theme-conference 4.0.2 _layouts/home.html.
+  Deltas vs. o gem (manter esta lista viva para merges de 3 vias num bump de tema):
+
+  1. Herói fora do `<h1>`: o gem punha a `<img>` DENTRO do `<h1>` (`w-75
+     d-none d-md-inline` / `w-100 d-md-none`). Aqui ela vive numa `col-md-5`
+     ao lado do texto, com `order-1 order-md-2` (imagem em cima no mobile,
+     à direita no desktop) e o texto numa `col-md-7 order-2 order-md-1`.
+  2. Botão primário: `link.primary` no front matter escolhe `btn-primary` em
+     vez de `btn-outline-primary` no laço de `page.links`.
+  3. Teto do herói via `.home-hero-img` (assets/css/main.scss), NUNCA por
+     `style=` inline. Inline vence o `max-width: 100%` do `.img-fluid` por
+     origem, então o cap virava absoluto: o SVG (1112x1078 intrínseco) ficava
+     travado em 360px e vazava pela direita da coluna abaixo de ~396px de
+     viewport (320px -> 76px de pan). Ver _tools/check-overflow.mjs.
+{%- endcomment -%}
 {% include header.html %}
 
   <div class="bg-body-tertiary text-body-primary rounded p-4 p-md-5 mb-4">
@@ -83,10 +99,10 @@
       {% if page.header.img %}
         <div class="col-md-5 order-1 order-md-2 text-center mb-4 mb-md-0">
           {% if page.header.img_dark %}
-            <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="img-fluid mode-light" style="max-width: 360px;" alt="{{ site.title }}" />
-            <img src="{{ page.header.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" class="img-fluid mode-dark" style="max-width: 360px;" alt="{{ site.title }}" />
+            <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="img-fluid home-hero-img mode-light" alt="{{ site.title }}" />
+            <img src="{{ page.header.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" class="img-fluid home-hero-img mode-dark" alt="{{ site.title }}" />
           {% else %}
-            <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="img-fluid" style="max-width: 360px;" alt="{{ site.title }}" />
+            <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="img-fluid home-hero-img" alt="{{ site.title }}" />
           {% endif %}
         </div>
       {% endif %}
