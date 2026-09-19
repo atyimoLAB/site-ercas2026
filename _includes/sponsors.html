@@ -17,8 +17,18 @@
   `break_before: true` força uma quebra de linha (`.w-100`) antes do item,
   dividindo a coluna em linhas fixas. Se as categorias do _data/sponsors.yml
   mudarem, ajuste o `case` abaixo.
+
+  GUTTER `lg`-ONLY (não trocar por `gx-5`): `gx-5` põe `--bs-gutter-x: 3rem`, e a
+  `.row` vira margem lateral de -24px contra os 12px de padding do `.container`.
+  Abaixo de `sm` o container é full-bleed, então a row sobra 12px para fora da tela
+  dos DOIS lados — e como este include roda no rodapé de TODAS as páginas
+  (sponsors_footer.html), isso era pan horizontal no site inteiro no celular.
+  Abaixo de `lg` os grupos são `col-12` e o padding de 24px da coluna cancela a
+  margem da row, ou seja o gutter horizontal só pinta de `lg` para cima — que é
+  onde os 3 grupos ficam lado a lado. Logo `gx-lg-5` é idêntico no mobile e
+  preserva o desktop. Ver _tools/check-overflow.mjs.
 {% endcomment %}
-<div class="row gx-5 gy-4">
+<div class="row gx-lg-5 gy-4">
   {%- for group in site.data.sponsors -%}
   {%- case group.category -%}
     {%- when "Realização" -%}

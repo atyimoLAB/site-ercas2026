@@ -342,6 +342,26 @@ $ercas-track-colors:
   }
 }
 
+// ── Herói da home (/) ───────────────────────────────────────
+// _layouts/home.html delta 3. O SVG do herói tem tamanho intrínseco de
+// 1112x1078, então precisa de um teto. Era `style="max-width: 360px"` inline
+// na <img>, o que ANULA o `max-width: 100%` do `.img-fluid` (declaração
+// inline vence classe por origem): o teto virava absoluto, a imagem ficava
+// travada em 360px e, como o excedente de uma <img> inline não é centrado
+// pelo `.text-center` da coluna, ela vazava pela direita — 76px de pan
+// horizontal a 320px de viewport, some só acima de ~396px.
+// `width` + `max-width` dá os DOIS tetos: 360px quando há espaço, 100% da
+// coluna quando não há. Rendering idêntico no desktop. Só remover o inline
+// não bastaria — sem `width` o `.img-fluid` deixaria o herói crescer até a
+// largura da col-md-5 (~520px a 1140px), mudando o design.
+// main.css carrega DEPOIS de conference.bundle.css (_includes/header.html),
+// então esta classe vence o `.img-fluid` por ordem de fonte. Sem !important.
+.home-hero-img {
+  width: 360px;
+  max-width: 100%;
+  height: auto;
+}
+
 // ── Apoiadores: chip claro atrás de cada logo ──────────────
 // data-bs-theme fica travado em "light" (ver _includes/header.html),
 // mas o chip branco também padroniza o conjunto de logos (fundos
@@ -434,25 +454,6 @@ $ercas-track-colors:
 
 .sponsor-logo-org-wide {
   max-width: 216px;
-}
-
-// Acerto de tamanho do PGCOMP (item com `logo_class_extra` no
-// _data/sponsors.yml). Os dois logos têm a MESMA arte (proporção
-// 0,604), mas o PNG do PGCOMP vem num canvas quadrado 240×240 com a
-// arte ocupando só 136×225 (≈44% de margem transparente lateral),
-// enquanto computacao-ufba.png (145×240) não tem margem. Sob os caps
-// compartilhados a arte do PGCOMP renderiza bem menor.
-// Truque: ignorar os caps e dar ao <img> uma altura de canvas
-// explícita (151,5px = 142 ÷ 225 × 240) para que a ARTE saia na mesma
-// caixa que "Computação UFBA" (~85×142). O canvas transparente extra
-// extrapola o chip, mas é invisível; a tinta visível fica dentro.
-// Escala uniforme (aspecto preservado), object-fit/centralização
-// mantidos. Referência é o Computação — não mexer nele.
-.sponsor-logo-org-pgcomp {
-  max-width: none;
-  max-height: none;
-  width: auto;
-  height: 151.5px;
 }
 
 // ── Rodapé de apoiadores ──────────────────────────────────

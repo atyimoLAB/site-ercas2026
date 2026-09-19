@@ -1,0 +1,47 @@
+name: Checks (build + horizontal overflow)
+
+# Layout gate for pull requests. Deliberately separate from deploy.yml: that
+# workflow opens a VPN tunnel and runs a delete-mirror, and has no business
+# being coupled to a rendering check.
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  overflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@89f90524b88a01fe6e0b732220432cc6142926af # v1.313.0
+        env:
+          BUNDLE_FROZEN: 'true'          # fail if Gemfile.lock is stale
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
+      - name: Setup Node
+        # >= 22: the guard drives Chrome over the global WebSocket, so it needs
+        # no npm dependencies at all.
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+
+      - name: Build site
+        run: bundle exec jekyll build -d _site
+        env:
+          JEKYLL_ENV: production
+
+      - name: Check for horizontal overflow
+        # google-chrome-stable is preinstalled on ubuntu-latest runners; using it
+        # directly avoids adding a third-party setup action to the supply chain.
+        run: |
+          set -euo pipefail
+          CHROME="$(command -v google-chrome-stable || command -v google-chrome || true)"
+          [ -n "$CHROME" ] || { echo "No Chrome binary found on the runner."; exit 1; }
+          CHROME_PATH="$CHROME" node _tools/check-overflow.mjs

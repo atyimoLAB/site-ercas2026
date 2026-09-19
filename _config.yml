@@ -63,6 +63,14 @@ conference:
   show_errors: true
 
   navigation:
+    # Ponto em que a navbar deixa de ser hamburger e vira linha de links.
+    # `lg` (>= 992px), não o `md` padrão do tema: são 8 links, e a linha inteira
+    # mede ~885px. Entre 768px e 991px o `.container` está capado em 720px, então
+    # com `md` os links transbordavam a tela (até +146px a 768px — um iPad em pé
+    # arrastava lateralmente). A `.navbar-nav` não quebra linha, então o único
+    # conserto sem override de CSS é expandir só quando cabe. Se um link for
+    # adicionado, re-rodar `node _tools/check-overflow.mjs` e conferir 992/1200.
+    breakpoint: lg
     # Links da barra de navegação. Adicione `disabled: true` a um link para
     # ocultá-lo enquanto a seção correspondente não estiver pronta.
     links:

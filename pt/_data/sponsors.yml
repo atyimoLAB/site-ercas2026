@@ -30,7 +30,6 @@
     - name: PGCOMP UFBA
       url: https://pgcomp.ufba.br/
       logo: sponsors/pgcomp-ufba.png
-      logo_class_extra: sponsor-logo-org-pgcomp   # compensa a margem transparente do PNG p/ igualar o tamanho de "Computação UFBA" (ver main.scss)
     - name: DEST/IME UFBA
       url: https://est.ufba.br/
       logo: sponsors/dest-ime-ufba.jpg
