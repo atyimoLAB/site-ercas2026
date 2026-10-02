@@ -56,7 +56,7 @@ with layout defaults.
 - **Structural invariant**: plenary-lane and parallel-lane activities must be temporally
   disjoint on a given day, or the parallel `<td>` loop is skipped and concurrent talks vanish
   with no build error. Currently disjoint on both days — re-check on every schedule edit.
-- **Speakers** (14, all referenced): breno-silva, bruno-oliveira, carlos-cardoso,
+- **Speakers** (13, all referenced; breno-silva removed 2026-10-01): bruno-oliveira, carlos-cardoso,
   fernando-oliveira, gabriel-teixeira, helena-caseli, jose-augusto, lais-sacramento,
   marcus-eustorgio, mariana-recamonde-mendoza ("Mariana Recamonde-Mendoza"), matheus-villa,
   ricardo-gomes ("Ricardo Gomes" — renamed 2026-09 from ricardo-oliveira.md/"Ricardo

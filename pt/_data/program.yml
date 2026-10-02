@@ -52,7 +52,7 @@ days:
         talks:
           - { name: Prompt engineering para apoio à revisão sistemática, time_start: "08:30", time_end: "10:00" }
           - { name: Integrando grandes volumes de dados com o CIDACS-RL, time_start: "10:30", time_end: "12:00" }
-          - { name: "Uso de blockchain para prontuários eletrônicos: aprimorando a gestão de dados em hospitais", time_start: "13:30", time_end: "15:00" }
+          - { name: "Do dado fragmentado à jornada conectada: desafios computacionais da gestão hospitalar e o papel da blockchain em saúde", time_start: "13:30", time_end: "15:00" }
 
   - name: Quarta-feira
     abbr: Qua
