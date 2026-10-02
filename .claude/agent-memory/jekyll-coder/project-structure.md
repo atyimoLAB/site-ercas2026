@@ -55,7 +55,7 @@ time with another named one WOULD collide (only one banner `<td>` per row).
 `pt/_rooms/` has 5 room docs: `auditorio-farmacia`, `ic-sc-1` (IC - SC I/success),
 `ic-sc-2` (IC - SC II/warning), `ic-sc-4` (IC - SC IV/info), `saguao-do-ic` (dark).
 
-`pt/_speakers/` (14): Breno Silva, Bruno Oliveira, Carlos Cardoso, Fernando Oliveira,
+`pt/_speakers/` (13; Breno Silva removed 2026-10-01): Bruno Oliveira, Carlos Cardoso, Fernando Oliveira,
 Gabriel Teixeira, Helena Caseli, José Augusto, Laís Sacramento, Marcus Eustórgio,
 Mariana Recamonde-Mendoza, Matheus Villa, Ricardo Gomes (file `ricardo-gomes.md` —
 renamed 2026-09 from "Ricardo Oliveira"), Ricardo Rocha, Rodrigo Veras.
