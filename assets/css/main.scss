@@ -60,12 +60,13 @@ a {
 // Link de nav com `highlight: true` em _config.yml vira um botão
 // sólido. Classe própria em vez de `.btn-primary`: a regra
 // `.navbar-nav .nav-link` (0,2,0) venceria `.btn` e deixaria texto
-// cinza sobre azul. Cantos retos, como o resto do site.
+// cinza sobre azul. Cantos arredondados (raio padrão do Bootstrap)
+// para o CTA se destacar dos demais links.
 .navbar .nav-link.nav-link-cta {
   background-color: var(--bs-primary);
   color: #fff;
   font-weight: 600;
-  border-radius: 0;
+  border-radius: var(--bs-border-radius);
   padding-inline: 0.75rem;
 
   &:hover,
