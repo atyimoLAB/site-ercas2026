@@ -162,12 +162,13 @@ a {
 // `.navbar-nav .nav-link` (0,2,0) venceria `.btn` e deixaria texto
 // cinza sobre azul. Cantos arredondados (raio padrão do Bootstrap)
 // para o CTA se destacar dos demais links.
+// Sem padding/margem extra: a navbar em `lg` já mede quase o
+// container de 960px, e cada px conta (ver bloco abaixo).
 .navbar .nav-link.nav-link-cta {
   background-color: var(--bs-primary);
   color: #fff;
   font-weight: 600;
   border-radius: var(--bs-border-radius);
-  padding-inline: 0.75rem;
 
   &:hover,
   &:focus-visible {
@@ -178,7 +179,19 @@ a {
 
 @media (min-width: 992px) {
   .navbar .nav-link.nav-link-cta {
-    margin-left: 0.5rem;
+    margin-left: 0.25rem;
+  }
+}
+
+// Entre 992px e 1199px o .container fica capado em 960px e a
+// `.navbar-nav` não quebra linha: com o CTA (fundo + negrito) a linha
+// estourava até +12px no CI (fontes do Linux são mais largas que as do
+// macOS, então o guard passava local e falhava no runner). Encolher o
+// padding horizontal dos links (0.5rem → 0.375rem) só nessa faixa
+// devolve ~32px. Se um link for adicionado, re-rodar o guard em 992.
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .navbar {
+    --bs-navbar-nav-link-padding-x: 0.375rem;
   }
 }
 
@@ -186,6 +199,7 @@ a {
   .navbar .nav-link.nav-link-cta {
     display: inline-block;
     margin-top: 0.25rem;
+    padding-inline: 0.75rem;
   }
 }
 

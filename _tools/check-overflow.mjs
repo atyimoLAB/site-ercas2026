@@ -327,9 +327,14 @@ async function principal() {
   }
 
   cdp.sock.close();
+  // Espera o Chrome sair de fato antes de apagar o perfil: ele ainda
+  // grava cache logo após o SIGTERM, e o rm concorrente estourava com
+  // ENOTEMPTY (exit 2 mesmo com 0 falhas). Retentativas cobrem o resto.
+  const saiu = new Promise((ok) => proc.once('exit', ok));
   proc.kill();
+  await Promise.race([saiu, new Promise((ok) => setTimeout(ok, 5000))]);
   srv.close();
-  await rm(perfil, { recursive: true, force: true });
+  await rm(perfil, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
 
   if (falhas.length) {
     console.log(`\n  ${falhas.length} de ${rotas.length * larguras.length} medições com pan horizontal.\n`);
