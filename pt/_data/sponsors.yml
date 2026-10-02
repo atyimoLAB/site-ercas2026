@@ -22,11 +22,12 @@
     - name: CIDACS — Centro de Integração de Dados e Conhecimentos para Saúde
       url: https://cidacs.bahia.fiocruz.br/
       logo: sponsors/cidacs-fiocruz.png
-      wide: true   # lockup horizontal → chip largo (2 unidades) em /patrocinio/
+      xwide: true        # lockup de uma linha (~7:1) → chip extra largo (3 unidades) em /patrocinio/
+      break_before: true # CIDACS ocupa a 2ª linha sozinho
     - name: Computação UFBA
       url: https://computacao.ufba.br/
       logo: sponsors/computacao-ufba.png
-      break_before: true   # inicia a 2ª linha da coluna Organização em /patrocinio/
+      break_before: true   # inicia a 3ª linha da coluna Organização em /patrocinio/
     - name: PGCOMP UFBA
       url: https://pgcomp.ufba.br/
       logo: sponsors/pgcomp-ufba.png

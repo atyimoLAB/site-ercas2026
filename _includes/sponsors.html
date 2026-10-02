@@ -13,8 +13,9 @@
   esquerda (`justify-content-lg-start`), pois as duas linhas fixas devem começar
   sob o título; abaixo de lg (colunas empilhadas) volta a centralizar. Realização
   e Patrocínio ficam sempre centralizados. Em Organização, `wide: true` num
-  item aplica um chip ~2x mais largo (mesma altura) para os lockups horizontais, e
-  `break_before: true` força uma quebra de linha (`.w-100`) antes do item,
+  item aplica um chip ~2x mais largo (mesma altura) para os lockups horizontais,
+  `xwide: true` um chip de 3 unidades, mais baixo, para lockups de uma linha só
+  (CIDACS), e `break_before: true` força uma quebra de linha (`.w-100`) antes do item,
   dividindo a coluna em linhas fixas. Se as categorias do _data/sponsors.yml
   mudarem, ajuste o `case` abaixo.
 
@@ -60,12 +61,18 @@
         {%- assign item_chip_class = item_chip_class | append: " sponsor-chip-org-wide" -%}
         {%- assign item_logo_class = item_logo_class | append: " sponsor-logo-org-wide" -%}
       {%- endif -%}
+      {%- assign item_wrap_class = "text-center" -%}
+      {%- if item.xwide -%}
+        {%- assign item_chip_class = item_chip_class | append: " sponsor-chip-org-xwide" -%}
+        {%- assign item_logo_class = item_logo_class | append: " sponsor-logo-org-xwide" -%}
+        {%- assign item_wrap_class = "text-center sponsor-item-shrink" -%}
+      {%- endif -%}
       {%- comment -%} classe extra por item (ex.: acerto de tamanho de um logo específico) {%- endcomment -%}
       {%- if item.logo_class_extra -%}
         {%- assign item_logo_class = item_logo_class | append: " " | append: item.logo_class_extra -%}
       {%- endif -%}
       {%- if item.break_before -%}<div class="w-100"></div>{%- endif -%}
-      <div class="text-center">
+      <div class="{{ item_wrap_class }}">
         {%- if item.url -%}<a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{%- endif -%}
         {%- if item.logo -%}
         <span class="{{ item_chip_class }}">
