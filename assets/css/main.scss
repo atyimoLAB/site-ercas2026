@@ -433,11 +433,12 @@ $ercas-track-colors:
 // da Realização (SBC ≈ 153px). Dois tamanhos de chip com a MESMA
 // altura — estreito (brasões verticais / selos quadrados) e largo
 // exatamente 2 células + o gap-2 (2×122 + 8), para os lockups
-// horizontais: CIDACS, PPGFAR (marcados com `wide: true` no
-// _data/sponsors.yml). `break_before: true` em "Computação UFBA"
-// emite um `.w-100` e fixa 2 linhas: UFBA/UESC/CIDACS, depois
-// Computação/PGCOMP/DEST-IME/PPGFAR. Cada linha é centralizada e as
-// células têm dimensão fixa → alinhamento em grade.
+// horizontais: PPGFAR (marcado com `wide: true` no
+// _data/sponsors.yml). CIDACS é um lockup de uma linha só (~7:1) e usa
+// `xwide: true`: chip de 3 células (3×122 + 2×8) e mais baixo. Itens com
+// `break_before: true` emitem um `.w-100` e fixam 3 linhas: UFBA/UESC,
+// CIDACS, depois Computação/PGCOMP/DEST-IME/PPGFAR. Cada linha é
+// centralizada e as células têm dimensão fixa → alinhamento em grade.
 .sponsor-chip-org {
   width: 122px;
   height: 158px;
@@ -454,6 +455,26 @@ $ercas-track-colors:
 
 .sponsor-logo-org-wide {
   max-width: 216px;
+}
+
+// 382px não cabe numa coluna de celular (~272px a 320px de viewport):
+// o wrapper (.sponsor-item-shrink, item flex) pode encolher abaixo do
+// conteúdo e o chip/logo acompanham via max-width: 100%.
+.sponsor-item-shrink {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.sponsor-chip-org-xwide {
+  width: 382px;
+  max-width: 100%;
+  height: 96px;
+}
+
+.sponsor-logo-org-xwide {
+  max-width: 100%;
+  max-height: 80px;
+  min-width: 0;
 }
 
 // ── Rodapé de apoiadores ──────────────────────────────────
