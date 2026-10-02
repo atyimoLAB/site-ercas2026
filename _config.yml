@@ -96,14 +96,14 @@ conference:
       - name: Local
         relative_url: /local/
       - name: Inscrições
-        absolute_url: "https://ercas2026.ufba.br/inscricoes"
-        disabled: true
+        absolute_url: "https://centraldesistemas.sbc.org.br/ecos/ercas2026/"
+        highlight: true
 
   event:
     dates: "3–4 de Novembro de 2026"
     city: "Salvador, BA"
     venue: "Instituto de Computação da Universidade Federal da Bahia (IC/UFBA)"
-    registration_url: "https://ercas2026.ufba.br/inscricoes"
+    registration_url: "https://centraldesistemas.sbc.org.br/ecos/ercas2026/"
 
   social:
     email: "contato@ercas2026.ufba.br"

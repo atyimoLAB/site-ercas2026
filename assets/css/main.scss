@@ -1,6 +1,106 @@
 ---
 ---
+@use "sass:color";
 @use "sass:list";
+
+// ── Cor primária da marca ───────────────────────────────────
+// O tema entrega o Bootstrap 5.3 JÁ COMPILADO (conference.bundle.css),
+// então `$primary` não pode ser sobrescrito em Sass. Em vez disso,
+// redefinimos as variáveis CSS que o bundle lê, com os mesmos
+// tons derivados que o Bootstrap calcularia (shade/tint de $primary).
+// Componentes que gravam o azul literal (#0d6efd) em vez de
+// var(--bs-primary) — .btn-primary, .btn-outline-primary, nav-pills,
+// dropdown/list-group active, foco de formulário — são cobertos
+// um a um abaixo. main.css carrega depois do bundle; mesma
+// especificidade ⇒ a ordem de origem vence.
+// Contraste: branco sobre #2270BA ≈ 5.1:1 (WCAG AA).
+$ercas-primary: #2270BA;
+
+@function shade($c, $w) { @return color.mix(#000, $c, $w); }
+@function tint($c, $w)  { @return color.mix(#fff, $c, $w); }
+@function rgb-list($c) {
+  @return color.channel($c, "red", $space: rgb), color.channel($c, "green", $space: rgb), color.channel($c, "blue", $space: rgb);
+}
+
+$ercas-primary-dark: tint($ercas-primary, 40%); // texto/link no modo escuro
+
+:root,
+[data-bs-theme=light] {
+  --bs-blue: #{$ercas-primary};
+  --bs-primary: #{$ercas-primary};
+  --bs-primary-rgb: #{rgb-list($ercas-primary)};
+  --bs-primary-text-emphasis: #{shade($ercas-primary, 60%)};
+  --bs-primary-bg-subtle: #{tint($ercas-primary, 80%)};
+  --bs-primary-border-subtle: #{tint($ercas-primary, 60%)};
+  --bs-link-color: #{$ercas-primary};
+  --bs-link-color-rgb: #{rgb-list($ercas-primary)};
+  --bs-link-hover-color: #{shade($ercas-primary, 20%)};
+  --bs-link-hover-color-rgb: #{rgb-list(shade($ercas-primary, 20%))};
+  --bs-focus-ring-color: #{rgba($ercas-primary, 0.25)};
+}
+
+[data-bs-theme=dark] {
+  --bs-primary-text-emphasis: #{$ercas-primary-dark};
+  --bs-primary-bg-subtle: #{shade($ercas-primary, 80%)};
+  --bs-primary-border-subtle: #{shade($ercas-primary, 40%)};
+  --bs-link-color: #{$ercas-primary-dark};
+  --bs-link-color-rgb: #{rgb-list($ercas-primary-dark)};
+  --bs-link-hover-color: #{tint($ercas-primary, 60%)};
+  --bs-link-hover-color-rgb: #{rgb-list(tint($ercas-primary, 60%))};
+}
+
+.btn-primary {
+  --bs-btn-bg: #{$ercas-primary};
+  --bs-btn-border-color: #{$ercas-primary};
+  --bs-btn-hover-bg: #{shade($ercas-primary, 15%)};
+  --bs-btn-hover-border-color: #{shade($ercas-primary, 20%)};
+  --bs-btn-focus-shadow-rgb: #{rgb-list($ercas-primary)};
+  --bs-btn-active-bg: #{shade($ercas-primary, 20%)};
+  --bs-btn-active-border-color: #{shade($ercas-primary, 25%)};
+  --bs-btn-disabled-bg: #{$ercas-primary};
+  --bs-btn-disabled-border-color: #{$ercas-primary};
+}
+
+.btn-outline-primary {
+  --bs-btn-color: #{$ercas-primary};
+  --bs-btn-border-color: #{$ercas-primary};
+  --bs-btn-hover-bg: #{$ercas-primary};
+  --bs-btn-hover-border-color: #{$ercas-primary};
+  --bs-btn-focus-shadow-rgb: #{rgb-list($ercas-primary)};
+  --bs-btn-active-bg: #{$ercas-primary};
+  --bs-btn-active-border-color: #{$ercas-primary};
+  --bs-btn-disabled-color: #{$ercas-primary};
+  --bs-btn-disabled-border-color: #{$ercas-primary};
+}
+
+.link-primary:hover,
+.link-primary:focus {
+  color: #{rgba(shade($ercas-primary, 20%), 1)} !important;
+}
+
+.btn-close { --bs-btn-close-focus-shadow: 0 0 0 .25rem #{rgba($ercas-primary, 0.25)}; }
+.dropdown-menu,
+.dropdown-menu-dark { --bs-dropdown-link-active-bg: #{$ercas-primary}; }
+.list-group {
+  --bs-list-group-active-bg: #{$ercas-primary};
+  --bs-list-group-active-border-color: #{$ercas-primary};
+}
+.nav-pills { --bs-nav-pills-link-active-bg: #{$ercas-primary}; }
+
+.nav-link:focus-visible,
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+  box-shadow: 0 0 0 .25rem #{rgba($ercas-primary, 0.25)};
+}
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus { border-color: #{tint($ercas-primary, 50%)}; }
+.form-check-input:checked,
+.form-check-input[type=checkbox]:indeterminate {
+  background-color: #{$ercas-primary};
+  border-color: #{$ercas-primary};
+}
 
 // ── Link underline (usability) ──────────────────────────────
 // Content links stay permanently underlined (no hover needed),
@@ -54,6 +154,53 @@ a {
   border-radius: 0;
   font-weight: 600;
   box-shadow: inset 0 -2px 0 currentColor;
+}
+
+// ── Navbar: CTA "Inscrições" ─────────────────────────────────
+// Link de nav com `highlight: true` em _config.yml vira um botão
+// sólido. Classe própria em vez de `.btn-primary`: a regra
+// `.navbar-nav .nav-link` (0,2,0) venceria `.btn` e deixaria texto
+// cinza sobre azul. Cantos arredondados (raio padrão do Bootstrap)
+// para o CTA se destacar dos demais links.
+// Sem padding/margem extra: a navbar em `lg` já mede quase o
+// container de 960px, e cada px conta (ver bloco abaixo).
+.navbar .nav-link.nav-link-cta {
+  background-color: var(--bs-primary);
+  color: #fff;
+  font-weight: 600;
+  border-radius: var(--bs-border-radius);
+
+  &:hover,
+  &:focus-visible {
+    background-color: #{shade($ercas-primary, 15%)};
+    color: #fff;
+  }
+}
+
+@media (min-width: 992px) {
+  .navbar .nav-link.nav-link-cta {
+    margin-left: 0.25rem;
+  }
+}
+
+// Entre 992px e 1199px o .container fica capado em 960px e a
+// `.navbar-nav` não quebra linha: com o CTA (fundo + negrito) a linha
+// estourava até +12px no CI (fontes do Linux são mais largas que as do
+// macOS, então o guard passava local e falhava no runner). Encolher o
+// padding horizontal dos links (0.5rem → 0.375rem) só nessa faixa
+// devolve ~32px. Se um link for adicionado, re-rodar o guard em 992.
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .navbar {
+    --bs-navbar-nav-link-padding-x: 0.375rem;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .navbar .nav-link.nav-link-cta {
+    display: inline-block;
+    margin-top: 0.25rem;
+    padding-inline: 0.75rem;
+  }
 }
 
 // ── Avatares circulares (silhueta/foto) ──────────────────────
@@ -306,7 +453,7 @@ $ercas-track-colors:
 // navbar or any other nav:
 //   • inactive tabs stay quiet — muted grey text, darken on hover;
 //   • the active tab gets the classic bordered-tab shape — a 2px
-//     primary (#0d6efd → --bs-primary) border on top/left/right,
+//     primary ($ercas-primary → --bs-primary) border on top/left/right,
 //     no visible bottom border (it is painted --bs-body-bg so it
 //     overlaps and hides the strip line, merging with the panel),
 //     and an 8% primary tint background.
