@@ -35,9 +35,13 @@
 
   {% include get_page_title.html -%}
   <title>
-    {{- page_title -}}
-    {%- unless page_title == empty %} - {% endunless -%}
-    {{- site.title -}}
+    {%- if page.layout == 'home' and site.conference.event.dates -%}
+      {{- site.title }} - {{ site.conference.event.dates -}}
+    {%- else -%}
+      {{- page_title -}}
+      {%- unless page_title == empty %} - {% endunless -%}
+      {{- site.title -}}
+    {%- endif -%}
   </title>
   {% include list_header_meta.html %}
 

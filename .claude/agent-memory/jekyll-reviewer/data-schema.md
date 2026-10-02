@@ -51,8 +51,8 @@ with layout defaults.
   M2 prompt-engineering(→IA Generativa e LLMs), M3 integrando-cidacs, M4 aplicacoes-llms
   (→IA Generativa e LLMs), M5 blockchain, M6 shap(→IA Responsável e Equidade),
   M7 sumarizacao(→IA Generativa e LLMs); P1 modelos-preditivos(→IA Responsável e Equidade,
-  Mariana, 06/10 16:00), P2 deteccao(→IA para Diagnóstico, Rodrigo Veras, 07/10 13:30),
-  P3 ia-pln-saude-mental(→IA para Diagnóstico, Helena, 07/10 15:30).
+  Mariana, 03/11 16:00), P2 deteccao(→IA para Diagnóstico, Rodrigo Veras, 04/11 13:30),
+  P3 ia-pln-saude-mental(→IA para Diagnóstico, Helena, 04/11 15:30).
 - **Structural invariant**: plenary-lane and parallel-lane activities must be temporally
   disjoint on a given day, or the parallel `<td>` loop is skipped and concurrent talks vanish
   with no build error. Currently disjoint on both days — re-check on every schedule edit.
@@ -97,7 +97,7 @@ theme docs saying it's optional.
 - Room: `pt/_rooms/auditorio.md` → name "Auditório" (single room, both days).
 - Speakers: `helena-caseli.md`, `mariana-recamonde.md`, `mirlei-moura-da-silva.md`,
   `ricardo-rios.md`, `robespierre-pita.md`, `rodrigo-veras.md` (name: "Rodrigo de Melo Souza Veras").
-- Talks: 14 unique talks across 2 days (2026-10-06/07), including 3 reused-by-name
+- Talks: 14 unique talks across 2 days (2026-11-03/04), including 3 reused-by-name
   logistics talks (`credenciamento.md`, `almoco.md`, `intervalo.md`, all `hide: true`, no track)
   each scheduled multiple times across days without file duplication.
 - All previous fake identifiers (`keynote-abertura`, `telemedicina-hospitais`,
