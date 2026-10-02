@@ -7,10 +7,9 @@ header:
 links:
   - name: Programação
     relative_url: /programacao/
+  - name: Inscrições
+    absolute_url: "https://centraldesistemas.sbc.org.br/ecos/ercas2026/"
     primary: true
-  - name: 'Inscrições <span class="badge text-bg-secondary align-middle ms-1">Em breve</span>'
-    absolute_url: "https://ercas2026.ufba.br/inscricoes"
-    disabled: true
 ---
 
 **{{ site.conference.name }} {{ site.conference.year }}** — {{ site.conference.event.dates }}, {{ site.conference.event.city }}.

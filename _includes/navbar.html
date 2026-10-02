@@ -63,7 +63,11 @@
               {% else %}
                 {% assign is_active = false %}
               {% endif %}
-              {%- include get_link.html class="nav-link" is_active=is_active -%}
+              {%- if link.highlight -%}
+                {%- include get_link.html class="nav-link nav-link-cta" is_active=is_active -%}
+              {%- else -%}
+                {%- include get_link.html class="nav-link" is_active=is_active -%}
+              {%- endif -%}
               {{ link_tag }}
                 {{ link.name }}
               </a>

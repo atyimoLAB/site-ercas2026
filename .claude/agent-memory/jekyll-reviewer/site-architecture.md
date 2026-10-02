@@ -26,6 +26,7 @@ assume it still applies; verify against `_config.yml` and CLAUDE.md before citin
 - Nav links use a `disabled: true` opt-out pattern (comment at `_config.yml:58-59`): entries
   without `disabled: true` are live. As of 2026-09-10: Sobre, Programação, Palestras,
   Palestrantes, Local, Organização (permalink `/organizacao/`, renamed from "Comitês") are
-  enabled; Patrocínio, Datas, Inscrições remain disabled.
+  enabled; Patrocínio, Datas remain disabled. As of 2026-10-01 Inscrições is live
+  (SBC/ECOS URL) and styled as a navbar CTA via `highlight: true` → `.nav-link-cta`.
 
 See [[data-schema]] for collection schemas and [[build-notes]] for build command details.
