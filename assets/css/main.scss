@@ -319,7 +319,7 @@ $ercas-track-colors:
 // are identical in both states, so the tab never resizes on click.
 // Contrast on the tint (≈ #e9f0fe over white): near-black body
 // text ≈ 18:1, muted inactive text ≈ 7:1 — both pass WCAG AA. The
-// "…, N de Out." date span is `.fw-normal`; it inherits this dark
+// "…, N de <mês>" date span is `.fw-normal`; it inherits this dark
 // text colour, so it stays AA on the active tab too.
 // The stock Bootstrap `:focus-visible` ring is left intact (no
 // competing box-shadow on the active link).

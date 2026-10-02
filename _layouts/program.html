@@ -77,10 +77,12 @@
   {%- if nbr_days > 1 %}
     <nav aria-label="{{ site.data.lang[site.conference.lang].program.days | default: 'Conference days' }}">
       <ul class="nav nav-tabs conf-tabs justify-content-center mb-3" id="program-tabs" role="tablist">
+        {%- assign pt_months = "Jan.,Fev.,Mar.,Abr.,Mai.,Jun.,Jul.,Ago.,Set.,Out.,Nov.,Dez." | split: "," -%}
         {%- for d in site.data.program.days -%}
+          {%- assign month_idx = d.date | date: "%-m" | minus: 1 -%}
           {%- include get_day_hash.html %}
           <li class="nav-item" role="presentation">
-            <a class="nav-link {%- if forloop.index == 1 %} active{% endif %}" id="tab-{{ day_hash }}" data-bs-toggle="tab" {%- if d.date -%}{%- include get_talk_timestamp.html %} data-ts="{{ timestamp_start }}" {%- endif %} href="#{{ day_hash }}" role="tab" aria-controls="{{ day_hash }}" aria-selected="{% if forloop.index == 1 %}true{% else %}false{% endif %}">{{ day_name }}{%- if d.date -%}<span class="fw-normal">, {{ d.date | date: "%-d" }} de Out.</span>{%- endif -%}</a>
+            <a class="nav-link {%- if forloop.index == 1 %} active{% endif %}" id="tab-{{ day_hash }}" data-bs-toggle="tab" {%- if d.date -%}{%- include get_talk_timestamp.html %} data-ts="{{ timestamp_start }}" {%- endif %} href="#{{ day_hash }}" role="tab" aria-controls="{{ day_hash }}" aria-selected="{% if forloop.index == 1 %}true{% else %}false{% endif %}">{{ day_name }}{%- if d.date -%}<span class="fw-normal">, {{ d.date | date: "%-d" }} de {{ pt_months[month_idx] }}</span>{%- endif -%}</a>
           </li>
         {%- endfor %}
       </ul>

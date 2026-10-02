@@ -41,7 +41,7 @@ assets/css/main.scss  new as of 2026-07 (was previously linked by header.html bu
 ```
 
 Program schedule (as of 2026-09, `pt/_data/program.yml`): 2 days (Ter/Qua,
-2026-10-06..07), each with **2 parallel IC rooms** + **3 `plenary: true` lanes**:
+2026-11-03..04), each with **2 parallel IC rooms** + **3 `plenary: true` lanes**:
   1. `name: Auditório de Farmácia` (color `secondary`) — Abertura, keynotes, Fechamento;
      full-width session card.
   2. `name: Saguão do IC` (color `dark`) — Credenciamento only, 08:00–08:30 both days;
