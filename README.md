@@ -80,10 +80,26 @@ Full front-matter fields: [theme docs](https://github.com/DigitaleGesellschaft/j
 
 ## Deployment
 
-CD already wired up: to deploy: **open a PR, merge to `main`.** That's it.
+> **CI deploy is currently broken** (VPN/FTP setup on the runner). Use [Deploy locally](#deploy-locally) until it's fixed.
 
-On merge, GitHub Actions
+On merge to `main`, GitHub Actions
 ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)) builds the
 site and mirrors `_site/` to the UFBA host over FTP through a VPN tunnel
 (delete-mirror sync — removed local files are removed remotely too). No
 manual deploy step, no direct pushes to `main` needed.
+
+### Deploy locally
+
+One-time setup:
+
+- Ruby 3.4 + `bundle install`
+- `brew install lftp`
+- UFBA VPN client (same one you use with FileZilla)
+- `cp .env.deploy.example .env.deploy` and fill in `FTP_HOST` and `FTP_USER`. `FTP_PASS` is optional; if it's empty, you're asked for it.
+
+Deploy:
+
+1. Connect the VPN.
+2. Run `_tools/deploy.sh`
+
+It builds the site, lists what will be uploaded or deleted, asks `y/N`, then mirrors `_site/` to the server (files removed locally are removed there too). `-y` skips the question. `-b main` deploys `main` (or any branch/commit) from whatever branch you're on, without touching your checkout. Run `git pull` on `main` first, or use `-b origin/main` after `git fetch`. "FTP host unreachable" means the VPN is not connected.
