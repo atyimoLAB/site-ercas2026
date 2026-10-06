@@ -76,6 +76,8 @@ The **important-dates / "Datas"** section is intentionally dormant for the 2026 
 
 `.github/workflows/deploy.yml` builds on push to `main` and deploys to GitHub Pages, using the single default config and uploading `_site/`.
 
+CI deploy is currently broken. Deploy from a local machine with `_tools/deploy.sh`: it needs the VPN connected, `lftp` and `.env.deploy`, and it builds, dry-runs, confirms, then runs `lftp mirror -R --delete`. See README "Deploy locally".
+
 ### Pending custom-domain migration
 
 Target is **`https://ercas2026.ufba.br/`**. The config is already set for it: `_config.yml` has `url: https://ercas2026.ufba.br` and `baseurl: ""` (serves at root). Remaining work is the DNS/GitHub-Pages cutover — full runbook in `GUIDE.md` (DNS request to UFBA infra, GitHub Pages settings, HTTPS). `GUIDE.md` and `README.md` are `exclude`d from the build.
