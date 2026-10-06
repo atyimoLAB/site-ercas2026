@@ -5,7 +5,7 @@ last_name: Oliveira
 avatar: /assets/images/speakers/fernando-oliveira.jpg
 links:
   - name: LinkedIn
-    absolute_url: https://br.linkedin.com/in/fernando-henrique-moura-de-oliveira-767391124
+    absolute_url: https://www.linkedin.com/in/fernando-oliveira-2a42b51a4
     icon: linkedin
 ---
 
