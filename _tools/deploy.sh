@@ -66,7 +66,8 @@ mirror() {
 # 6. Dry run + confirm.
 echo "Comparing with server..."
 PLAN=$(mirror --dry-run)
-UPLOADS=$(grep -c '^put ' <<<"$PLAN" || true)
+# A reverse-mirror dry run prints uploads as `get -O <remote> file:<local>`, not `put`.
+UPLOADS=$(grep -cE '^(get|put) ' <<<"$PLAN" || true)
 DELETES=$(grep -cE '^rm(dir)? ' <<<"$PLAN" || true)
 echo "$PLAN" | grep -E '^rm(dir)? ' | sed 's/^/  /' || true
 echo "Plan: $UPLOADS upload(s), $DELETES delete(s) -> $FTP_HOST:$REMOTE_DIR"
