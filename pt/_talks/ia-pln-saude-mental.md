@@ -1,4 +1,5 @@
 ---
+published: false
 name: Processamento de linguagem natural aplicado à saúde mental
 track: IA para Diagnóstico
 tags: [Palestra]

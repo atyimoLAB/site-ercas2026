@@ -123,6 +123,8 @@ conference:
         color: warning
       - name: Institucional
         color: secondary
+      - name: A definir
+        color: ercas-tbd
     tags:
       - name: Keynote
         icon: star
