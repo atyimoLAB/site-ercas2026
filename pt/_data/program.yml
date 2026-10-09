@@ -21,7 +21,7 @@
 # Reordenar faixas renumera os rótulos.
 #
 # Minicursos que atravessam o intervalo do meio da manhã são DUAS entradas com
-# o mesmo `name` (08:30–10:00 e 10:30–12:00) — mantém cada bloco numa única
+# o mesmo `name` (ex.: 08:30–10:00 e 10:30–12:00) — mantém cada bloco numa única
 # linha da tabela e os dois recebem o mesmo número.
 days:
   - name: Terça-feira
@@ -31,8 +31,10 @@ days:
       - name: Auditório de Farmácia
         plenary: true
         talks:
-          - { name: Abertura,       time_start: "15:30", time_end: "16:00" }
-          - { name: "Modelos preditivos na saúde: desafios e estratégias para mitigar vieses e desigualdades", time_start: "16:00", time_end: "17:30" }
+          - { name: "Do dado fragmentado à jornada conectada: desafios computacionais da gestão hospitalar e o papel da blockchain em saúde", time_start: "10:30", time_end: "12:00" }
+          - { name: Abertura,       time_start: "13:00", time_end: "13:30" }
+          - { name: "Modelos preditivos na saúde: desafios e estratégias para mitigar vieses e desigualdades", time_start: "13:30", time_end: "14:30" }
+          - { name: "Palestra a definir (03/11)", time_start: "15:00", time_end: "17:00" }
       - name: Saguão do IC
         plenary: true
         talks:
@@ -41,18 +43,11 @@ days:
         is_break: true
         talks:
           - { name: Intervalo, time_start: "10:00", time_end: "10:30" }
-          - { name: Almoço,    time_start: "12:00", time_end: "13:30" }
-          - { name: Intervalo, time_start: "15:00", time_end: "15:30" }
-      - name: IC - SC I
+          - { name: Almoço,    time_start: "12:00", time_end: "13:00" }
+          - { name: Intervalo, time_start: "14:30", time_end: "15:00" }
+      - name: IC - SC III
         talks:
-          - { name: Análise de grandes volumes de dados em saúde usando R, time_start: "08:30", time_end: "10:00" }
-          - { name: Análise de grandes volumes de dados em saúde usando R, time_start: "10:30", time_end: "12:00" }  # 2ª parte
-          - { name: Aplicações de LLMs na saúde, time_start: "13:30", time_end: "15:00" }
-      - name: IC - SC IV
-        talks:
-          - { name: Prompt engineering para apoio à revisão sistemática, time_start: "08:30", time_end: "10:00" }
-          - { name: Integrando grandes volumes de dados com o CIDACS-RL, time_start: "10:30", time_end: "12:00" }
-          - { name: "Do dado fragmentado à jornada conectada: desafios computacionais da gestão hospitalar e o papel da blockchain em saúde", time_start: "13:30", time_end: "15:00" }
+          - { name: Sumarizando prontuários eletrônicos com modelos de linguagem, time_start: "08:30", time_end: "10:00" }
 
   - name: Quarta-feira
     abbr: Qua
@@ -61,9 +56,9 @@ days:
       - name: Auditório de Farmácia
         plenary: true
         talks:
-          - { name: Detecção e diagnóstico de doenças usando inteligência artificial, time_start: "13:30", time_end: "15:00" }
-          - { name: Processamento de linguagem natural aplicado à saúde mental, time_start: "15:30", time_end: "17:00" }
-          - { name: Fechamento,     time_start: "17:00", time_end: "17:30" }
+          - { name: Aplicações de LLMs na saúde, time_start: "13:00", time_end: "14:30" }
+          - { name: "Palestra a definir (04/11)", time_start: "15:00", time_end: "16:30" }
+          - { name: Fechamento,     time_start: "16:30", time_end: "17:00" }
       - name: Saguão do IC
         plenary: true
         talks:
@@ -72,13 +67,17 @@ days:
         is_break: true
         talks:
           - { name: Intervalo, time_start: "10:00", time_end: "10:30" }
-          - { name: Almoço,    time_start: "12:00", time_end: "13:30" }
-          - { name: Intervalo, time_start: "15:00", time_end: "15:30" }
-      - name: IC - SC II
+          - { name: Almoço,    time_start: "12:00", time_end: "13:00" }
+          - { name: Intervalo, time_start: "14:30", time_end: "15:00" }
+      - name: IC - SC I
         talks:
           - { name: Usando o SHAP para interpretabilidade de modelos de IA em saúde, time_start: "08:30", time_end: "10:00" }
-          - { name: Usando o SHAP para interpretabilidade de modelos de IA em saúde, time_start: "10:30", time_end: "12:00" }  # 2ª parte
+          - { name: Minicurso a definir, time_start: "10:30", time_end: "12:00" }
+      - name: IC - SC II
+        talks:
+          - { name: Análise de grandes volumes de dados em saúde usando R, time_start: "09:00", time_end: "10:00" }
+          - { name: Análise de grandes volumes de dados em saúde usando R, time_start: "10:30", time_end: "12:00" }  # 2ª parte
       - name: IC - SC IV
         talks:
-          - { name: Sumarizando prontuários eletrônicos com modelos de linguagem, time_start: "08:30", time_end: "10:00" }
-          - { name: Sumarizando prontuários eletrônicos com modelos de linguagem, time_start: "10:30", time_end: "12:00" }  # 2ª parte
+          - { name: Prompt engineering para apoio à revisão sistemática, time_start: "08:30", time_end: "10:00" }
+          - { name: Integrando grandes volumes de dados com o CIDACS-RL, time_start: "10:30", time_end: "12:00" }

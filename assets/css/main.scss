@@ -345,9 +345,10 @@ a {
 // da tabela — se alguém trocar por `rgba(...)`, a garantia cai.
 //
 // Borda de 1px em `-text-emphasis` (não `-border-subtle`): mantém uma silhueta
-// legível mesmo quando o chip cai sobre um cartão do MESMO matiz — hoje o chip
-// `success` (IC - SC I) renderiza sobre o cartão `bg-success-subtle` da trilha
-// "Ciência de Dados Clínicos e Epidemiologia" (minicurso de R).
+// legível mesmo quando o chip cai sobre um cartão do MESMO matiz — ex.: um chip
+// `success` (IC - SC I) sobre o cartão `bg-success-subtle` da trilha
+// "Ciência de Dados Clínicos e Epidemiologia". Hoje o minicurso de R fica na
+// IC - SC II, então esse par não ocorre, mas a borda segue como salvaguarda.
 // As cores `-text-emphasis` são todas escuras, então a borda fica ≥ 7:1 contra
 // qualquer `-bg-subtle` e contra o branco. Não remover "por ficar mais limpo".
 .program-room-chip {
@@ -396,7 +397,9 @@ a {
 //   nome            bg        borda     texto     rgb da base (p/ o sublinhado)
 $ercas-track-colors:
   ("ercas-violet"  #d4c6ec   #beaae3   #2c1a4d   "111, 66, 193"),
-  ("ercas-blue"    #b6d4fe   #92befe   #052c65   "13, 110, 253");
+  ("ercas-blue"    #b6d4fe   #92befe   #052c65   "13, 110, 253"),
+  // Atividades "A definir" (tbd: true) — cartão branco, distinto do Institucional (secondary).
+  ("ercas-tbd"     #ffffff   #ced4da   #495057   "108, 117, 125");
 
 @each $t in $ercas-track-colors {
   $name: list.nth($t, 1);
