@@ -1,6 +1,6 @@
 # Organização da ERCAS 2026, agrupada por grupo (Coordenação Geral, Coordenação
 # Local). Cada membro: first_name, last_name, institution, avatar (caminho
-# relativo à raiz do site). Todos os membros usam por ora o mesmo avatar
+# relativo à raiz do site). Quem ainda não enviou foto usa o avatar
 # placeholder — trocar por uma foto real é uma edição de uma linha por
 # pessoa, sem precisar mudar o template.
 
@@ -9,25 +9,29 @@
     - first_name: Robespierre
       last_name: Pita
       institution: DCC/IC/UFBA
-      avatar: assets/images/committees/placeholder.svg
+      avatar: assets/images/committees/robespierre-pita.jpg
     - first_name: Paulo
       last_name: Ambrósio
       institution: DEC/UESC
-      avatar: assets/images/committees/placeholder.svg
+      avatar: assets/images/committees/paulo-ambrosio.jpg
     - first_name: Bethânia
       last_name: Almeida
       institution: CIDACS/Fiocruz-BA
-      avatar: assets/images/committees/placeholder.svg
+      avatar: assets/images/committees/bethania-almeida.jpg
 
 - group: Coordenação Local
   members:
+    - first_name: André Luis
+      last_name: dos Santos
+      institution: PGCOMP/IC/UFBA
+      avatar: assets/images/committees/placeholder.svg
     - first_name: Cynara
       last_name: Gomes Barbosa
-      institution: DACT/FACFAR/UFBA
-      avatar: assets/images/committees/placeholder.svg
+      institution: DACTOX/FACFAR/UFBA
+      avatar: assets/images/committees/cynara-gomes-barbosa.jpg
     - first_name: Gecynalda
       last_name: Gomes
-      institution: DEST/IME/PGCOMP/UFBA
+      institution: IME/DEST/UFBA
       avatar: assets/images/committees/placeholder.svg
     - first_name: Iago
       last_name: Santo
@@ -36,7 +40,7 @@
     - first_name: Mirlei
       last_name: Moura
       institution: PGCOMP/IC/UFBA
-      avatar: assets/images/committees/placeholder.svg
+      avatar: assets/images/committees/mirlei-moura.jpg
     - first_name: Sâmela
       last_name: Rocha
       institution: PGCOMP/IC/UFBA
@@ -44,4 +48,4 @@
     - first_name: Thiago
       last_name: Colares
       institution: PGCOMP/IC/UFBA
-      avatar: assets/images/committees/placeholder.svg
+      avatar: assets/images/committees/thiago-colares.jpg
