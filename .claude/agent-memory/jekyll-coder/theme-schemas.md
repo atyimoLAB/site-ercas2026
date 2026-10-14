@@ -102,8 +102,8 @@ Read from gem source, not assumed:
   `Fundamentos de IA e Aprendizado de Máquina`/danger, `IoT, Sistemas e Infraestrutura em
   Saúde`/warning, `Institucional`/secondary. Session-format words (Minicurso/Palestra) live
   as name-only tags, not tracks. Institucional ceremony/logistics talks (Abertura/
-  Credenciamento/Fechamento/Almoço/Intervalo) still carry a format tag (Abertura/
-  Credenciamento/Fechamento) — those tags exist in config for the numbering include.
+  Credenciamento/Encerramento/Almoço/Intervalo) still carry a format tag (Abertura/
+  Credenciamento/Encerramento) — those tags exist in config for the numbering include.
 - Renaming a track = edit the one `_config.yml` entry + every `track:` line in `pt/_talks/*`
   that named the old value (grep the old string across `pt/` and `_config.yml`). `checks.html`
   DOES catch a talk pointing at an undefined track — it pushes a "missing tracks" error box

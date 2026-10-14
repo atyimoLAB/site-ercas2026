@@ -1,0 +1,8 @@
+---
+name: Tatiane Nogueira Rios
+first_name: Tatiane
+last_name: Nogueira Rios
+avatar: /assets/images/speakers/tatiane-nogueira-rios.jpg
+---
+
+Tatiane Nogueira Rios é professora e pesquisadora do Instituto de Computação da Universidade Federal da Bahia (UFBA). Ela possui mestrado em Ciência da Computação pela Universidade Federal de São Carlos (UFSCar), doutorado e pós-doutorado em Ciência da Computação e Matemática Computacional pela Universidade de São Paulo (ICMC/USP), com parte de suas pesquisas realizadas na Universidad de Granada, na Espanha, e na McGill University, no Canadá. Ela é também Bolsista de Produtividade em Pesquisa do CNPq e Membro Senior do IEEE, supervisionando estudantes de graduação, mestrado, doutorado e pós-doutorado. Possui experiência em Inteligência Artificial (IA) teórica e aplicada, com foco especial no desenvolvimento de sistemas inteligentes de tomada de decisão sob incerteza. Atualmente, ela é coordenadora da Comissão Especial de Inteligência Artificial (CEIA) da Sociedade Brasileira de Computação (SBC), cujo objetivo é reunir pesquisadores que desenvolvem e promovem a pesquisa em IA no Brasil. Além disso, é pesquisadora associada do Centro de Matemática Aplicada à Indústria (CeMEAI/USP), orientadora do MBA em Inteligência Artificial do ICMC/USP e coordenadora da rede de Referência em Inteligência Artificial do Estado da Bahia do Instituto BAH.IA (INCITE/FAPESB), promovido pela Secretaria de Ciência e Tecnologia do Estado da Bahia (SECTI). Concluiu em 2025 seu estágio pós-doutoral no Artificial Intelligence Institute da Waikato University, na Nova Zelândia, como pesquisadora associada do projeto TAIAO.

@@ -137,5 +137,5 @@ conference:
       # página da atividade, inconsistente com Minicurso/Palestra.
       - name: Credenciamento
       - name: Abertura
-      - name: Fechamento
+      - name: Encerramento
       - name: Workshop

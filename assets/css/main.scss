@@ -301,8 +301,15 @@ a {
 // (fixed columns + horizontal scroll-snap = the mobile UX); from lg up let
 // the table fill its parent container and the columns share the width.
 @media (min-width: 992px) {
+  // `fixed` splits the width equally between room columns. With `auto`, a lane
+  // that is empty most of the day (e.g. PAF I on 04/11) collapses to a sliver.
   .program-table.program-rooms-multi {
     width: 100%;
+    table-layout: fixed;
+  }
+
+  .program-table.program-rooms-multi .program-time {
+    width: 4.5rem;
   }
 
   .program-table.program-rooms-multi .program-talk {
