@@ -4,9 +4,9 @@
 #   paralelas e NÃO viram coluna no cabeçalho da tabela.
 #
 #   Cada dia tem TRÊS faixas plenárias:
-#     1. `name: Auditório de Farmácia` — atividades REAIS (Abertura, Palestras,
-#        Fechamento). Viram cartão de largura total e aparecem em
-#        /salas/auditorio-farmacia/.
+#     1. `name: PAF I` — atividades REAIS (Abertura, Palestras,
+#        Encerramento). Viram cartão de largura total e aparecem em
+#        /salas/paf-1/.
 #     2. `name: Saguão do IC` — Credenciamento (08:00–08:30, nos dois dias).
 #        Cartão de largura total próprio; aparece em /salas/saguao-do-ic/.
 #     3. SEM `name` + `is_break: true` — PAUSAS de todo o evento
@@ -28,13 +28,13 @@ days:
     abbr: Ter
     date: 2026-11-03
     rooms:
-      - name: Auditório de Farmácia
+      - name: PAF I
         plenary: true
         talks:
           - { name: "Do dado fragmentado à jornada conectada: desafios computacionais da gestão hospitalar e o papel da blockchain em saúde", time_start: "10:30", time_end: "12:00" }
           - { name: Abertura,       time_start: "13:00", time_end: "13:30" }
-          - { name: "Modelos preditivos na saúde: desafios e estratégias para mitigar vieses e desigualdades", time_start: "13:30", time_end: "14:30" }
-          - { name: "Palestra a definir (03/11)", time_start: "15:00", time_end: "17:00" }
+          - { name: "Modelos preditivos na saúde: desafios e estratégias para mitigar vieses e desigualdades", time_start: "13:30", time_end: "15:00" }
+          - { name: "I-CARE: Da Pesquisa em Inteligência Artificial à Inovação em Saúde", time_start: "15:30", time_end: "17:00" }
       - name: Saguão do IC
         plenary: true
         talks:
@@ -44,7 +44,7 @@ days:
         talks:
           - { name: Intervalo, time_start: "10:00", time_end: "10:30" }
           - { name: Almoço,    time_start: "12:00", time_end: "13:00" }
-          - { name: Intervalo, time_start: "14:30", time_end: "15:00" }
+          - { name: Intervalo, time_start: "15:00", time_end: "15:30" }
       - name: IC - SC III
         talks:
           - { name: Sumarizando prontuários eletrônicos com modelos de linguagem, time_start: "08:30", time_end: "10:00" }
@@ -53,12 +53,12 @@ days:
     abbr: Qua
     date: 2026-11-04
     rooms:
-      - name: Auditório de Farmácia
+      - name: PAF I
         plenary: true
         talks:
           - { name: Aplicações de LLMs na saúde, time_start: "13:00", time_end: "14:30" }
           - { name: "Palestra a definir (04/11)", time_start: "15:00", time_end: "16:30" }
-          - { name: Fechamento,     time_start: "16:30", time_end: "17:00" }
+          - { name: Encerramento,   time_start: "16:30", time_end: "17:00" }
       - name: Saguão do IC
         plenary: true
         talks:
@@ -69,10 +69,15 @@ days:
           - { name: Intervalo, time_start: "10:00", time_end: "10:30" }
           - { name: Almoço,    time_start: "12:00", time_end: "13:00" }
           - { name: Intervalo, time_start: "14:30", time_end: "15:00" }
+      # PAF I também como faixa PARALELA: a grade reserva 10:30–12:00 no PAF I
+      # junto às salas IC. A faixa plenária não pode coincidir com as paralelas
+      # (_layouts/program.html, delta 3), então o slot vira coluna própria.
+      - name: PAF I
+        talks:
+          - { name: Minicurso a definir, time_start: "10:30", time_end: "12:00" }
       - name: IC - SC I
         talks:
           - { name: Usando o SHAP para interpretabilidade de modelos de IA em saúde, time_start: "08:30", time_end: "10:00" }
-          - { name: Minicurso a definir, time_start: "10:30", time_end: "12:00" }
       - name: IC - SC II
         talks:
           - { name: Análise de grandes volumes de dados em saúde usando R, time_start: "09:00", time_end: "10:00" }

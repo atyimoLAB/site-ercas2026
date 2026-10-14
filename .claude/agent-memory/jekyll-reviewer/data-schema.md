@@ -27,14 +27,14 @@ with layout defaults.
   missing track). `!important` on the emitted rules is correct (mirrors Bootstrap's own
   subtle utilities; main.css loads after conference.bundle.css).
 - **Tags** (name-only unless noted): Keynote(icon star), Tutorial(icon mortarboard), Minicurso,
-  Palestra, Credenciamento, Abertura, Fechamento, Workshop. Only Minicurso/Palestra/Credenciamento/
-  Abertura/Fechamento are actually used by talks. Keynote/Tutorial/Workshop are unused (harmless).
-- **Rooms** (5): `auditorio-farmacia.md` "Auditório de Farmácia"/secondary, `ic-sc-1.md`
+  Palestra, Credenciamento, Abertura, Encerramento, Workshop. Only Minicurso/Palestra/Credenciamento/
+  Abertura/Encerramento are actually used by talks. Keynote/Tutorial/Workshop are unused (harmless).
+- **Rooms** (5): `paf-1.md` "PAF I"/secondary, `ic-sc-1.md`
   "IC - SC I"/success, `ic-sc-2.md` "IC - SC II"/warning, `ic-sc-4.md` "IC - SC IV"/info,
   `saguao-do-ic.md` "Saguão do IC"/dark (Credenciamento only, added 2026-09).
 - **program.yml plenary convention** (documented in the file's header comment): each day has
-  THREE `plenary: true` lanes — "Auditório de Farmácia" (Abertura/Palestras/Fechamento,
-  full-width card + `/salas/auditorio-farmacia/`), "Saguão do IC" (Credenciamento 08:00–08:30
+  THREE `plenary: true` lanes — "PAF I" (Abertura/Palestras/Encerramento,
+  full-width card + `/salas/paf-1/`), "Saguão do IC" (Credenciamento 08:00–08:30
   both days, own full-width card + `/salas/saguao-do-ic/`), and one unnamed `is_break: true`
   (Intervalo/Almoço, flat `.program-banner`, no room page). Non-plenary lanes (IC - SC *)
   become table columns. Verified 2026-09-10: multiple named plenary lanes at different times

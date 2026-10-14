@@ -16,8 +16,8 @@
      active over the current row, emits ONE full-width `<td colspan rowspan
      class="program-talk p-0 h-100">`. Two modes, decided by the LANE:
        - `is_break: true` lane (Intervalo/Almoço) -> tira plana `.program-banner`;
-       - `name: Auditório de Farmácia` lane (Credenciamento/Abertura/Palestras/
-         Fechamento) -> cartão de largura total via o include
+       - `name: PAF I` lane (Credenciamento/Abertura/Palestras/
+         Encerramento) -> cartão de largura total via o include
          ercas_talk_card.html (plenary=true, room_name=plenary_room_name) — o
          MESMO cartão das salas paralelas
          (tint + TAG·TRILHA + título + palestrantes), só que ocupando `colspan`
@@ -43,7 +43,7 @@
   7. Faixa plenária com dois modos, decididos pela FAIXA (lane) do program.yml,
      não pela atividade: 2ª faixa `plenary: true` + `is_break: true` sem `name`
      carrega Intervalo/Almoço -> tira plana `.program-banner`; a faixa 1
-     (`Auditório de Farmácia`) -> cartão cheio via `ercas_talk_card.html
+     (`PAF I`) -> cartão cheio via `ercas_talk_card.html
      plenary=true`. `plenary_is_break` é capturado de `pr.is_break`. Ambos os
      modos ocupam `colspan` de todas as colunas e mantêm o prefixo visualmente
      oculto "Atividade plenária: ".

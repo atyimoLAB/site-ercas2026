@@ -42,7 +42,7 @@ assets/css/main.scss  new as of 2026-07 (was previously linked by header.html bu
 
 Program schedule (as of 2026-09, `pt/_data/program.yml`): 2 days (Ter/Qua,
 2026-11-03..04), each with **2 parallel IC rooms** + **3 `plenary: true` lanes**:
-  1. `name: Auditório de Farmácia` (color `secondary`) — Abertura, keynotes, Fechamento;
+  1. `name: PAF I` (color `secondary`) — Abertura, keynotes, Encerramento;
      full-width session card.
   2. `name: Saguão do IC` (color `dark`) — Credenciamento only, 08:00–08:30 both days;
      full-width session card. Added when D7 was reversed — Credenciamento moved out of the
@@ -52,7 +52,7 @@ The two named plenary lanes never overlap in time, so the layout's "last plenary
 starting on this row wins" logic is safe. Adding a 4th plenary lane that shares a start
 time with another named one WOULD collide (only one banner `<td>` per row).
 
-`pt/_rooms/` has 5 room docs: `auditorio-farmacia`, `ic-sc-1` (IC - SC I/success),
+`pt/_rooms/` has 5 room docs: `paf-1`, `ic-sc-1` (IC - SC I/success),
 `ic-sc-2` (IC - SC II/warning), `ic-sc-4` (IC - SC IV/info), `saguao-do-ic` (dark).
 
 `pt/_speakers/` (13; Breno Silva removed 2026-10-01): Bruno Oliveira, Carlos Cardoso, Fernando Oliveira,
