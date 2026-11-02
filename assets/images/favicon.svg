@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="60 -110 900 900">
 <defs><clipPath id="c"><rect x="60" y="0" width="900" height="680"/></clipPath></defs>
-<rect x="80" y="-90" width="860" height="860" rx="170" fill="#fff" stroke="#2270ba" stroke-width="40"/>
+<rect x="60" y="-110" width="900" height="900" rx="190" fill="#fff"/>
 <g transform="translate(510 340) scale(.78) translate(-510 -340)">
 <g clip-path="url(#c)">
 <path fill="#2270ba" d="m 227.80137,93.88002 q -2.7,0.59 -5.14,-0.16 l -0.19,-76.980001 a 2.73,2.73 0 0 1 2.71,-2.74 h 0.13 a 2.7,2.7 0 0 1 2.71,2.71 z" />
