@@ -45,6 +45,10 @@
   </title>
   {% include list_header_meta.html %}
 
+  <link rel="icon" href="{{ site.baseurl }}/favicon.ico" sizes="any" />
+  <link rel="icon" href="{{ site.baseurl }}/assets/images/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="{{ site.baseurl }}/assets/images/apple-touch-icon.png" />
+
   {% if site.conference.custom_style == "bootstrap" %}
   {% comment %} Conference bundle with separate Bootstrap {% endcomment %}
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/bootstrap.min.css?t={{ site.time | date: '%s' }}" />
