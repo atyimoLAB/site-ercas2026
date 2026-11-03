@@ -57,7 +57,7 @@ days:
         plenary: true
         talks:
           - { name: Aplicações de LLMs na saúde, time_start: "13:00", time_end: "14:30" }
-          - { name: "Palestra a definir (04/11)", time_start: "15:00", time_end: "16:30" }
+          - { name: "Da Ideia ao Impacto: Empreender e Inovar na Saúde", time_start: "15:00", time_end: "16:30" }
           - { name: Encerramento,   time_start: "16:30", time_end: "17:00" }
       - name: Saguão do IC
         plenary: true
@@ -69,12 +69,6 @@ days:
           - { name: Intervalo, time_start: "10:00", time_end: "10:30" }
           - { name: Almoço,    time_start: "12:00", time_end: "13:00" }
           - { name: Intervalo, time_start: "14:30", time_end: "15:00" }
-      # PAF I também como faixa PARALELA: a grade reserva 10:30–12:00 no PAF I
-      # junto às salas IC. A faixa plenária não pode coincidir com as paralelas
-      # (_layouts/program.html, delta 3), então o slot vira coluna própria.
-      - name: PAF I
-        talks:
-          - { name: Minicurso a definir, time_start: "10:30", time_end: "12:00" }
       - name: IC - SC I
         talks:
           - { name: Usando o SHAP para interpretabilidade de modelos de IA em saúde, time_start: "08:30", time_end: "10:00" }

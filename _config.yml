@@ -123,6 +123,8 @@ conference:
         color: warning
       - name: Institucional
         color: secondary
+      - name: Inovação e Empreendedorismo
+        color: ercas-orange
       - name: A definir
         color: ercas-tbd
     tags:
